@@ -1,0 +1,9 @@
+node_modules
+dist
+.tmp
+/app/vendor/
+.idea
+.DS_Store
+node_modules
+bower_components
+coverage
