@@ -54,7 +54,7 @@ function requestPosts(reddit) {
 function receivePosts(reddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit: reddit,
+    reddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
@@ -98,7 +98,7 @@ import { combineReducers } from 'redux';
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
-} from '../actions';
+} from './actions';
 
 function selectedReddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -162,10 +162,12 @@ export default rootReducer;
 #### `configureStore.js`
 
 ```js
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import loggerMiddleware from 'redux-logger';
-import rootReducer from '../reducers';
+import createLogger from 'redux-logger';
+import rootReducer from './reducers';
+
+const loggerMiddleware = createLogger();
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,

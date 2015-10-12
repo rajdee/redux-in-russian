@@ -1,4 +1,4 @@
-# Writing tests
+# Writing Tests
 
 Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
 
@@ -57,7 +57,7 @@ describe('actions', () => {
     };
     expect(actions.addTodo(text)).toEqual(expectedAction);
   });
-}
+});
 ```
 
 ### Reducers
@@ -138,6 +138,7 @@ describe('todos reducer', () => {
       id: 0
     }]);
   });
+});
 ```
 
 ### Components
@@ -259,10 +260,118 @@ export default function jsdomReact() {
 
 Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
 
+### Connected Components
+
+If you use a library like [React Redux](https://github.com/rackt/react-redux), you might be using [higher-order components](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) like [`connect()`](https://github.com/rackt/react-redux#connectmapstatetoprops-mapdispatchtoprops-mergeprops). This lets you inject Redux state into a regular React component.
+
+Consider the following `App` component:
+
+```js
+import { connect } from 'react-redux';
+
+class App extends Component { /* ... */ }
+
+export default connect(mapStateToProps)(App);
+```
+
+In a unit test, you would normally import the `App` component like this:
+
+```js
+import App from './App';
+```
+
+However when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
+
+In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
+
+```js
+import { connect } from 'react-redux';
+
+// Use named export for unconnected component (for tests)
+export class App extends Component { /* ... */ }
+
+// Use default export for the connected component (for app)
+export default connect(mapDispatchToProps)(App);
+```
+
+Since the default export is still the decorated component, the import statement pictured above will work as before so you won’t have to change your application code. However, you can now import the undecorated `App` components in your test file like this:
+
+```js
+// Note the curly braces: grab the named export instead of default export
+import { App } from './App';
+```
+
+And if you need both:
+
+```js
+import ConnectedApp, { App } from './App';
+```
+
+In the app itself, you would still import it normally:
+
+```js
+import App from './App';
+```
+
+You would only use the named export for tests.
+
+>##### A Note on Mixing ES6 Modules and CommonJS
+
+>If you are using ES6 in your application source, but write your tests in ES5, you should know that Babel handles the interchangeable use of ES6 `import` and CommonJS `require` through its [interop](http://babeljs.io/docs/usage/modules/#interop) capability to run two module formats side-by-side, but the behavior is [slightly different](https://github.com/babel/babel/issues/2047). If you add a second export beside your default export, you can no longer import the default using `require('./App')`. Instead you have to use `require('./App').default`.
+
+### Middleware
+
+Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this modified behavior we need to mock the behavior of the `dispatch` call.
+
+#### Example
+
+```js
+import expect from 'expect';
+import * as types from '../../constants/ActionTypes';
+import singleDispatch from '../../middleware/singleDispatch';
+
+const createFakeStore = fakeData => ({
+  getState() {
+    return fakeData;
+  }
+});
+
+const dispatchWithStoreOf = (storeData, action) => {
+  let dispatched = null;
+  const dispatch = singleDispatch(createFakeStore(storeData))(actionAttempt => dispatched = actionAttempt);
+  dispatch(action);
+  return dispatched;
+};
+
+describe('middleware', () => {
+  it('should dispatch if store is empty', () => {
+    const action = {
+      type: types.ADD_TODO
+    };
+    
+    expect(
+      dispatchWithStoreOf({}, action)
+    ).toEqual(action);
+  });
+
+  it('should not dispatch if store already has type', () => {
+    const action = {
+      type: types.ADD_TODO
+    };
+    
+    expect(
+      dispatchWithStoreOf({
+        [types.ADD_TODO]: 'dispatched'
+      }, action)
+    ).toNotExist();
+  });
+});
+```
+
 ### Glossary
 
 - [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
 
-- [jsdom](https://github.com/tmpvar/jsdom): An in-JavaScript implementation of the DOM. Jsdom allows us to run the tests without browser.
+- [jsdom](https://github.com/tmpvar/jsdom): A plain JavaScript implementation of the DOM API. jsdom allows us to run the tests without browser.
 
-- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): The main idea of shallow rendering is to instantiate a component and get the result of its `render` method just a single level deep instead of rendering into a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements). That means it is possible to access its children, props and test if it works as expected.
+- [Shallow rendering](http://facebook.github.io/react/docs/test-utils.html#shallow-rendering): Shallow rendering lets you instantiate a component and get the result of its `render` method just a single level deep instead of rendering components recursively to a DOM. The result of shallow rendering is a [ReactElement](https://facebook.github.io/react/docs/glossary.html#react-elements). That means it is possible to access its children, props and test if it works as expected. This also means that you changing a child component won’t affect the tests for parent component.

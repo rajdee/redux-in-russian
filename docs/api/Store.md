@@ -15,7 +15,6 @@ To create it, pass your root [reducing function](../Glossary.md#reducer) to [`cr
 - [`getState()`](#getState)
 - [`dispatch(action)`](#dispatch)
 - [`subscribe(listener)`](#subscribe)
-- [`getReducer()`](#getReducer)
 - [`replaceReducer(nextReducer)`](#replaceReducer)
 
 ## Store Methods
@@ -44,7 +43,7 @@ The store’s reducing function will be called with the current [`getState()`](#
 
 #### Arguments
 
-1. `action` (*Object*<sup>†</sup>): A plain object describing the change that makes sense for your application. Actions are the only way to get data into the store, so any data, whether from the UI events, network callbacks, or other sources such as WebSockets needs to eventually be dispatched as actions. By convention, actions should have a `type` field that indicates the type of action being performed. Types can be defined as constants and imported from another module. It’s better to use strings for `type` than [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) because strings are serializable. Other than `type`, the structure of an action object is really up to you. If you’re interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions should be constructed.
+1. `action` (*Object*<sup>†</sup>): A plain object describing the change that makes sense for your application. Actions are the only way to get data into the store, so any data, whether from the UI events, network callbacks, or other sources such as WebSockets needs to eventually be dispatched as actions. Actions must have a `type` field that indicates the type of action being performed. Types can be defined as constants and imported from another module. It’s better to use strings for `type` than [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) because strings are serializable. Other than `type`, the structure of an action object is really up to you. If you’re interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions could be constructed.
 
 #### Returns
 
@@ -54,7 +53,7 @@ The store’s reducing function will be called with the current [`getState()`](#
 
 <sup>†</sup> The “vanilla” store implementation you get by calling [`createStore`](createStore.md) only supports plain object actions and hands them immediately to the reducer.
 
-However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [intents](../Glossary.md#intent). Intents are usually asynchronous primitives like Promises, Observables, or thunks.
+However, if you wrap [`createStore`](createStore.md) with [`applyMiddleware`](applyMiddleware.md), the middleware can interpret actions differently, and provide support for dispatching [async actions](../Glossary.md#async-action). Async actions are usually asynchronous primitives like Promises, Observables, or thunks.
 
 Middleware is created by the community and does not ship with Redux by default. You need to explicitly install packages like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) to use it. You may also create your own middleware.
 
@@ -118,29 +117,7 @@ handleChange();
 
 <hr>
 
-### <a id='getReducer'></a>[`getReducer()`](#getReducer)
-
->##### Deprecated
-
->This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
->It will be removed when we find a better solution for this problem.
-
-Returns the reducer currently used by the store to calculate the state.
-
-It is an advanced API. You might only need this if you implement a hot reloading mechanism for Redux.
-
-#### Returns
-
-(*Function*): The store’s current reducer.
-
-<hr>
-
 ### <a id='replaceReducer'></a>[`replaceReducer(nextReducer)`](#replaceReducer)
-
->##### Deprecated
-
->This API has been [deprecated](https://github.com/rackt/redux/issues/350).  
->It will be removed when we find a better solution for this problem.
 
 Replaces the reducer currently used by the store to calculate the state.
 

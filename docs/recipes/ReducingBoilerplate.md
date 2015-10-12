@@ -31,7 +31,7 @@ Why is this beneficial? **It is often claimed that constants are unnecessary, an
 * It helps keep the naming consistent because all action types are gathered in a single place.
 * Sometimes you want to see all existing actions before working on a new feature. It may be that the action you need was already added by somebody on the team, but you didn’t know.
 * The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
-* If you make a typo when importing an action constant, you will get `undefined`. This is much easier to notice than a typo when you wonder why nothing happens when the action is dispatched.
+* If you make a typo when importing an action constant, you will get `undefined`. Redux will immediately throw when dispatching such an action, and you’ll find the mistake sooner.
 
 It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgment.
 
@@ -49,7 +49,7 @@ dispatch({
 });
 ```
 
-you might write an action creator in a separate file, and import it from your component:
+You might write an action creator in a separate file, and import it from your component:
 
 #### `actionCreators.js`
 
@@ -101,14 +101,22 @@ We just modified how `addTodo` action creator behaves, completely invisible to t
 
 ### Generating Action Creators
 
-Some frameworks like [Flummox](https://github.com/acdlite/flummox) generate action type constants automatically from the action creator function definitions. The idea is that you don’t need to both define `ADD_TODO` constant and `addTodo()` action creator. Under the hood, such solutions still generate action type constants, but they’re created implicitly so it’s a level of indirection.
+Some frameworks like [Flummox](https://github.com/acdlite/flummox) generate action type constants automatically from the action creator function definitions. The idea is that you don’t need to both define `ADD_TODO` constant and `addTodo()` action creator. Under the hood, such solutions still generate action type constants, but they’re created implicitly so it’s a level of indirection and can cause confusion. We recommend creating your action type constants explicitly.
 
-We don’t recommend this approach. If you’re tired of writing simple action creators like:
+Writing simple action creators can be tiresome and often ends up generating redundant boilerplate code:
 
 ```js
 export function addTodo(text) {
   return {
     type: 'ADD_TODO',
+    text
+  };
+}
+
+export function editTodo(id, text) {
+  return {
+    type: 'EDIT_TODO',
+    id,
     text
   };
 }
@@ -121,7 +129,7 @@ export function removeTodo(id) {
 }
 ```
 
-you can always write a function that generates an action creator:
+You can always write a function that generates an action creator:
 
 ```js
 function makeActionCreator(type, ...argNames) {
@@ -134,14 +142,15 @@ function makeActionCreator(type, ...argNames) {
   }
 }
 
-export const addTodo = makeActionCreator('ADD_TODO', 'todo');
-export const removeTodo = makeActionCreator('REMOVE_TODO', 'id');
+const ADD_TODO = 'ADD_TODO';
+const EDIT_TODO = 'EDIT_TODO';
+const REMOVE_TODO = 'REMOVE_TODO';
+
+export const addTodo = makeActionCreator(ADD_TODO, 'todo');
+export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo');
+export const removeTodo = makeActionCreator(REMOVE_TODO, 'id');
 ```
-
-See [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions) for examples of such utilities.
-
-Note that such utilities add magic to your code.  
-Are magic and indirection really worth it to avoid a few extra few lines of code?
+There are also utility libraries to aid in generating action creators, such as [redux-action-utils](https://github.com/insin/redux-action-utils) and [redux-actions](https://github.com/acdlite/redux-actions). These can help with reducing your boilerplate code and adhering to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action). 
 
 ## Async Action Creators
 

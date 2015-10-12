@@ -37,7 +37,7 @@ React.render(
 
 export const ADD_TODO = 'ADD_TODO';
 export const COMPLETE_TODO = 'COMPLETE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
 
 /*
  * other constants
@@ -135,7 +135,7 @@ class App extends Component {
             dispatch(addTodo(text))
           } />
         <TodoList
-          todos={this.props.visibleTodos}
+          todos={visibleTodos}
           onTodoClick={index =>
             dispatch(completeTodo(index))
           } />

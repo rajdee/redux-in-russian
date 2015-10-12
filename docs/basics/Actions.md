@@ -1,10 +1,10 @@
-# Actions
+# Действия
 
-First, let’s define some actions.
+Во-первых, давайте определим некоторые действия.
 
-**Actions** are payloads of information that send data from your application to your store. They are the *only* source of information for the store. You send them to the store using [`store.dispatch()`](../api/Store.md#dispatch).
+**Действия** - это структура, которая передает данные из вашего приложения в хранилище. Они являются *единственным* источником информации для хранилища. Вы отправляете их в хранилище используя метод [`store.dispatch()`](../api/Store.md#dispatch).
 
-Here’s an example action which represents adding a new todo item:
+Вот пример, которое представляет действие, добавляющее новый пункт в список дел:
 
 ```js
 {
@@ -13,19 +13,19 @@ Here’s an example action which represents adding a new todo item:
 }
 ```
 
-Actions are plain JavaScript objects. By convention, actions should have a string `type` field that indicates the type of action being performed. Types should typically be defined as string constants. Once your app is large enough, you may want to move them into a separate module.
+Действия - это обычный объект JavaScript. По соглашению, действия должны иметь строковое поле `type`  которое указывает на тип исполняемого действия. Типы должны, как правило, определятся как строковые константы. После того, как ваше приложение разрастется, вы можете переместить их в отдельный модуль.
 
 ```js
 import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 ```
 
->##### Note on Boilerplate
+>##### Примечание к шаблону разработки
 
->You don’t have to define action type constants in a separate file, or even to define them at all. For a small project, it might be easier to just use string literals for action types. However, there are some benefits to explicitly declaring constants in larger codebases. Read [Reducing Boilerplate](../recipes/ReducingBoilerplate.md) for more practical tips on keeping your codebase clean. 
+>Вам не нужно определять константы типа действий в отдельном файле или даже определить их и вовсе. Для небольшого проекта, было бы проще просто использовать строковые литералы для типов действий. Однако, есть некоторые преимущества в явном объявлении констант в больших проектах. Прочтите [Reducing Boilerplate](../recipes/ReducingBoilerplate.md) для знакомства с большим количеством практических советов, позволяющих хранить вашу кодовую базу в чистоте.
 
-Other than `type`, the structure of an action object is really up to you. If you’re interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions could be constructed.
+Кроме `type`, структуру объекта действий вы можете строить на ваше усмотрение. Если вам интересно, изучите [Flux Standard Action](https://github.com/acdlite/flux-standard-action) для рекомендаций, как должны строятся действия.
 
-We’ll add one more action type to describe a user ticking off a todo as completed. We refer to a particular todo by `index` because we store them in an array. In a real app it is wiser to generate a unique ID every time something new is created.
+Мы добавим еще один тип действия для описывания отметки задачи, как выполненной. Мы обращаемся к конкретному todo по `index`, потому что мы храним их в виде массива.  В реальном приложении, разумнее генерировать уникальный ID каждый раз, когда что-то новое создается.
 
 ```js
 {
@@ -34,9 +34,9 @@ We’ll add one more action type to describe a user ticking off a todo as comple
 }
 ```
 
-It’s a good idea to pass as little data in action as possible. For example, it’s better to pass `index` than the whole todo object.
+Это хорошая идея, передавать как можно меньше данных в каждом действии. Например, лучше отправить `index`, чем весь объект todo.
 
-Finally, we’ll add one more action type for changing the currently visible todos.
+Наконец, мы добавим еще один тип действия по изменению видимых, в данный момент, задач.
 
 ```js
 {

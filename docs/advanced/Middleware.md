@@ -1,18 +1,10 @@
 # Middleware
 
-If you've used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you are familiar with a concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple independent third-party middleware in a single project.
+You’ve seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you’ve used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple independent third-party middleware in a single project.
 
-Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the store.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
+Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
 
 This article is divided into an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
-
->##### Note for the Impatient
-
->You will find some practical advice on using middleware for asynchronous actions [in the next section](AsyncActions.md). However we strongly advise you to resist the urge to skip this section.
-
->Middleware is the most “magical” part of Redux you are likely to encounter. Learning how it works and how to write your own is the best investment you can make into your productivity using Redux.
-
->If you’re really impatient, skip ahead to [seven examples](#seven-examples) and come back.
 
 ## Understanding Middleware
 
@@ -277,7 +269,7 @@ The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ship
 * It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.
 md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we will see [later](AsyncActions.md).
+* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
 
 * To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
 
@@ -369,26 +361,26 @@ const crashReporter = store => next => action => {
 
 /**
  * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
- * Makes `dispatch` return a function to cancel the interval in this case.
+ * Makes `dispatch` return a function to cancel the timeout in this case.
  */
 const timeoutScheduler = store => next => action => {
   if (!action.meta || !action.meta.delay) {
     return next(action);
   }
 
-  let intervalId = setTimeout(
+  let timeoutId = setTimeout(
     () => next(action),
     action.meta.delay
   );
 
   return function cancel() {
-    clearInterval(intervalId);
+    clearTimeout(timeoutId);
   };
 };
 
 /**
  * Schedules actions with { meta: { raf: true } } to be dispatched inside a rAF loop frame.
- * Makes `dispatch` return a function to remove the action from queue in this case.
+ * Makes `dispatch` return a function to remove the action from the queue in this case.
  */
 const rafScheduler = store => next => {
   let queuedActions = [];
