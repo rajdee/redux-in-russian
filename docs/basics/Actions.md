@@ -1,10 +1,10 @@
-# Действия
+# Действия (Actions)
 
 Во-первых, давайте определим некоторые действия.
 
 **Действия** - это структура, которая передает данные из вашего приложения в хранилище. Они являются *единственным* источником информации для хранилища. Вы отправляете их в хранилище используя метод [`store.dispatch()`](../api/Store.md#dispatch).
 
-Вот пример, которое представляет действие, добавляющее новый пункт в список дел:
+Например, вот действие которое представляет добавление нового пункта в список дел:
 
 ```js
 {
@@ -13,7 +13,7 @@
 }
 ```
 
-Действия - это обычный объект JavaScript. По соглашению, действия должны иметь строковое поле `type`  которое указывает на тип исполняемого действия. Типы должны, как правило, определятся как строковые константы. После того, как ваше приложение разрастется, вы можете переместить их в отдельный модуль.
+Действия - это обычный объект JavaScript. По соглашению, действия должны иметь строковое поле `type`, которое указывает на тип исполняемого действия. Типы должны, как правило, определяться как строковые константы. После того, как ваше приложение разрастется, вы можете захотеть переместить их в отдельный модуль.
 
 ```js
 import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
@@ -23,9 +23,9 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 
 >Вам не нужно определять константы типа действий в отдельном файле или даже определить их и вовсе. Для небольшого проекта, было бы проще просто использовать строковые литералы для типов действий. Однако, есть некоторые преимущества в явном объявлении констант в больших проектах. Прочтите [Reducing Boilerplate](../recipes/ReducingBoilerplate.md) для знакомства с большим количеством практических советов, позволяющих хранить вашу кодовую базу в чистоте.
 
-Кроме `type`, структуру объекта действий вы можете строить на ваше усмотрение. Если вам интересно, изучите [Flux Standard Action](https://github.com/acdlite/flux-standard-action) для рекомендаций, как должны строятся действия.
+Кроме `type`, структуру объекта действий вы можете строить на ваше усмотрение. Если вам интересно, изучите [Flux Standard Action](https://github.com/acdlite/flux-standard-action) для рекомендаций о том, как могут строится действия.
 
-Мы добавим еще один тип действия для описывания отметки задачи, как выполненной. Мы обращаемся к конкретному todo по `index`, потому что мы храним их в виде массива.  В реальном приложении, разумнее генерировать уникальный ID каждый раз, когда что-то новое создается.
+Мы добавим еще один тип действия для описания пометки задачи, как выполненной. Мы обращаемся к конкретному todo по `index`, потому что мы храним их в виде массива. В реальном приложении, разумнее генерировать уникальный ID каждый раз, когда что-то новое создается.
 
 ```js
 {
@@ -36,7 +36,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 
 Это хорошая идея, передавать как можно меньше данных в каждом действии. Например, лучше отправить `index`, чем весь объект todo.
 
-Наконец, мы добавим еще один тип действия по изменению видимых, в данный момент, задач.
+Наконец, мы добавим еще один тип действия для редактирования видимых в данный момент задач.
 
 ```js
 {
@@ -45,11 +45,11 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 }
 ```
 
-## Action Creators
+## Генераторы действий (Action Creators)
 
-**Action creators** are exactly that—functions that create actions. It's easy to conflate the terms “action” and “action creator,” so do your best to use the proper term.
+**Action creators** - не что иное, как функции, которые создают действия. Довольно просто запутаться в терминах “action” and “action creator,” поэтому постарайтесь использовать правильный термин.
 
-In [traditional Flux](http://facebook.github.io/flux) implementations, action creators often trigger a dispatch when invoked, like so:
+В [традиционной реализации Flux](http://facebook.github.io/flux), action creators при выполнении часто вызывают dispatch, примерно так:
 
 ```js
 function addTodoWithDispatch(text) {
@@ -61,7 +61,7 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-By contrast, in Redux action creators are **pure functions** with zero side-effects. They simply return an action:
+В противоположность этому, в Redux action creators являются  **чистыми функциями** с нулевыми сайд-эффектами. Они просто возвращают action:
 
 ```js
 function addTodo(text) {
@@ -72,30 +72,30 @@ function addTodo(text) {
 }
 ```
 
-This makes them more portable and easier to test. To actually initiate a dispatch, pass the result to the `dispatch()` function:
+Это делает их более подвижными (portable ориг.) и легкими для тестирования. На самом деле, чтобы запустить отправку - передайте результат action creator в функцию `dispatch()`:
 
 ```js
 dispatch(addTodo(text));
 dispatch(completeTodo(index));
 ```
 
-Or create a **bound action creator** that automatically dispatches:
+Или создайте **связанный генератор действия (bound action creator)** который автоматически запускает отправку действия:
 
 ```js
 const boundAddTodo = (text) => dispatch(addTodo(text));
 const boundCompleteTodo = (index) => dispatch(completeTodo(index));
 ```
 
-You’ll be able to call them directly:
+Вы сразу же сможете его вызвать:
 
 ```
 boundAddTodo(text);
 boundCompleteTodo(index);
 ```
 
-The `dispatch()` function can be accessed directly from the store as [`store.dispatch()`](../api/Store.md#dispatch), but more likely you'll access it using a helper like [react-redux](http://github.com/gaearon/react-redux)'s `connect()`. You can use [`bindActionCreators()`](../api/bindActionCreators.md) to automatically bind many action creators to a `dispatch()` function.
+Доступ к функции `dispatch()` может быть получен непосредственно из хранилища (store) [`store.dispatch()`](../api/Store.md#dispatch), но, что более вероятно, вы будете получать доступ к ней при помощи чего-то типа `connect()` из [react-redux](http://github.com/gaearon/react-redux). Вы можете использовать функцию [`bindActionCreators()`](../api/bindActionCreators.md) для автоматического привязывания большого количества генераторов действий (action creators) к функции `dispatch()`.
 
-## Source Code
+## Исходный код
 
 ### `actions.js`
 
@@ -137,7 +137,7 @@ export function setVisibilityFilter(filter) {
 
 ## Next Steps
 
-Now let’s [define some reducers](Reducers.md) to specify how the state updates when you dispatch these actions!
+Теперь давайте [создадим несколько редьюсеров](Reducers.md) для того, чтобы описать как будет обновляться состояние (state) когда мы отправляем действия (actions)!
 
->##### Note for Advanced Users
->If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async actions](../advanced/AsyncActions.md) in the [advanced tutorial](../advanced/README.md) to learn how to handle AJAX responses and compose action creators into async control flow.
+>##### Для продвинутых пользователей
+>Если Вы уже знакомы с базовыми концептами и уже освоили этот обучающий материал, то не забудьте заценить [асинхронные действия (async actions)](../advanced/AsyncActions.md) в [руководстве для опытных](../advanced/README.md), чтобы научиться работать с AJAX ответами и создавать генераторы действий для асинхронного потока управления.
