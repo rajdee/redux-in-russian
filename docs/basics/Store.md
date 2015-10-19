@@ -1,17 +1,17 @@
 # Store
 
-In the previous sections, we defined the [actions](Actions.md) that represent the facts about “what happened” and the [reducers](Reducers.md) that update the state according to those actions.
+В предыдущих разделах мы определили [действия (actions)](Actions.md), которые представляют факт того, что "что-то случилось", и [редьюсеры](Reducers.md), которые обновляют состояние (state) в соответствии с этими действиями. 
 
-The **Store** is the object that brings them together. The store has the following responsibilities:
+**Хранилище (Store)** - это объект, который соединяет эти части вместе. Хранилище берет на себя следующие задачи:
 
-* Holds application state;
-* Allows access to state via [`getState()`](../api/Store.md#getState);
-* Allows state to be updated via [`dispatch(action)`](../api/Store.md#dispatch);
-* Registers listeners via [`subscribe(listener)`](../api/Store.md#subscribe).
+* Содержит состояние приложения (application state);
+* Предоставляет доступ к состоянию с помощью [`getState()`](../api/Store.md#getState);
+* Предоставляет возможность обновления состояния с помощью [`dispatch(action)`](../api/Store.md#dispatch);
+* Регистрирует слушатели (listeners) c помощью [`subscribe(listener)`](../api/Store.md#subscribe).
 
-It’s important to note that you’ll only have a single store in a Redux application. When you want to split your data handling logic, you’ll use [reducer composition](Reducers.md#splitting-reducers) instead of many stores.
+Важно отметить, что у Вас будет только одно состояние в Redux приложении. Если Вы захотите разделить логику обработки данных, то нужно будет использовать [компановку редьюсеров (reducer composition)](Reducers.md#splitting-reducers) вместо использования множества хранилищ (stores). 
 
-It’s easy to create a store if you have a reducer. In the [previous section](Reducers.md), we used [`combineReducers()`](../api/combineReducers.md) to combine several reducers into one. We will now import it, and pass it to [`createStore()`](../api/createStore.md).
+Очень легко создать Хранилище (Store), если у Вас есть редьюсер. В [предыдущем разделе](Reducers.md) мы использовали [`combineReducers()`](../api/combineReducers.md) для комбинирования редьюсреов в один глобальный редьюсер. Теперь мы их импортируем и передадим в [`createStore()`](../api/createStore.md).
 
 ```js
 import { createStore } from 'redux';
@@ -20,15 +20,15 @@ import todoApp from './reducers';
 let store = createStore(todoApp);
 ```
 
-You may optionally specify the initial state as the second argument to [`createStore()`](../api/createStore.md). This is useful for hydrating the state of the client to match the state of a Redux application running on the server.
+Вы можете объявить начальное состояние, передав его вторым аргументом в [`createStore()`](../api/createStore.md). Это полезно для пробрасывания состояния на клиент из состояния приложения Redux, работающего на сервере, когда Вы пишете универсальное приложение. 
 
 ```js
 let store = createStore(todoApp, window.STATE_FROM_SERVER);
 ```
 
-## Dispatching Actions
+## Отправка действий (Dispatching Actions)
 
-Now that we have created a store, let’s verify our program works! Even without any UI, we can already test the update logic.
+На текуший момент у нас есть созданное хранилище. Давайте проверим как работает наше приложение! Даже без UI части мы уже можем проверить логику обновления состояния.
 
 ```js
 import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions';
@@ -53,13 +53,13 @@ store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
 unsubscribe();
 ```
 
-You can see how this causes the state held by the store to change:
+Вы можете видеть как выполение кода, приведенного выше, меняет состояние, содержащееся в хранилище:
 
 <img src='http://i.imgur.com/zMMtoMz.png' width='70%'>
 
-We specified the behavior of our app before we even started writing the UI. We won’t do this in this tutorial, but at this point you can write tests for your reducers and action creators. You won’t need to mock anything because they are just functions. Call them, and make assertions on what they return.
+Мы смогли определить поведение нашего приложения даже до того, как начали создавать какой то UI. Мы не будем делать этого в этом руководстве, но с этого момента Вы можете писать тесты для редьюсеров и генераторов действий (action creators). Вам не нужно будет иметь никаких замоканых фейковых данных потому, что редьюсеры - это простые функции. Вызывайте их и делайте проверки (make assertions) того, что они возвращают. 
 
-## Source Code
+## Исходный код (Source Code)
 
 #### `index.js`
 
@@ -70,6 +70,6 @@ import todoApp from './reducers';
 let store = createStore(todoApp);
 ```
 
-## Next Steps
+## Следующие шаги
 
-Before creating a UI for our todo app, we will take a detour to see [how the data flows in a Redux application](DataFlow.md).
+Перед тем, как создавать UI для нашего ToDo приложения, мы сделаем небольшую прогулку, чтобы посмотреть [что такое поток данных (data flows) в Redux приложении](DataFlow.md).
