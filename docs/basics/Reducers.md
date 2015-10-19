@@ -1,17 +1,17 @@
-# Reducers
+# Редьюсеры (Reducers)
 
-[Actions](./Actions.md) describe the fact that *something happened*, but don’t specify how the application’s state changes in response. This is the job of a reducer.
+[Действия (Actions)](./Actions.md) описывают тот факт, что *что-то совершилось*, но не определяют как в ответ изменяется состояние (state) приложения. Это работа для редьюсеров (reducers).
 
-## Designing the State Shape
+## Проектирование формы состояния (State)
 
-In Redux, all application state is stored as a single object. It’s a good idea to think of its shape before writing any code. What’s the minimal representation of your app’s state as an object?
+В Redux, все состояние приложения хранится в виде единственного объекта. Подумать о его форме перед написанием кода - довольно неплохая идея. Каково минимальное представление состояния Вашего приложения в виде объекта?
 
-For our todo app, we want to store two different things:
+Для нашего ToDo приложения мы хотим хранить две разные вещи:
 
-* The currently selected visibility filter;
-* The actual list of todos.
+* Состояние фильтра видимости;
+* Актиульный список todo-задач.
 
-You’ll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separate from the UI state.
+Часто Вы будете понимать, что в дереве состояний (state tree) нужно хранить какие то данные, которые не совсем относятся к состоянию UI. Это нормально, только старайтесь такие данные не смешивать с данными, которые описывают состояние UI.
 
 ```js
 {
@@ -26,29 +26,29 @@ You’ll often find that you need to store some data, as well as some UI state, 
 }
 ```
 
->##### Note on Relationships
+>##### Заметка об отношениях
 
->In a more complex app, you’re going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app’s state as a database. This approach is described in [normalizr's](https://github.com/gaearon/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we’re keeping the example simple.
+>В более сложном приложении Вы, скорее всего, будете иметь разные сущности, которые будут ссылаться друг на друга. Мы советуем поддерживать состояние (state) в настолько нормализованном виде, насколько это возможно. Старайтесь не допускать никакой вложенности. Держите каждую сущность в объекте, который хранится с ID в качестве ключа. Используйте этот ID в качестве ссылки из других сущностей или списков. Думайте о состоянии приложения (apps state), как о базе данных. Этот подход детально описан в [документации к normalizr](https://github.com/gaearon/normalizr). Например, в реальном приложении хранение хеша ToDo сущностей `todosById: { id -> todo }` и массива их ID `todos: array<id>` в состоянии (state) было бы лучшей идеей, но мы оставим пример простым.
 
-## Handling Actions
+## Обработка действий (Handling Actions)
 
-Now that we’ve decided what our state object looks like, we’re ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
+Теперь, когда мы определились с тем, как должны выглядеть наши объекты состояния (state objects), мы готовы написать редьюсер для них. Редьюсер (reducer) - это чистая функция, которая принимает предыдущее состояние и действие (state и action) и возвращает следующее состояние (новую версию предыдущего).
 
 ```js
 (previousState, action) => newState
 ```
 
-It’s called a reducer because it’s the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It’s very important that the reducer stays pure. Things you should **never** do inside a reducer:
+Функция называется редьюсером (reducer) потому, что ее можно передать в [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). Очень важно чтобы редьюсеры оставались чистыми функциями. Вот список того, чего **никогда** нельзя делать в редьюсере:
 
-* Mutate its arguments;
-* Perform side effects like API calls and routing transitions;
-* Calling non-pure functions, e.g. `Date.now()` or `Math.random()`.
+* Непосредственно изменять то, что пришло в аргументах функции;
+* Выполнять какие-либо сайд-эффекты: обращаться к API или осуществлять переход по роутам;
+* Вызывать не чистые функции, например `Date.now()` or `Math.random()`.
 
-We’ll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
+Мы рассмотрим способы выполнения сайд-эффектов в [продвинутом руководстве](../advanced/README.md). На данный момент просто запомните, что редьюсер должен быть чистым. **Получая аргументы одного типа, редьюсер должен вычислять новую версию состояния и возвращать ее. Никаких сюрпризов. Никаких сайд-эффектов. Никаких обращений к стороннему API. Никаких изменений (mutations). Только вычисление новой версии состояния.**
 
-With this out of the way, let’s start writing our reducer by gradually teaching it to understand the [actions](Actions.md) we defined earlier.
+Исходя из вышенаписанных принципов, давайте начнем писать редьюсер, постепенно обучая его понимать [действия (actions)](Actions.md), которые мы описали чуть раньше.
 
-We’ll start by specifying the initial state. Redux will call our reducer with an `undefined` state for the first time. This is our chance to return the initial state of our app:
+Мы начнем с определения начального состояния (initial state). В первый раз Redux вызовет редьюсер с неопределенным состоянием(`state === undefined`). Это наш шанс инициализировать начальное состояние приложения:
 
 ```js
 import { VisibilityFilters } from './actions';
@@ -63,23 +63,23 @@ function todoApp(state, action) {
     return initialState;
   }
 
-  // For now, don’t handle any actions
-  // and just return the state given to us.
+  // Пока не обрабатываем никаких действий
+  // и просто возвращаем состояние, которое приняли в качестве параметра
   return state;
 }
 ```
 
-One neat trick is to use the [ES6 default arguments syntax](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) to write this in a more compact way:
+Использование [синтаксиса аргументов по умолчанию из ES6](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) для более компактного написания - просто аккуратный трюк:
 
 ```js
 function todoApp(state = initialState, action) {
-  // For now, don’t handle any actions
-  // and just return the state given to us.
+  // Пока не обрабатываем никаких действий
+  // и просто возвращаем состояние, которое приняли в качестве параметра
   return state;
 }
 ```
 
-Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibilityFilter` on the state. Easy:
+Теперь давайте начнем обрабатывать действие `SET_VISIBILITY_FILTER`. Все, что нужно сделать это изменить `visibilityFilter` в состоянии приложения. Это просто:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -94,25 +94,28 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that:
+Обратите внимание:
 
-1. **We don’t mutate the `state`.** We create a copy with [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). `Object.assign(state, { visibilityFilter: action.filter })` is also wrong: it will mutate the first argument. You **must** supply an empty object as the first parameter. You can also enable the experimental [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for ES7 to write `{ ...state, ...newState }` instead.
+1. **Мы не изменяем `state`** Мы, с помощью [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign), создаем обновленную копию `state`. 
+`Object.assign(state, { visibilityFilter: action.filter })` тоже не верный вариант. В этом случае первый аргумент будет изменен.
+Вы **должны** передать первым аргументом пустой объект. Вы также можете попробовать использовать экспериментальный [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread), предложенный в ES7. В этом случае можно просто написать `{ ...state, ...newState }`
 
-2. **We return the previous `state` in the `default` case.** It’s important to return the previous `state` for any unknown action.
+2. Если в операторе `switch` мы попадаем в `default` ветку, то **возвращаем предыдущую версию состояния** - состояние без изменений. Очень важно возвращать предыдущую версию состояния (`state`) для любого неизвестного/необрабатываемого действия (`action`).
 
->##### Note on `Object.assign`
 
->[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, but is not implemented by most browsers yet. You’ll need to either use a polyfill, a [Babel plugin](https://www.npmjs.com/package/babel-plugin-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
+>##### Обратите внимание на `Object.assign`
 
->##### Note on `switch` and Boilerplate
+>[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) это часть ES6, но этот метод пока не реализован в большинстве браузеров. Вам нужно будет использовать либо полифилл [Babel плагин](https://www.npmjs.com/package/babel-plugin-object-assign), либо хелпер из другой библиотеки, к примеру [`_.assign()` из lodash](https://lodash.com/docs#assign).
 
->The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
+>##### Обратите внимание на `switch` и Шаблон (Boilerplate ориг)
 
->It’s unfortunate that many still choose a framework based on whether it uses `switch` statements in the documentation. If you don’t like `switch`, you can use a custom `createReducer` function that accepts a handler map, as shown in [“reducing boilerplate”](../recipes/ReducingBoilerplate.md#reducers).
+> Конструкция `switch` *не является* реальным шаблоном. Реальный шаблон Flux является абстракцией: необходимость инициировать обновление, необходимость зарегистрировать хранилище (`Store`) в `Dispatcher'е`, необходимость, чтобы `Store` был объектом (возникают осложнения, если Вы хотите универсальное приложение (universal app)). Redux решает эти проблемы благодаря использованию чистых редьюсеров вместо генераторов событий (event emitters)
 
-## Handling More Actions
+>Если Вам не нравится конструкция `switch`, Вы можете использовать собственную функцию `createReducer`, которая принимает объект обработчиков, как показано в [“сокращении шаблонности (reducing boilerplate)”](../recipes/ReducingBoilerplate.md#reducers).
 
-We have two more actions to handle! Let’s extend our reducer to handle `ADD_TODO`.
+## Обрабатываем больше действий
+
+У нас есть еще два действия, которые должны быть обработаны! Давайте расширим наш редьюсер так, чтобы он мог обрабатывать действие `ADD_TODO`.
 
 ```js
 function todoApp(state = initialState, action) {
@@ -134,9 +137,9 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Just like before, we never write directly to `state` or its fields, and instead we return new objects. The new `todos` is equal to the old `todos` concatenated with a single new item at the end. The fresh todo was constructed using the data from the action.
+Как и раньше, мы никогда не изменяем непосредственно `state` или его поля. Вместо этого мы возвращаем новый объект. В случае добавления новый `todos` объект это старый `todos` объект, в данном случае массив, в конец которого добавлен новый элемент `todo`. Свежий `todos` объект был создан с использованием информации, полученной из `action`.
 
-Finally, the implementation of the `COMPLETE_TODO` handler shouldn’t come as a complete surprise:
+Ну и наконец имплементация обработчика для действия `COMPLETE_TODO` не должна стать для Вас болшим сюрпризом:
 
 ```js
 case COMPLETE_TODO:
@@ -151,11 +154,11 @@ case COMPLETE_TODO:
   });
 ```
 
-Because we want to update a specific item in the array without resorting to mutations, we have to slice it before and after the item. If you find yourself often writing such operations, it’s a good idea to use a helper like [React.addons.update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), or even a library like [Immutable](http://facebook.github.io/immutable-js/) that has native support for deep updates. Just remember to never assign to anything inside the `state` unless you clone it first.
+В силу того, что мы хотим обновить конкретный `todo` элемент в массиве не прибегая к изменению исходного массива, мы должны использовать функцию slice для массива. Мы как бы создадим новый массив из кусочков старого - `[элементы до интересующего нас элемента, обновленный интересующий нас элемент, элементы после интересующего нас элемента]`. Если Вы поймаете себя на частом написании такого рода решений, то, возможно, Вам стоит обратить внимание на такие утилиты как [React.addons.update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep), или даже такие библиотеки как [Immutable](http://facebook.github.io/immutable-js/), котрые имеют нативную поддержку глубоких обновлений (deep updates). Просто запомните, что нельзя присваивать ничего внутри `state` пока вы его не склонировали.
 
-## Splitting Reducers
+## Разделение редьюсеров (Splitting Reducers)
 
-Here is our code so far. It is rather verbose:
+Вот так выглядит наш код на данный момент. Выглядит излишне многословным:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -187,7 +190,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Is there a way to make it easier to comprehend? It seems like `todos` and `visibilityFilter` are updated completely independently. Sometimes state fields depend on one another and more consideration is required, but in our case we can easily split updating `todos` into a separate function:
+Есть ли какой-либо способ сделать его более простым для чтения и понимания? Кажется, что `todos` и `visibilityFilter` обновляются совершенно независимо. Иногда поля состояния (state fields) зависят от других полей и требуется б*о*льшая связанность, но в нашем случаем мы безболезненно можем вынести обновление `todos` в отдельную функцию:
 
 ```js
 function todos(state = [], action) {
@@ -227,9 +230,9 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that `todos` also accepts `state`—but it’s an array! Now `todoApp` just gives it the slice of the state to manage, and `todos` knows how to update just that slice. **This is called *reducer composition*, and it’s the fundamental pattern of building Redux apps.**
+Обратите внимание, что функция `todos` также принимает `state`, но `state` - это массив! Теперь `todoApp` просто передает срез/слой состояния в функцию `todos`, которая, с вою очередь, точно знает как обновить именно этот/такой кусок состояния. **Это называется *reducer composition* и является фундаментальным шаблоном построения Redux приложений** Мы разбиваем главный редьюсер на дочерние "подредьюсеры", которые выполняют каждый свою работу - обрабатывают какой-то один кусочек данных (срез состояния). А главный редьюсер только лишь решает какому дочернему редьюсеру и какой срез состояния отдать.
 
-Let’s explore reducer composition more. Can we also extract a reducer managing just `visibilityFilter`? We can:
+Давайте рассмотрим reducer composition подробнее. Можем ли мы извлечь редьюсер, который будет управлять только `visibilityFilter`? Конечно можем:
 
 ```js
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -242,7 +245,10 @@ function visibilityFilter(state = SHOW_ALL, action) {
 }
 ```
 
-Now we can rewrite the main reducer as a function that calls the reducers managing parts of the state, and combines them into a single object. It also doesn’t need to know the complete initial state anymore. It’s enough that the child reducers return their initial state when given `undefined` at first.
+Теперь мы можем переписать наш главный редьюсер как функцию, которая:
+* вызывает другие редьюсеры, обрабатывающие части состояния;
+* собирает отдельно обработанные части состояния в один цельный объект.
+Также главному редьюсеру больше нет необходимости знать полное начальное состояние. Достаточно того, что каждый дочерний редьюсер возвращает свое начальное состояние, если при первом вызове получает `undefined` вместо `state`.
 
 ```js
 function todos(state = [], action) {
@@ -282,11 +288,11 @@ function todoApp(state = {}, action) {
 }
 ```
 
-**Note that each of these reducers is managing its own part of the global state. The `state` parameter is different for every reducer, and corresponds to the part of the state it manages.**
+** Обратите внимание на то, что каждый из этих дочерних редьюсеров управляет только какой-то одной/своей частью глобального состояния. Параметр `state` разный для каждого отдельного дочернего редьюсера и соответствует той части глобального состояния, которой управляет этот дочерний редьюсер.**
 
-This is already looking good! When the app is larger, we can split the reducers into separate files and keep them completely independent and managing different data domains.
+Уже выглядит лучше! Когда приложение разрастается мы можем выносить редьюсеры в отдельные файлы и поддерживать их совершенно независимыми, что дает нам возможность управлять различными разделами/срезами наших данных.
 
-Finally, Redux provides a utility called [`combineReducers()`](../api/combineReducers.md) that does the same boilerplate logic that the `todoApp` above currently does. With its help, we can rewrite `todoApp` like this:
+Наконец, Redux предоставляет утилиту называемую [`combineReducers()`](../api/combineReducers.md), которая реализует точно такой же логический шаблон, который мы только что реализовали в `todoApp`. С ее помощью мы можем переписать `todoApp` следующим образом:
 
 ```js
 import { combineReducers } from 'redux';
@@ -299,7 +305,7 @@ const todoApp = combineReducers({
 export default todoApp;
 ```
 
-Note that this is completely equivalent to:
+Обратите внимание, что это полностью эквивалентно такому коду:
 
 ```js
 export default function todoApp(state, action) {
@@ -310,7 +316,7 @@ export default function todoApp(state, action) {
 }
 ```
 
-You could also give them different keys, or call functions differently. These two ways to write a combined reducer are completely equivalent:
+Есть два совершенно равноценных способа писать комбинированные редьюсеры:
 
 ```js
 const reducer = combineReducers({
@@ -330,11 +336,12 @@ function reducer(state, action) {
 }
 ```
 
-All [`combineReducers()`](../api/combineReducers.md) does is generate a function that calls your reducers **with the slices of state selected according to their keys**, and combining their results into a single object again. [It’s not magic.](https://github.com/rackt/redux/issues/428#issuecomment-129223274)
+Все, что делает [`combineReducers()`](../api/combineReducers.md) - это генерирует функцию, которая вызывает ваши редьюсеры, передавая им в качестве одного из аргументов **срез глобального состояния, который выбирается в соответствии с именем его ключа в глобалном состоянии**, и затем снова собирает результаты всех вызовов в один объект. [Тут нет никакой магии.](https://github.com/rackt/redux/issues/428#issuecomment-129223274)
 
->##### Note for ES6 Savvy Users
+>##### Заметка для сообразительных пользователей синтаксиса ES6
 
->Because `combineReducers` expects an object, we can put all top-level reducers into a separate file, `export` each reducer function, and use `import * as reducers` to get them as an object with their names as the keys:
+>Т.к. `combineReducers` ожидает на входе объект, мы можем поместить все редьюсеры верхнего уровня в разные файлы, экспортировать каждую функцию-редьюсер 
+ и использовать `import * as reducers` для получения их в формате объекта, ключами которого будут имена экспортируемых функций.
 
 >```js
 >import { combineReducers } from 'redux';
@@ -343,9 +350,9 @@ All [`combineReducers()`](../api/combineReducers.md) does is generate a function
 >const todoApp = combineReducers(reducers);
 >```
 >
->Because `import *` is still new syntax, we don’t use it anymore in the documentation to avoid [confusion](https://github.com/rackt/redux/issues/428#issuecomment-129223274), but you may encounter it in some community examples.
+>Поскольку `import *` это все еще новый синтаксис, мы не используем его нигде в документации воизбежание [путаницы](https://github.com/rackt/redux/issues/428#issuecomment-129223274), но Вы можете случайно наткнуться на него в каих-нибудь примерах кода из сообщества.
 
-## Source Code
+## Исходный код (Source Code)
 
 #### `reducers.js`
 
@@ -391,6 +398,6 @@ const todoApp = combineReducers({
 export default todoApp;
 ```
 
-## Next Steps
+## Следующие шаги
 
-Next, we’ll explore how to [create a Redux store](Store.md) that holds the state and takes care of calling your reducer when you dispatch an action.
+Далле мы изучим как [создать Redux хранилище (create a Redux store)](Store.md), которое содержит состояние (state) и заботится о вызове редьюсеров когда Вы генерируете и транслируете действие (dispatch an action).
