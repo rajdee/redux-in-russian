@@ -1,17 +1,17 @@
-# Reducers
+# Редьюсеры (Reducers)
 
-[Actions](./Actions.md) describe the fact that *something happened*, but don’t specify how the application’s state changes in response. This is the job of a reducer.
+[Действия (Actions)](./Actions.md) описывают тот факт, что *что-то совершилось*, но не определяют как в ответ изменяется состояние (state) приложения. Это работа редьюсеров (reducers).
 
-## Designing the State Shape
+## Проектирование формы состояния (State)
 
-In Redux, all application state is stored as a single object. It’s a good idea to think of its shape before writing any code. What’s the minimal representation of your app’s state as an object?
+В Redux, все состояния приложения хранится в виде единственного объекта. Подумать о его форме перед написанием кода - довольно не плохая идея. Каково минимальное представление состояния Вашего приложения в виде объекта?
 
-For our todo app, we want to store two different things:
+Для нашего ToDo приложения мы хотим хранить две разные вещи:
 
-* The currently selected visibility filter;
-* The actual list of todos.
+* Состояние фильтра видимости;
+* Актиульный список todo-задач.
 
-You’ll often find that you need to store some data, as well as some UI state, in the state tree. This is fine, but try to keep the data separate from the UI state.
+Часто Вы будете понимать, что в дереве состояний (state tree) нужно хранить какие то данные, которые не совсем относятся к состоянию UI. Это нормально, только старайтесь держать не смешивать с данными, которые описывают состояние UI.
 
 ```js
 {
@@ -26,29 +26,29 @@ You’ll often find that you need to store some data, as well as some UI state, 
 }
 ```
 
->##### Note on Relationships
+>##### Заметка об отношениях
 
->In a more complex app, you’re going to want different entities to reference each other. We suggest that you keep your state as normalized as possible, without any nesting. Keep every entity in an object stored with an ID as a key, and use IDs to reference it from other entities, or lists. Think of the app’s state as a database. This approach is described in [normalizr's](https://github.com/gaearon/normalizr) documentation in detail. For example, keeping `todosById: { id -> todo }` and `todos: array<id>` inside the state would be a better idea in a real app, but we’re keeping the example simple.
+>В более сложном приложении Вы, скорее всего, будете иметь разные сущности, которые будут ссылаться друг на друга. Мы советуем поддерживать состояние (state) в настолько нормализованном виде, насколько это возможно. Старайтесь не допускать никакой вложенности. Держите каждую сущность в объекте, который хранится с ID в качестве ключа. Используйте этот ID в качестве ссылки из других сущностей или списков. Думайте о состоянии приложения (apps state), как о базе данных. Этот подход детально описан в [документации к normalizr](https://github.com/gaearon/normalizr). Например, в реальном приложении хранение хеша ToDo сущностей `todosById: { id -> todo }` и массива их ID `todos: array<id>` в состоянии (state) было бы лучшей идеей, но мы оставим пример простым.
 
-## Handling Actions
+## Обработка действий (Handling Actions)
 
-Now that we’ve decided what our state object looks like, we’re ready to write a reducer for it. The reducer is a pure function that takes the previous state and an action, and returns the next state.
+Теперь, когда мы определились с тем, как должны выглядеть наши объекты состояния (state objects), мы готовы написать редьюсер для них. Редьюсер (reducer) - это чистая функция, котора принимает предыдущее состояние и действие (state и action) и возвращает следующее состояние (новую версию предыдущего).
 
 ```js
 (previousState, action) => newState
 ```
 
-It’s called a reducer because it’s the type of function you would pass to [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). It’s very important that the reducer stays pure. Things you should **never** do inside a reducer:
+Функция называется редьюсером (reducer) потому, что ее можно передать в [`Array.prototype.reduce(reducer, ?initialValue)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). Очент важно чтобы редьюсеры (reducer) оставались чистыми функциями. Вот список того, чего **никогда** нельзя делать в редьюсере:
 
-* Mutate its arguments;
-* Perform side effects like API calls and routing transitions;
-* Calling non-pure functions, e.g. `Date.now()` or `Math.random()`.
+* Непосредственно изменять то, что пришло в аргументах функции;
+* Выполнять какие-либо сайд-эффекты: обращаться к API или осуществлять переход по роутам;
+* Вызывать не чистые функции, например `Date.now()` or `Math.random()`.
 
-We’ll explore how to perform side effects in the [advanced walkthrough](../advanced/README.md). For now, just remember that the reducer must be pure. **Given the same arguments, it should calculate the next state and return it. No surprises. No side effects. No API calls. No mutations. Just a calculation.**
+Мы рассмотрим способы выполнения сайд-эффектов в [продвинутом руководстве](../advanced/README.md). На данный момент просто запомните, что редьюсер должен быть чистым. **Получая аргументы, которые имеют неизменный тип, редьюсер должен вычислять новую версию состояния и возвращать ее. Никаких сюрпризов. Никаких сайд-эффектов. Никаких обращений к стороннему API. Никаких изменений (mutations). Только вычисление новой версии состояния.**
 
-With this out of the way, let’s start writing our reducer by gradually teaching it to understand the [actions](Actions.md) we defined earlier.
+С осознанием вышенаписанного, давайте начнем писать редьюсер, постепенно обучая его понимать [действия (actions)](Actions.md), которые мы описали чуть раньше.
 
-We’ll start by specifying the initial state. Redux will call our reducer with an `undefined` state for the first time. This is our chance to return the initial state of our app:
+Мы начнем с определения начального состояния (initial state). В первый раз Redux вызовет редьюсер с неопределенным состоянием(`state === undefined`). Это наш шанс инициализировать начальное состояние приложения:
 
 ```js
 import { VisibilityFilters } from './actions';
@@ -63,23 +63,23 @@ function todoApp(state, action) {
     return initialState;
   }
 
-  // For now, don’t handle any actions
-  // and just return the state given to us.
+  // Пока не обрабатываем никаких жействий
+  // и просто возвращаем состояние, которое приняли в качестве параметра
   return state;
 }
 ```
 
-One neat trick is to use the [ES6 default arguments syntax](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) to write this in a more compact way:
+Использование [синтаксиса аргументов по умолчанию из ES6](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) для более компактного написания - просто аккуратный трюк:
 
 ```js
 function todoApp(state = initialState, action) {
-  // For now, don’t handle any actions
-  // and just return the state given to us.
+  // Пока не обрабатываем никаких жействий
+  // и просто возвращаем состояние, которое приняли в качестве параметра
   return state;
 }
 ```
 
-Now let’s handle `SET_VISIBILITY_FILTER`. All it needs to do is to change `visibilityFilter` on the state. Easy:
+Теперь давайте начнем обрабатывать действие `SET_VISIBILITY_FILTER`. Все, что нужно сделать это изменить `visibilityFilter` в состоянии приложения. Это просто:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -94,21 +94,26 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Note that:
+Обратите внимание:
 
-1. **We don’t mutate the `state`.** We create a copy with [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). `Object.assign(state, { visibilityFilter: action.filter })` is also wrong: it will mutate the first argument. You **must** supply an empty object as the first parameter. You can also enable the experimental [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for ES7 to write `{ ...state, ...newState }` instead.
+1. **Мы не изменяем `state`** Мы, с помощью [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) создаем копию `state`. 
+`Object.assign(state, { visibilityFilter: action.filter })` тоже не верный вариант. В этом случае первый аргумент будет изменен.
+Вы **должны** передать первым аргументом пустой объект. Вы также можете попробовать использовать экспериментальный [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread), предложенный в ES7. В этом случае можно просто написать `{ ...state, ...newState }`
 
-2. **We return the previous `state` in the `default` case.** It’s important to return the previous `state` for any unknown action.
+2. Если в операторе `switch` мы попадаем в `default` ветку, то **возвращаем предыдущую версию состояния** - состояние без изменений. Очень важно возвращать предыдущую версию состояния (`state`) для любого неизвестного/необрабатываемого действия (`action`).
 
->##### Note on `Object.assign`
 
->[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) is a part of ES6, but is not implemented by most browsers yet. You’ll need to either use a polyfill, a [Babel plugin](https://www.npmjs.com/package/babel-plugin-object-assign), or a helper from another library like [`_.assign()`](https://lodash.com/docs#assign).
+>##### Обратите внимание на `Object.assign`
 
->##### Note on `switch` and Boilerplate
+>[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) это часть ES6, но этот метод пока не реализован в большинстве браузеров. Вам нужно будет использовать либо полифилл [Babel плагин](https://www.npmjs.com/package/babel-plugin-object-assign), либо хелпериз другой библиотеки, к примеру [`_.assign()` из lodash](https://lodash.com/docs#assign).
+
+>##### Обратите внимание на `switch` and Шаблонность
+
+> Конструкция `switch` *не является* реальным шаблоном (boilerplate ориг). Реальный шаблон Flux является абстракцией: необходимость инициировать обновление, необходимость зарегистрировать хранилище (`Store`) в `Dispatcher'е`, необходимость, чтобы `Store` был объектом (возникают осложнения, если Вы хотите универсальное приложение (universal app)). Redux решает эти проблемы благодаря использованию читсых редьюсеров вместо генераторов событий (event emitters)
 
 >The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app). Redux solves these problems by using pure reducers instead of event emitters.
 
->It’s unfortunate that many still choose a framework based on whether it uses `switch` statements in the documentation. If you don’t like `switch`, you can use a custom `createReducer` function that accepts a handler map, as shown in [“reducing boilerplate”](../recipes/ReducingBoilerplate.md#reducers).
+>Если Вам не нравится конструкция `switch`, Вы можете использовать собственную функцию `createReducer`, которая принимает объект обработчиков, как показано в [“сокращении шаблонности (reducing boilerplate)”](../recipes/ReducingBoilerplate.md#reducers).
 
 ## Handling More Actions
 
