@@ -1,16 +1,16 @@
-# Data Flow
+# Поток данных (Data Flow)
 
-Redux architecture revolves around a **strict unidirectional data flow**.
+Архитектура Redux вращается вокруг **строго однонаправленного потока данных**.
 
-This means that all data in an application follows the same lifecycle pattern, making the logic of your app more predictable and easier to understand. It also encourages data normalization, so that you don't end up with multiple, independent copies of the same data that are unaware of one another.
+Это значит, что все данные в приложении следуют отднопу паттерну жизненного цикла, делая логику Вашего приложения более предсказуемой и легкой для понимания. Также это способствует большей нормализации данных (data normalization), так что в конесном итоге у Вас не будет нескольких изолированных копий одних и тех же данных, которые ничего не знают друг о друге.
 
-If you're still not convinced, read [Motivation](../introduction/Motivation.md) and [The Case for Flux](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6) for a compelling argument in favor of unidirectional data flow. Although [Redux is not exactly Flux](../introduction/PriorArt.md), it shares the same key benefits.
+Если Вы до сих пор не убеждены, прочтите [Мотивацию (Motivation)](../introduction/Motivation.md) и [The Case for Flux](https://medium.com/@dan_abramov/the-case-for-flux-379b7d1982c6) для ознакомления с убедительными аргументами в пользу однонаправленного потока данных. Хотя [Redux это не совсем Flux](../introduction/PriorArt.md), он дает такие же основные преимущества.
 
-The data lifecycle in any Redux app follows these 4 steps:
+Жизненный цикл данных в любом  Redux приложении включает в себя 4 шага:
 
-1. **You call** [`store.dispatch(action)`](../api/Store.md#dispatch).
+1. **Вы вызываете** [`store.dispatch(action)`](../api/Store.md#dispatch).
 
-  An action is a plain object describing *what happened*. For example:
+  Действие - это простой javascript объект, который описывает *что случилось*. Например:
 
     ```js
     { type: 'LIKE_ARTICLE', articleId: 42 };
@@ -18,16 +18,16 @@ The data lifecycle in any Redux app follows these 4 steps:
     { type: 'ADD_TODO', text: 'Read the Redux docs.'};
     ```
 
-  Think of an action as a very brief snippet of news. “Mary liked article 42.” or “‘Read the Redux docs.’ was added to the list of todos.”
+  Думайте о действии, как о очень коротком фрагменте новостей. "Мэри залайкала статью 42" или "'Прочитать документацию Redux' было добавлено в ToDo список".
 
-  You can call [`store.dispatch(action)`](../api/Store.md#dispatch) from anywhere in your app, including components and XHR callbacks, or even at scheduled intervals.
+  Вы можете вызвать [`store.dispatch(action)`](../api/Store.md#dispatch) из любого места Вашего приложения, включая компоненты и XHR каллбеки, или даже с запланированными интервалами.
 
-2. **The Redux store calls the reducer function you gave it.**
+2. **Хранилище Redux вызывает функцию-редьюсер, который Вы ему передали.**
 
-  The store will pass two arguments to the reducer, the current state tree and the action. For example, in the todo app, the root reducer might receive something like this:
-
+  Хранилище передаст два аргумента при вызове редьюсера: текущее дерево состояния (current state tree) и действие (action). Например, в ToDo приложении главный редьюсер может принимать что-то такое:
+   
     ```js
-    // The current application state (list of todos and chosen filter)
+    // Текущее состояние приложения (список дел и выбранный фильтр)
     let previousState = {
       visibleTodoFilter: 'SHOW_ALL',
       todos: [{
@@ -36,32 +36,32 @@ The data lifecycle in any Redux app follows these 4 steps:
       }]
     };
 
-    // The action being performed (adding a todo)
+    // Выполнение действия (добавление дела)
     let action = {
       type: 'ADD_TODO',
       text: 'Understand the flow.'
     };
 
-    // Your reducer returns the next application state
+    // Ваш редьюсер возвращает следующее состояние приложения
     let nextState = todoApp(previousState, action);
     ```
 
-    Note that a reducer is a pure function. It only *computes* the next state. It should be completely predictable: calling it with the same inputs many times should produce the same outputs. It shouldn’t perform any side effects like API calls or router transitions. These should happen before an action is dispatched.
+    Обратите внимание на то, тчо редьюсер это чистая функция. Он только *вычисляет* следующее состояние. Он должен быть совершенно предсказуемым: тип возвращаемых данных не должен меняться если на вход подаются данные одного типа. Он не должен совершать никаких сайд эффектов таких как обращение к API или маршрутизация по приложению. Все это должно происходить только после того, как действие будет совершено.
 
-3. **The root reducer may combine the output of multiple reducers into a single state tree.**
+3. **Главный редьюсер может комбинировать результат работы несольких редьюсеров в единственное дерево состояния приложения.**
 
-  How you structure the root reducer is completely up to you. Redux ships with a [`combineReducers()`](../api/combineReducers.md) helper function, useful for “splitting” the root reducer into separate functions that each manage one branch of the state tree.
+  Каким образом вы будете структурировать главный редьюсер зависит только от Вас. Redux поставляется с [`combineReducers()`](../api/combineReducers.md) хелпером, полезным для "разделения" главного редьюсера на отдельные функции, которые управляют отдельными ветвями дерева состояния.
 
-  Here’s how [`combineReducers()`](../api/combineReducers.md) works. Let’s say you have two reducers, one for a list of todos, and another for the currently selected filter setting:
+  [`combineReducers()`](../api/combineReducers.md) работают следующим образом. Допустим у Вас есть два редьюсера: один для списка ToDo дел, второй - для выбранного сейчас режима отображения этого списка:
 
     ```js
     function todos(state = [], action) {
-      // Somehow calculate it...
+      // как то вычисляет nextState...
       return nextState;
     }
 
     function visibleTodoFilter(state = 'SHOW_ALL', action) {
-      // Somehow calculate it...
+      // как то вычисляет nextState...
       return nextState;
     }
 
@@ -71,14 +71,14 @@ The data lifecycle in any Redux app follows these 4 steps:
     });
     ```
 
-  When you emit an action, `todoApp` returned by `combineReducers` will call both reducers:
+  Когда вы инициируете действие, `todoApp`, которое вернул `combineReducers` вызовет оба редьюсера:
 
     ```js
     let nextTodos = todos(state.todos, action);
     let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action);
     ```
 
-  It will then combine both sets of results into a single state tree:
+  Затем оба набора состояний будут снова собраны в единое состояние:
 
     ```js
     return {
@@ -87,17 +87,18 @@ The data lifecycle in any Redux app follows these 4 steps:
     };
     ```
 
-  While [`combineReducers()`](../api/combineReducers.md) is a handy helper utility, you don’t have to use it; feel free to write your own root reducer!
+  Так как [`combineReducers()`](../api/combineReducers.md) это просто удобная утилита, Вы совершено не обязаны ее использовать. Вы можете написать главнй редьюсер самостоятельно!
 
-4. **The Redux store saves the complete state tree returned by the root reducer.**
+4. **Хранилище Redux сохраняет полное дерево состояния, которое возвращает главный редьюсер.**
 
-  This new tree is now the next state of your app! Every listener registered with [`store.subscribe(listener)`](../api/Store.md#subscribe) will now be invoked; listeners may call [`store.getState()`](../api/Store.md#getState) to get the current state.
+  Это новое дерево является следующим состоянием Вашего приложения! Каждый слушатель, зарегистрированный с помощью [`store.subscribe(listener)`](../api/Store.md#subscribe), будет вызван. Слушатели могут вызывать [`store.getState()`](../api/Store.md#getState) для получения текущего состояния приложения.
 
-  Now, the UI can be updated to reflect the new state. If you use bindings like [React Redux](https://github.com/gaearon/react-redux), this is the point at which `component.setState(newState)` is called.
+  Теперь UI может быть обновлен для отражения нового состояния приложения. Если Вы используете такие биндинги (bindings), как [React Redux](https://github.com/gaearon/react-redux), то это та точка, в которой стоит вызвать `component.setState(newState)`
 
-## Next Steps
+## Следующие шаги
 
-Now that you know how Redux works, let’s [connect it to a React app](UsageWithReact.md).
+Теперь, когда Вы знаете как работает Redux, давайте [свяжем его с React приложением](UsageWithReact.md).
 
->##### Note for Advanced Users
->If you’re already familiar with the basic concepts and have previously completed this tutorial, don’t forget to check out [async flow](../advanced/AsyncFlow.md) in the [advanced tutorial](../advanced/README.md) to learn how middleware transforms [async actions](../advanced/AsyncActions.md) before they reach the reducer.
+>##### Заметка для опытных пользователей
+
+> Если Вы уже знакомы с основными концепциями и уже освоили этот обучающее руководство, то не забудьте посетить [асинхронный поток (async flow)](../advanced/AsyncFlow.md) в [руководстве для опытных](../advanced/README.md) для изучения того как именнно middleware изменяют [асинхронные действия](../advanced/AsyncActions.md) 
