@@ -1,8 +1,8 @@
-# Example: Todo List
+# Пример: Список дел (Example: Todo List)
 
-This is the complete source code of the tiny todo app we built during the [basics tutorial](./README.md).
+Это полный исходный код простенького приложения-списка дел, котрое мы создалиизучая [базовое руководство](./README.md).
 
-## Entry Point
+## Точка входа (Entry Point)
 
 #### `index.js`
 
@@ -17,8 +17,8 @@ let store = createStore(todoApp);
 
 let rootElement = document.getElementById('root');
 React.render(
-  // The child must be wrapped in a function
-  // to work around an issue in React 0.13.
+  // Дочерний компонент должен быть обернуть в функцию
+  // это баг в React 0.13.
   <Provider store={store}>
     {() => <App />}
   </Provider>,
@@ -26,13 +26,13 @@ React.render(
 );
 ```
 
-## Action Creators and Constants
+## Генераторы действий и константы (Action Creators and Constants)
 
 #### `actions.js`
 
 ```js
 /*
- * action types
+ * типы действий
  */
 
 export const ADD_TODO = 'ADD_TODO';
@@ -40,7 +40,7 @@ export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
 
 /*
- * other constants
+ * другие константы
  */
 
 export const VisibilityFilters = {
@@ -50,7 +50,7 @@ export const VisibilityFilters = {
 };
 
 /*
- * action creators
+ * генераторы действий
  */
 
 export function addTodo(text) {
@@ -66,7 +66,7 @@ export function setVisibilityFilter(filter) {
 }
 ```
 
-## Reducers
+## Редьюсеры (Reducers)
 
 #### `reducers.js`
 
@@ -112,7 +112,7 @@ const todoApp = combineReducers({
 export default todoApp;
 ```
 
-## Smart Components
+## Умные компоненты (Smart Components)
 
 #### `containers/App.js`
 
@@ -126,7 +126,7 @@ import Footer from '../components/Footer';
 
 class App extends Component {
   render() {
-    // Injected by connect() call:
+    // Получено благодаря вызову connect():
     const { dispatch, visibleTodos, visibilityFilter } = this.props;
     return (
       <div>
@@ -172,8 +172,8 @@ function selectTodos(todos, filter) {
   }
 }
 
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
+// Какие именно props мы хотим получить из приходящего как аргумент глобального состояния?
+// Обртите внимание: испльзуйте https://github.com/faassen/reselect для более лучшей производительности.
 function select(state) {
   return {
     visibleTodos: selectTodos(state.todos, state.visibilityFilter),
@@ -181,11 +181,11 @@ function select(state) {
   };
 }
 
-// Wrap the component to inject dispatch and state into it
+// Оборачиваем компонент `App` для внедрения  в него функции `dispatch` и состояния
 export default connect(select)(App);
 ```
 
-## Dumb Components
+## Глупые компоненты (Dumb Components)
 
 #### `components/AddTodo.js`
 
