@@ -1,10 +1,10 @@
-# API Reference
+# API
 
-The Redux API surface is tiny. Redux defines a set of contracts for you to implement (such as [reducers](../Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
+Redux имеет скромный API . Он определяет лишь набор соглашений по использованию (например [reducers](../Glossary.md#reducer)) и предлагает нелсколько вспомогательных функци для того, чтобы объединить эти соглашения.
 
-This section documents the complete Redux API. Keep in mind that Redux is only concerned with managing the state. In a real app, you’ll also want to use UI bindings like [react-redux](https://github.com/gaearon/react-redux).
+В этом разделе полностью будет описан Redux API. Имейте ввиду, что Redux ориентирован только на управление состоянием (state). В реальном приложении, вы будете использовать UI-билды такие как [react-redux](https://github.com/gaearon/react-redux).
 
-### Top-Level Exports
+### Экспорты верхнего-уровня
 
 * [createStore(reducer, [initialState])](createStore.md)
 * [combineReducers(reducers)](combineReducers.md)
@@ -12,7 +12,7 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
 * [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
 * [compose(...functions)](compose.md)
 
-### Store API
+### API хранилища
 
 * [Store](Store.md)
   * [getState()](Store.md#getState)
@@ -20,9 +20,10 @@ This section documents the complete Redux API. Keep in mind that Redux is only c
   * [subscribe(listener)](Store.md#subscribe)
   * [replaceReducer(nextReducer)](Store.md#replaceReducer)
 
-### Importing
+### Импорты
 
-Every function described above is a top-level export. You can import any of them like this:
+Каждая функция описана как экспорт верхнего-уровня.
+Вы можете импортировать любые из них. Например:
 
 #### ES6
 
