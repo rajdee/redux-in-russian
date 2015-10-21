@@ -1,28 +1,28 @@
-# Async Actions
+# Асинхронные действия (Async Actions)
 
-In the [basics guide](../basics/README.md), we built a simple todo application. It was fully synchronous. Every time an action was dispatched, the state was updated immediately.
+В [базовом руководстве](../basics/README.md) мы построили простое приложение - список дел. Оно было совершенно синхронным. Состояние (State) обновлялось сразуже после того, как было сгенерировано и отправлено действие (dispatch action).
 
-In this guide, we will build a different, asynchronous application. It will use the Reddit API to show the current headlines for a select subreddit. How does asynchronicity fit into Redux flow?
+В этом руководстве мы будем строить асинхронное приложение, которое будет использовать API Reddit'а для отображения текущих заголовков для выбранного subreddit'a. Так как же асинхронность вписывается в Redux поток (flow)?
 
-## Actions
+## Действия (Actions)
 
-When you call an asynchronous API, there are two crucial moments in time: the moment you start the call, and the moment when you receive an answer (or a timeout).
+Когда Вы вызываете асинхронное API есть два ключевых момента времени: момент непосредственного вызова и момент получения ответа (или timeout'a)
 
-Each of these two moments can usually require a change in the application state; to do that, you need to dispatch normal actions that will be processed by reducers synchronously. Usually, for any API request you’ll want to dispatch at least three different kinds of actions:
+Для каждого из этих моментов обычно может требоваться изменение состояния приложения (application state). Для изменения состояния Вы должны запустить (dispatch) нормальное действие, которое будет обработано редьюсером синхронно. Обычно для любого API запроса Вам понадобится запустить (dispatch) по крайней мере три разных вида действий (actions):
 
-* **An action informing the reducers that the request began.**
+* **Действие, информирующее редьюсер о том, что запрос начался.**
 
-  The reducers may handle this action by toggling an `isFetching` flag in the state. This way the UI knows it’s time to show a spinner.
+  Редьюсер может обрабатывать такой вид действия, переключая флаг `isFetching` в состоянии приложения. Именно так UI понимает, что самое время показать лоадер/спиннер.
 
-* **An action informing the reducers that the request finished successfully.**
+* **Действие, информирующее редьюсер о том, что запрос успешно завершился.**
 
-  The reducers may handle this action by merging the new data into the state they manage and resetting `isFetching`. The UI would hide the spinner, and display the fetched data.
+  Редьюсер может обрабатывать такой вид действия, объединяя полученные из запроса данные с тем срезом состояния, которым управляет этот редьюсер, и сбрасывая флаг `isFetching`.
 
-* **An action informing the reducers that the request failed.**
+* **Действие, информирующее редьюсер о том, что запрос завершился неудачей.**
 
-  The reducers may handle this action by resetting `isFetching`. Maybe, some reducers will also want to store the error message so the UI can display it.
+  Редьюсер может обрабатывать такой вид действия сбрасывая флаг `isFetching`. Также некоторые редьюсеры могут хотеть сохранить сообщение об ошибке, чтобы UI мог его отобразить.
 
-You may use a dedicated `status` field in your actions:
+Для всего этого Вы можете использовать поле `status` в действиях (actions):
 
 ```js
 { type: 'FETCH_POSTS' }
@@ -30,7 +30,7 @@ You may use a dedicated `status` field in your actions:
 { type: 'FETCH_POSTS', status: 'success', response: { ... } }
 ```
 
-Or you can define separate types for them:
+Или Вы можете обхявить отдельные типы для таких действий:
 
 ```js
 { type: 'FETCH_POSTS_REQUEST' }
@@ -38,20 +38,24 @@ Or you can define separate types for them:
 { type: 'FETCH_POSTS_SUCCESS', response: { ... } }
 ```
 
-Choosing whether to use a single action type with flags, or multiple action types, is up to you. It’s a convention you need to decide with your team. Multiple types leave less room for a mistake, but this is not an issue if you generate action creators and reducers with a helper library like [redux-actions](https://github.com/acdlite/redux-actions).
+Выбор использования одного типа действий с флагами или нескольких отдельных типов действий остается за Вами. Это соглашение, которое Вы должны утвердить с Вашей командой. 
 
-Whatever convention you choose, stick with it throughout the application.  
-We’ll use separate types in this tutorial.
+Использование нескольких типов действий оставляют меньше места для ошибки, но это не проблема, если Вы генерируете действия и редьюсеры с помощью таких библиотек, как [redux-actions](https://github.com/acdlite/redux-actions).
 
-## Synchronous Action Creators
+Какое бы соглашение Вы не выбрали, следуйте ему на протяжении всего приложения.
+В этом руководстве мы будем использовать несколько отдельных типов действий.
 
-Let’s start by defining the several synchronous action types and action creators we need in our example app. Here, the user can select a reddit to display:
+## Синхронные генераторы действий (Synchronous Action Creators).
+
+Давайте начнем с объявления нескольких синхронный типов и генераторов действий, которые нам понадобятся в нашем приложении. Тут пользователь может выбрать reddit для отображения:
 
 #### `actions.js`
 
 ```js
+//тип действия
 export const SELECT_REDDIT = 'SELECT_REDDIT';
 
+//генератор действия
 export function selectReddit(reddit) {
   return {
     type: SELECT_REDDIT,
@@ -60,7 +64,7 @@ export function selectReddit(reddit) {
 }
 ```
 
-They can also press a “refresh” button to update it:
+Также пользователь может нажать кнопку "обновтить" для обновления:
 
 ```js
 export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT';
@@ -73,9 +77,9 @@ export function invalidateReddit(reddit) {
 }
 ```
 
-These were the actions governed by the user interaction. We will also have another kind of action, governed by the network requests. We will see how to dispatch them later, but for now, we just want to define them.
+Это были действия, отвечающие за взаимодействие с пользователем. Также у нас будет и другой тип действий, отвечающий за сетевые запросы. Сейчас мы просто определим их, а чуть пзже посмотрим как посылать такие действия.
 
-When it’s time to fetch the posts for some reddit, we will dispatch a `REQUEST_POSTS` action:
+Когда нужно будет фетчить посты для какого-нибудь reddit'a мы будем посылать дейсвие `REQUEST_POSTS`:
 
 ```js
 export const REQUEST_POSTS = 'REQUEST_POSTS';
@@ -88,9 +92,9 @@ export function requestPosts(reddit) {
 }
 ```
 
-It is important for it to be separate from `SELECT_REDDIT` or `INVALIDATE_REDDIT`. While they may occur one after another, as the app grows more complex, you might want to fetch some data independently of the user action (for example, to prefetch the most popular reddits, or to refresh stale data once in a while). You may also want to fetch in response to a route change, so it’s not wise to couple fetching to some particular UI event early on.
+Важно, чтобы это действие было отделено от `SELECT_REDDIT` и `INVALIDATE_REDDIT`. Хотя они (действия) могут происходить одно за другим, но, с возрастанием сложности приложения, Вам может понадобиться фетчить какие то данные независимо от действий пользователя (например для предзагрузки самых популярных reddit'ов или для того, чтобы изредка обновлять устаревшие данные). Вы можете  также захотеть фетчить данные в ответ на смену роута, так что не очень мудро связывать обновление данных с каким то обпределенным UI событием.
 
-Finally, when the network request comes through, we will dispatch `RECEIVE_POSTS`:
+Наконец, когда сетевой запрос будет осуществлен, мы отправим действие `RECEIVE_POSTS`:
 
 ```js
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
@@ -105,21 +109,23 @@ export function receivePosts(reddit, json) {
 }
 ```
 
-This is all we need to know for now. The particular mechanism to dispatch these actions together with network requests will be discussed later.
+Это все, что нам нужно знать на текущий момент. Конкретный механизм работы этих действий вместе с сетевыми запросами будет обсуждаться позже.
 
->##### Note on Error Handling
+>##### Обратите внимание на обработчик ошибки (Note on Error Handling)
 
->In a real app, you’d also want to dispatch an action on request failure. We won’t implement error handling in this tutorial, but the [real world example](../introduction/Examples.html#real-world) shows one of the possible approaches.
+> В реальном приложении, Вам бы также понадобилось отправлять действие в случае завершения сетевого запроса ошибкой. В этом руководстве мы не будем реализовывать обработку ошибок, но [пример из реальной жизни](../introduction/Examples.html#real-world) демонстрирует один из возможных путей ее реализации.
 
-## Designing the State Shape
+## Разработка структуры хранилища (Designing the State Shape)
 
-Just like in the basic tutorial, you’ll need to [design the shape of your application’s state](../basics/Reducers.md#designing-the-state-shape) before rushing into the implementation. With asynchronous code, there is more state to take care of, so we need to think it through.
+Как и в базовом руководстве, Вам нужно [разработать структуру состояния приложения](../basics/Reducers.md#designing-the-state-shape) прежде чем начинать писать само приложение. В случае с асинхронным кодом появляется больше состояний, о которых нужно позаботиться, так что нам нужно все как следует обдумать.
 
-This part is often confusing to beginners, because it is not immediately clear what information describes the state of an asynchronous application, and how to organize it in a single tree.
+Часто именно эта часть сбивает с толку новичков потому, что сразу не ясно какая информация описывает состояние в асинхронном приложении и как организовать все это в одно дерево состояния.
+
+Мы начнем с наиболее общего варианта использования - списокв. Веб приложения часто отображают списки чего-либо. Например список постов или список друзей. Вам нужно будет решить какие типы списков сможет отображать ваше приложение. Вам нужно хранить их отдельно в состоянии потому, что в этом случае Вы можете кешировать их и снова обновлять данные по необходимости. 
 
 We’ll start with the most common use case: lists. Web applications often show lists of things. For example, a list of posts, or a list of friends. You’ll need to figure out what sorts of lists your app can show. You want to store them separately in the state, because this way you can cache them and only fetch again if necessary.
 
-Here’s what the state shape for our “Reddit headlines” app might look like:
+Вот как может выглядеть структура состояния для нашего  приложения “Reddit headlines”:
 
 ```js
 {
@@ -146,17 +152,17 @@ Here’s what the state shape for our “Reddit headlines” app might look like
 }
 ```
 
-There are a few important bits here:
+тут есть несколько важных моментов:
 
-* We store each subreddit’s information separately so we can cache every subreddit. When the user switches between them the second time, the update will be instant, and we won’t need to refetch unless we want to. Don’t worry about all these items being in memory: unless you’re dealing with tens of thousands of items, and your user rarely closes the tab, you won’t need any sort of cleanup.
+* Мы храним информацию о каждом subreddit’е отдельно, следовательно мы можем кешировать любой subreddit. Когда пользователь переключается между ними во торой раз, обновление UI будет мгновенным, и сможем не перезагружать данные если мы этого не хотим. Не переживайт ео том, тчо все эти желементы (subreddit'ы, а их может быть очень много) будут находиться в памяти: Вам не понадобятся никакие читски памяти если только Вы и Ваш пользователь не имеете дело с десятками тысяч элементов и приэтом пользователь очень редко закрывает вкладку браузера.
 
-* For every list of items, you’ll want to store `isFetching` to show a spinner, `didInvalidate` so you can later toggle it when the data is stale, `lastUpdated` so you know when it was fetched the last time, and the `items` themselves. In a real app, you’ll also want to store pagination state like `fetchedPageCount` and `nextPageUrl`.
+* Для каждого списка элементов Вы захотите хранить `isFetching` для показа спиннера, `didInvalidate`, который Вы потом сможете установить в true, если данные устраеют, `lastUpdated` для того, тчобы знать когда данные были обновлены в последний раз и собственно `items`. В реально приложении Вы также захотите хранить состояние страничной навигации: `fetchedPageCount` и `nextPageUrl`.
 
->##### Note on Nested Entities
+>##### Обратите внимание на вложенные сущности
 
->In this example, we store the received items together with the pagination information. However, this approach won’t work well if you have nested entities referencing each other, or if you let the user edit items. Imagine the user wants to edit a fetched post, but this post is duplicated in several places in the state tree. This would be really painful to implement.
+> В этом примере мы храним полученные элементы вместе с информацией о постраничной навигации. Однако этот подход будет очень плох, если у Вас будут вложенные сущности, которые ссылаются друг на друга, или если Вы дадите пользователю возможность редактировать элементы. Представьте, что пользователь хочет отредактировать загруженный пост, но этот пост сдублирован в нескольких местах в дереве состояния (state tree). Реализация такого будет очень болезненна.
 
->If you have nested entities, or if you let users edit received entities, you should keep them separately in the state as if it was a database. In pagination information, you would only refer to them by their IDs. This lets you always keep them up to date. The [real world example](../introduction/Examples.html#real-world) shows this approach, together with [normalizr](https://github.com/gaearon/normalizr) to normalize the nested API responses. With this approach, your state might look like this:
+>Если у Вас есть вложенные сущности или если Вы даете возможность редактировать загруженные элементы, то Вы должны хранить их отдельно в состоянии (state), как есди бы оно (состояние) было базой данных. И в информации о постраничной навигации Вы можете ссылаться на такие элементы только по их ID. Это позволит Вам всегда держать их в актуальном состоянии. [Пример из реальной жизни](../introduction/Examples.html#real-world) демонстрирует это подход вместе с [normalizr](https://github.com/gaearon/normalizr) для упорядочивания вложенных API ответов. С таким подходом Ваше состояние (state) может выглядеть вот так:
 
 >```js
 > {
@@ -197,15 +203,15 @@ There are a few important bits here:
 > }
 >```
 
->In this guide, we won’t normalize entities, but it’s something you should consider for a more dynamic application.
+>В этом руководстве мы не будем упорядочивать сущности, но это то, о чем Вам стоит задуматься для более динамичного приложения.
 
-## Handling Actions
+## Обработка действий (Handling Actions)
 
-Before going into the details of dispatching actions together with network requests, we will write the reducers for the actions we defined above.
+Перед тем, как переходить к деталям отправки действий (dispatching actions) вместе с сетевми запросами, мы напишем редьюсеры для действий, которые определили выше.
 
->##### Note on Reducer Composition
+>##### Обратите внимание на компановку редьюсеров (Reducer Composition)
 
-> Here, we assume that you understand reducer composition with [`combineReducers()`](../api/combineReducers.md), as described in the [Splitting Reducers](../basics/Reducers.md#splitting-reducers) section on the [basics guide](../basics/README.md). If you don’t, please [read it first](../basics/Reducers.md#splitting-reducers).
+> Прдполагается, что Вы понимаете что такое компановка редьюсеров с помощью функции [`combineReducers()`](../api/combineReducers.md) описанной в разделе [Разделение редьюсеров](../basics/Reducers.md#splitting-reducers) в [базовом руководстве](../basics/README.md). Если это не так, то пожалуйста [сначала прочтите это](../basics/Reducers.md#splitting-reducers).
 
 #### `reducers.js`
 
@@ -273,33 +279,33 @@ const rootReducer = combineReducers({
 export default rootReducer;
 ```
 
-In this code, there are two interesting parts:
+Две части этого кода вызывают особый интерес:
 
-* We use ES6 computed property syntax so we can update `state[action.reddit]` with `Object.assign()` in a terse way. This:
+* Мы испозьзуем ES6 синтаксис вычисляемого свойства, т.е. мы можем обновить `state[action.reddit]` с помощью `Object.assign()` с использованием меньшего количества строк кода. Вот это:
 
   ```js
   return Object.assign({}, state, {
     [action.reddit]: posts(state[action.reddit], action)
   });
   ```
-  is equivalent to this:
+  эквивалентно этому:
 
   ```js
   let nextState = {};
   nextState[action.reddit] = posts(state[action.reddit], action);
   return Object.assign({}, state, nextState);
   ```
-* We extracted `posts(state, action)` that manages the state of a specific post list. This is just [reducer composition](../basics/Reducers.md#splitting-reducers)! It is our choice how to split the reducer into smaller reducers, and in this case, we’re delegating updating items inside an object to a `posts` reducer. The [real world example](../introduction/Examples.html#real-world) goes even further, showing how to create a reducer factory for parameterized pagination reducers.
+* Мы извлекли `posts(state, action)`, который управляет состоянием конкретного списка постов. Это просто [компановка редьюсеров](../basics/Reducers.md#splitting-reducers)! Нам выбирать как разбить/разделить редьюсер на более мелкие редьюсеры и, в этом случае, мы доверяем обновление элементов внутри объекта функции-редьюсеру `posts`. [Пример из реальной жизни](../introduction/Examples.html#real-world) идет еще дальше, показывая как фабрику редьюсеров для параметризированных редьюсеров постраничной навигации.
 
-Remember that reducers are just functions, so you can use functional composition and higher-order functions as much as you feel comfortable.
+Помние, что редьюсеры - это всего лишь функции, т.е. вы можете использовать функцилнальную композицию (речь о функциональном подходе к программированию и композиции функций *прим. переводчика*) и функции высшего порядка так часто, как Вам это будет удобно.
 
-## Async Action Creators
+## Асинхронные генераторы действий (Async Action Creators)
 
-Finally, how do we use the synchronous action creators we [defined earlier](#synchronous-action-creators) together with network requests? The standard way to do it with Redux is to use the [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). It comes in a separate package called `redux-thunk`. We’ll explain how middleware works in general [later](Middleware.md); for now, there is just one important thing you need to know: by using this specific middleware, an action creator can return a function instead of an action object. This way, the action creator becomes a [thunk](https://en.wikipedia.org/wiki/Thunk).
+Наконец как мы используем синхронные генераторы действий, [созданные нами ранее](#synchronous-action-creators) вместе с сетевыми запросами? Стандартый для Redux путь - это испольщование [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). Этот миддвар (middleware) содержитмя в отдельном пакете, который называется `redux-thunk`. Мы поясним как работают миддлвары [позже](Middleware.md). Сейчас есть одна важная вещь, о котрой вам нужно знать: при использовании конкретно этого миддлвара генератор действий может вернуть функцию вместо объекта действия. Таким образом, генератор действия превращается в [преобразователь (Thunk)](https://en.wikipedia.org/wiki/Thunk)
 
-When an action creator returns a function, that function will get executed by the Redux Thunk middleware. This function doesn’t need to be pure; it is thus allowed to have side effects, including executing asynchronous API calls. The function can also dispatch actions—like those synchronous actions we defined earlier.
+Когда генератор действия вернет функцию, эта функция бкдет вызвана Redux Thunk миддлваром. Этой функции не обязательно быть чистой. Таким образом, в ней разрешается инициировать побочные эффекты (side effects), в том числе и асинхронные вызовы API. Также эти функции могут отправлять действия (dispatch actions), такие же синхронные действия, которые мы отправляли ранее.
 
-We can still define these special thunk action creators inside our `actions.js` file:
+Мы все еще можем определить эти специальные thunk-генераторы-действий внутри нашего `actions.js` файла:
 
 #### `actions.js`
 
@@ -324,7 +330,7 @@ function receivePosts(reddit, json) {
   };
 }
 
-// Meet our first thunk action creator!
+// Тут мы встречаемся с нашим первым thunk-генератором-действий!
 // Though its insides are different, you would use it just like any other action creator:
 // store.dispatch(fetchPosts('reactjs'));
 

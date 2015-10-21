@@ -41,7 +41,7 @@ Redux - это небольшая библиотека, в которой сог
 ## Утилиты (Utilities)
 
 * [reselect](https://github.com/faassen/reselect) — Простая библиотека "селекторов" нашедшая вдохновение в геттерах NuclearJS
-* [normalizr](https://github.com/gaearon/normalizr) — Нормализация вложенных API ответов для облегчения дальнейшего их использования в редьюсерах.
+* [normalizr](https://github.com/gaearon/normalizr) — Упорядочивание вложенных API ответов для облегчения дальнейшего их использования в редьюсерах.
 * [redux-actions](https://github.com/acdlite/redux-actions) — Уменьшение шаблонности в написании редьюсеров и генераторов действий (action creators)
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer утилиты для Redux
 * [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Инструменты интеграции между Redux и [Immutable](https://github.com/facebook/immutable-js/)
