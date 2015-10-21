@@ -22,6 +22,7 @@ Redux - это небольшая библиотека, в которой сог
 * [redux-rx](https://github.com/acdlite/redux-rx) — RxJS утилиты для Redux, включая  middleware для Observable
 * [redux-logger](https://github.com/fcomb/redux-logger) — Логирование каждого Redux действия (action) и следующего состояния (state)
 * [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Предупреждения об изменениях состояния во время разработки
+* [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Аналитика для Redux
 
 ## Компоненты (Components)
 
@@ -37,6 +38,9 @@ Redux - это небольшая библиотека, в которой сог
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Оптимистичное использование действий (action) с возможностью их совершения или отмены в дальнейшем. 
 > От переводчика: например, можно инициировать `ADD_TODO` action, state изменится, UI обновится мгновенно, а затем отправится запрос на сохранение на сервер. Если на сервере все прошло успешно, то все ок и больше ничего не происходит. Но если же что-то пошло не так, то state будет "отмотан" до сотояния когда `ADD_TODO` action еще не был применен, state изменится, UI обновится мгновенно. Т.е. UI будет выглядеть так, словно ничего и не произошло.
 * [redux-undo](https://github.com/omnidan/redux-undo) — Позволяет без усилий получить undo/redo функциональность и историю действий для редьюсеров
+    * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
+* [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
+* [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
 
 ## Утилиты (Utilities)
 
