@@ -1,11 +1,11 @@
 # Writing Tests
 
-Because most of the Redux code you write are functions, and many of them are pure, they are easy test without mocking.
+Because most of the Redux code you write are functions, and many of them are pure, they are easy to test without mocking.
 
 ### Setting Up
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.  
-Note that it runs in a Node environment, so you won’t have access to DOM.
+We recommend [Mocha](http://mochajs.org/) as the testing engine.
+Note that it runs in a Node environment, so you won’t have access to the DOM.
 
 ```
 npm install --save-dev mocha
@@ -60,11 +60,118 @@ describe('actions', () => {
 });
 ```
 
+### Async Action Creators
+
+For async action creators using [Redux Thunk](https://github.com/gaearon/redux-thunk) or other middleware, it’s best to completely mock the Redux store for tests. You can still use [`applyMiddleware()`](../api/applyMiddleware.md) with a mock store, as shown below. You can also use [nock](https://github.com/pgte/nock) to mock the HTTP requests.
+
+#### Example
+
+```js
+function fetchTodosRequest() {
+  return {
+    type: ADD_TODOS_REQUEST
+  };
+}
+
+function fetchTodosSuccess(body) {
+  return {
+    type: ADD_TODOS_SUCCESS,
+    body
+  };
+}
+
+function fetchTodosFailure(ex) {
+  return {
+    type: ADD_TODOS_FAILURE,
+    ex
+  };
+}
+
+export function fetchTodos(data) {
+  return dispatch => {
+    dispatch(fetchTodosRequest());
+    return fetch('http://example.com/todos')
+      .then(res => res.json())
+      .then(json => dispatch(addTodosSuccess(json.body)))
+      .catch(ex => dispatch(addTodosFailure(ex)));
+  };
+}
+```
+
+can be tested like:
+
+```js
+import expect from 'expect';
+import { applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import * as actions from '../../actions/counter';
+import * as types from '../../constants/ActionTypes';
+import nock from 'nock';
+
+const middlewares = [thunk];
+
+/**
+ * Creates a mock of Redux store with middleware.
+ */
+function mockStore(getState, expectedActions, onLastAction) {
+  if (!Array.isArray(expectedActions)) {
+    throw new Error('expectedActions should be an array of expected actions.');
+  }
+  if (typeof onLastAction !== 'undefined' && typeof onLastAction !== 'function') {
+    throw new Error('onLastAction should either be undefined or function.');
+  }
+
+  function mockStoreWithoutMiddleware() {
+    return {
+      getState() {
+        return typeof getState === 'function' ?
+          getState() :
+          getState;
+      },
+
+      dispatch(action) {
+        const expectedAction = expectedActions.shift();
+        expect(action).toEqual(expectedAction);
+        if (onLastAction && !expectedActions.length) {
+          onLastAction();
+        }
+        return action;
+      }
+    }
+  }
+
+  const mockStoreWithMiddleware = applyMiddleware(
+    ...middlewares
+  )(mockStoreWithoutMiddleware);
+
+  return mockStoreWithMiddleware();
+}
+
+describe('async actions', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  it('creates FETCH_TODO_SUCCESS when fetching todos has been done', (done) => {
+    nock('http://example.com/')
+      .get('/todos')
+      .reply(200, { todos: ['do something'] });
+
+    const expectedActions = [
+      { type: types.FETCH_TODO_REQUEST },
+      { type: types.FETCH_TODO_SUCCESS, body: { todos: ['do something']  } }
+    ]
+    const store = mockStore({ todos: [] }, expectedActions, done);
+    store.dispatch(actions.fetchTodos());
+  });
+});
+```
+
 ### Reducers
 
 A reducer should return the new state after applying the action to the previous state, and that’s the behavior tested below.
 
-#### Example  
+#### Example
 
 ```js
 import { ADD_TODO } from '../constants/ActionTypes';
@@ -145,6 +252,12 @@ describe('todos reducer', () => {
 
 A nice thing about React components is that they are usually small and only rely on their props. That makes them easy to test.
 
+First, we will install [React Test Utilities](https://facebook.github.io/react/docs/test-utils.html):
+
+```
+npm install --save-dev react-addons-test-utils
+```
+
 To test the components we make a `setup()` helper that passes the stubbed callbacks as props and renders the component with [React shallow renderer](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering). This lets individual tests assert on whether the callbacks were called when expected.
 
 #### Example
@@ -183,12 +296,10 @@ can be tested like:
 
 ```js
 import expect from 'expect';
-import jsdomReact from '../jsdomReact';
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Header from '../../components/Header';
 import TodoTextInput from '../../components/TodoTextInput';
-
-const { TestUtils } = React.addons;
 
 function setup() {
   let props = {
@@ -207,8 +318,6 @@ function setup() {
 }
 
 describe('components', () => {
-  jsdomReact();
-
   describe('Header', () => {
     it('should render correctly', () => {
       const { output } = setup();
@@ -240,25 +349,34 @@ describe('components', () => {
 
 #### Fixing Broken `setState()`
 
-Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when DOM isn’t available. Here’s how to set it up:
+Shallow rendering currently [throws an error if `setState` is called](https://github.com/facebook/react/issues/4019). React seems to expect that, if you use `setState`, the DOM is available. To work around the issue, we use jsdom so React doesn’t throw the exception when the DOM isn’t available. Here’s how to [set it up](https://github.com/facebook/react/issues/5046#issuecomment-146222515):
 
 ```
-npm install --save-dev jsdom mocha-jsdom
+npm install --save-dev jsdom
 ```
 
-Then add a `jsdomReact()` helper function that looks like this:  
+Then create a `setup.js` file in your test directory:
 
 ```js
-import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
-import jsdom from 'mocha-jsdom';
+import { jsdom } from 'jsdom';
 
-export default function jsdomReact() {
-  jsdom();
-  ExecutionEnvironment.canUseDOM = true;
-}
+global.document = jsdom('<!doctype html><html><body></body></html>');
+global.window = document.defaultView;
+global.navigator = global.window.navigator;
 ```
 
-Call it before running any component tests. Note this is a dirty workaround, and it can be removed once [facebook/react#4019](https://github.com/facebook/react/issues/4019) is fixed.
+It’s important that this code is evaluated *before* React is imported. To ensure this, modify your `mocha` command to include `--require ./test/setup.js` in the options in your `package.json`:
+
+```js
+{
+  ...
+  "scripts": {
+    ...
+    "test": "mocha --compilers js:babel/register --recursive --require ./test/setup.js",
+  },
+  ...
+}
+```
 
 ### Connected Components
 
@@ -280,7 +398,7 @@ In a unit test, you would normally import the `App` component like this:
 import App from './App';
 ```
 
-However when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
+However, when you import it, you’re actually holding the wrapper component returned by `connect()`, and not the `App` component itself. If you want to test its interaction with Redux, this is good news: you can wrap it in a [`<Provider>`](https://github.com/rackt/react-redux#provider-store) with a store created specifically for this unit test. But sometimes you want to test just the rendering of the component, without a Redux store.
 
 In order to be able to test the App component itself without having to deal with the decorator, we recommend you to also export the undecorated component:
 
@@ -348,7 +466,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({}, action)
     ).toEqual(action);
@@ -358,7 +476,7 @@ describe('middleware', () => {
     const action = {
       type: types.ADD_TODO
     };
-    
+
     expect(
       dispatchWithStoreOf({
         [types.ADD_TODO]: 'dispatched'
@@ -370,7 +488,7 @@ describe('middleware', () => {
 
 ### Glossary
 
-- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test utilities that ship with React.
+- [React Test Utils](http://facebook.github.io/react/docs/test-utils.html): Test Utilities for React.
 
 - [jsdom](https://github.com/tmpvar/jsdom): A plain JavaScript implementation of the DOM API. jsdom allows us to run the tests without browser.
 

@@ -173,10 +173,12 @@ function makeSandwichesForEverybody() {
 // This is very useful for server side rendering, because I can wait
 // until data is available, then synchronously render the app.
 
+import { renderToString } from 'react-dom/server';
+
 store.dispatch(
   makeSandwichesForEverybody()
 ).then(() =>
-  response.send(React.renderToString(<MyApp store={store} />))
+  response.send(renderToString(<MyApp store={store} />))
 );
 
 // I can also dispatch a thunk async action from a component
@@ -206,11 +208,10 @@ class SandwichShop extends Component {
 }
 
 export default connect(
-  SandwichShop,
   state => ({
     sandwiches: state.sandwiches
   })
-);
+)(SandwichShop);
 ```
 
 #### Tips
@@ -233,6 +234,6 @@ export default connect(
 
   This makes it easier for bundling tools to cut out unneeded modules and reduces the size of your builds.
 
-* Ever wondered what `applyMiddleware` itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, `applyMiddleware` is an example of the most poweful Redux extension mechanism called [store enhancers](../Glossary.md#store-enhancer). It is highly unlikely you’ll ever want to write a store enhancer yourself. Another example of a store enhancer is [redux-devtools](https://github.com/gaearon/redux-devtools). Middleware is less powerful than a store enhancer, but it is easier to write.
+* Ever wondered what `applyMiddleware` itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, `applyMiddleware` is an example of the most powerful Redux extension mechanism called [store enhancers](../Glossary.md#store-enhancer). It is highly unlikely you’ll ever want to write a store enhancer yourself. Another example of a store enhancer is [redux-devtools](https://github.com/gaearon/redux-devtools). Middleware is less powerful than a store enhancer, but it is easier to write.
 
 * Middleware sounds much more complicated than it really is. The only way to really understand middleware is to see how the existing middleware works, and try to write your own. The function nesting can be intimidating, but most of the middleware you’ll find are, in fact, 10-liners, and the nesting and composability is what makes the middleware system powerful.
