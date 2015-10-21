@@ -1,89 +1,89 @@
-# Usage with React
+# Использование в связке с React (Usage with React)
 
-From the very beginning, we need to stress that Redux has no relation to React. You can write Redux apps with React, Angular, Ember, jQuery, or vanilla JavaScript.
+Для начала стоит подчеркнуть, что Redux не завязан только на React. Вы можете создавать Redux приложения c помощью React, Angular, Ember, jQuery или обычного javascript.
 
-That said, Redux works especially well with frameworks like [React](http://facebook.github.io/react/) and [Deku](https://github.com/dekujs/deku) because they let you describe UI as a function of state, and Redux emits state updates in response to actions.
+И все-таки Redux работает особенно хорошо с такими фреймворками, как [React](http://facebook.github.io/react/) и [Deku](https://github.com/dekujs/deku) потому, что они позволяют Вам описать UI как функцию состояния и, кроме того, Redux умеет менять состояние (state) приложения в ответ на произошедшие действия (actions).
 
-We will use React to build our simple todo app.
+Для построения нашего простенького ToDo приложения мы будем использовать React.
 
-## Installing React Redux
+## Установка React Redux (Installing React Redux)
 
-[React bindings](https://github.com/gaearon/react-redux) are not included in Redux by default. You need to install them explicitly:
+[React bindings](https://github.com/gaearon/react-redux) не включены в redux по умолчанию. Вам нужно установить их явно:
 
 ```
 npm install --save react-redux
 ```
 
-## Smart and Dumb Components
+## Умные и глупые компоенты (Smart and Dumb Components)
 
-React bindings for Redux embrace the idea of [separating “smart” and “dumb” components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
+React bindings для Redux охвачены идеей [разделения компонентов на “умные” и “глупые”](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
 
-It is advisable that only top-level components of your app (such as route handlers) are aware of Redux. Components below them should be “dumb” and receive all data via props.
+Желательно, чтобы о том, тчо Вы используете Redux? знали только компоненты верхнего уровня, такие как такие как обработчики роутов (route handlers) например. Компоненты, которые находятся ниже в иерархии, должны быть "глупыми" и принимать все данные только через `props`.
 
 <table>
     <thead>
         <tr>
             <th></th>
-            <th scope="col" style="text-align:left">“Smart” Components</th>
-            <th scope="col" style="text-align:left">“Dumb” Components</th>
+            <th scope="col" style="text-align:left">“Умные” Компоненты</th>
+            <th scope="col" style="text-align:left">“Глупые” Компоненты</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-          <th scope="row" style="text-align:right">Location</th>
-          <td>Top level, route handlers</td>
-          <td>Middle and leaf components</td>
+          <th scope="row" style="text-align:right">Расположение</th>
+          <td>Верхний уровень, Обработчики роутов</td>
+          <td>Средний уровень и компоненты-"листья" (leaf components)</td>
         </tr>
         <tr>
-          <th scope="row" style="text-align:right">Aware of Redux</th>
-          <td>Yes</th>
-          <td>No</th>
+          <th scope="row" style="text-align:right">Знают о Redux</th>
+          <td>Да</th>
+          <td>Нет</th>
         </tr>
         <tr>
-          <th scope="row" style="text-align:right">To read data</th>
-          <td>Subscribe to Redux state</td>
-          <td>Read data from props</td>
+          <th scope="row" style="text-align:right">Получают / читают данные</th>
+          <td>Подписываются на Redux состояние (Redux state)</td>
+          <td>Получают данные из props</td>
         </tr>
         <tr>
-          <th scope="row" style="text-align:right">To change data</th>
-          <td>Dispatch Redux actions</td>
-          <td>Invoke callbacks from props</td>
+          <th scope="row" style="text-align:right">Изменяют данные</th>
+          <td>Отправляют Redux действия (actions)</td>
+          <td>Вызывают каллбэки из props</td>
         </tr>
     </tbody>
 </table>
 
-In this todo app, we will only have a single “smart” component at the top of our view hierarchy. In more complex apps, you might have several of them. While you may nest “smart” components, we suggest that you pass props down whenever possible.
+В нашем ToDo приложении будет один "умный" компонент на вершине иерархии представлений (view). В более сложных приложениях таких "умных" компонентов может быть несколько. Мы советуем не вкладывать "умные" компоненты друг в друга, а передавать `props` вниз по иерархии компонентов всегда, когда это возможно.
 
-## Designing Component Hierarchy
+## Проектирование иерархии компонентов (Designing Component Hierarchy)
 
-Remember how we [designed the shape of the root state object](Reducers.md)? It’s time we design the UI hierarchy to match it. This is not a Redux-specific task. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) is a great tutorial that explains the process.
+Помните как мы [спроектировали структуру объекта состояния](Reducers.md)? В этот раз мы спроектируем иерархию UI компонентов, которая будет соответсвовать этой структуре. С такого рода задачей Вы можете столкнуться разрабатывая и не Redux приложение. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) - это великолепное руководство, которое поясняет весь процесс решения этой задачи.
 
-Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all / only completed / only incomplete todos.
+Наше техническое задание для проектирования довольно простое. Мы хотим показать список дел. По клику мы должны зачеркнуть дело, что будет означать, что оно выполнено. Также мы хотим показать поле ввода, с помощью которого пользователь сможет добавить новое дело в список. В футере должны быть переключатели, с помощью которых мы будем показывать все дела / только завершенные / только не завершенные.
 
-I see the following components (and their props) emerge from this brief:
+Следуя спецификации, можно выделить такие компоненты и их свойства:
 
-* **`AddTodo`** is an input field with a button.
-  - `onAddClick(text: string)` is a callback to invoke when a button is pressed.
-* **`TodoList`** is a list showing visible todos.
-  - `todos: Array` is an array of todo items with `{ text, completed }` shape.
-  - `onTodoClick(index: number)` is a callback to invoke when a todo is clicked.
-* **`Todo`** is a single todo item.
-  - `text: string` is the text to show.
-  - `completed: boolean` is whether todo should appear crossed out.
-  - `onClick()` is a callback to invoke when a todo is clicked.
-* **`Footer`** is a component where we let user change visible todo filter.
-  - `filter: string` is the current filter: `'SHOW_ALL'`, `'SHOW_COMPLETED'` or `'SHOW_ACTIVE'`.
-  - `onFilterChange(nextFilter: string)`: Callback to invoke when user chooses a different filter.
+* **`AddTodo`** поле ввода с кнопкой.
+    * `onAddClick(text: string)` функция-каллбек, которая будет вызвана при нажатии на кнопку.
+* **`TodoList`** список, в котором отображены видимые дела.
+    * `todos: Array` массив объектов дел, имеющих следующую структуру `{ text, completed }`.
+    * `onTodoClick(index: number)` функция-каллбек, которая будет вызвана по клику на дело.
+* **`Todo`** единичный элемент-дело.
+    * `text: string` текст для отображения.
+    * `completed: boolean` должно ли дело быть показано отмеченным (вычеркнутым).
+    * `onClick()` функция-каллбек, которая будет вызвана по клику на дело.
+* **`Footer`** компонент, в котором мы дадим юзеру возможность изменять фильтрацию списка.
+    * `filter: string` текущий фильтр: `'SHOW_ALL'`, `'SHOW_COMPLETED'` или `'SHOW_ACTIVE'`.
+    * `onFilterChange(nextFilter: string)`: функция-каллбек, которая будет вызвана если пользователь выберет другой фильтр.
 
-These are all “dumb” components. They don’t know *where* the data comes from, or *how* to change it. They only render what’s given to them.
+Все это "глупые" компоненты. Они не знают **откуда** приходят данные и **как** их изменить. Они лишь только рендерят то, что им передали.
 
-If you migrate from Redux to something else, you’ll be able to keep all these components exactly the same. They have no dependency on Redux.
+Если Вы замените Redux чем то другим, то все равно сможете пользоваться этими компонентами. Они никак не зависят от Redux.
 
-Let’s write them! We don’t need to think about binding to Redux yet. You can just give them fake data while you experiment until they render correctly.
+Давайте напишем их! Пока нам не нужно думать о привязке Redux. Мы можем просто передавать им фейковые данные, чтобы убедиться, что компоненты рендерятся корректно.
 
-## Dumb Components
+## Глупые компоненты (Dumb Components)
 
-These are all normal React components, so we won’t stop to examine them in detail. Here they go:
+Это обычные React компоненты, так что давайте не будем сильно задерживаться на их изучении. Вот они:
 
 #### `components/AddTodo.js`
 
@@ -218,7 +218,7 @@ Footer.propTypes = {
 };
 ```
 
-That’s it! We can verify that they work correctly by writing a dummy `App` to render them:
+Вот и все! Мы можем проверить работоспособность наших компонентов, написав простенький `App`, который будет рендерить их:
 
 #### `containers/App.js`
 
@@ -258,17 +258,17 @@ export default class App extends Component {
 }
 ```
 
-This is what I see when I render `<App />`:
+Вот то, что мы увидим, когда отрендерим `<App />`:
 
 <img src='http://i.imgur.com/lj4QTfD.png' width='40%'>
 
-By itself, it’s not very interesting. Let’s connect it to Redux!
+Само по себе это не очень интересно. Давайте прикрутим Redux!
 
-## Connecting to Redux
+## Интеграция Redux (Connecting to Redux)
 
-We need to make two changes to connect our `App` component to Redux and make it dispatch actions and read state from the Redux store.
+Мы должны сделать два изменения для того, чтобы интегрировать Redux в наш `App` и научить его запускать действия (dispatch actions) и читать состояние (state) из Redux хранилища (store).
 
-First, we need to import `Provider` from [`react-redux`](http://github.com/gaearon/react-redux), which we installed earlier, and **wrap the root component in `<Provider>`** before rendering.
+Для начала нам нужно импортировать `Provider` из [`react-redux`](http://github.com/gaearon/react-redux), который мы установили чуть раньше, и **обернуть корневой компонент в `<Provider>`** перед рендерингом.
 
 #### `index.js`
 
@@ -292,13 +292,13 @@ React.render(
 );
 ```
 
-This makes our store instance available to the components below. (Internally, this is done via React's [undocumented “context” feature](http://www.youtube.com/watch?v=H7vlH-wntD4), but it’s not exposed directly in the API so don’t worry about it.)
+Это сделает наш экземпляр хранилища доступным для всх компонентов, которые располагаются в `Provider` компоненте. (Внутри это реализовано благодаря [недокументированной фиче React - “context”](http://www.youtube.com/watch?v=H7vlH-wntD4))
 
-Then, we **wrap the components we want to connect to Redux with the `connect()` function from [`react-redux`](http://github.com/gaearon/react-redux)**. Try to only do this for a top-level component, or route handlers. While technically you can `connect()` any component in your app to Redux store, avoid doing this too deeply, because it will make the data flow harder to trace.
+Затем нам **нужно обернуть компоненты, которые мы хотим связать с Redux, в вызов функции `connect()` из [`react-redux`](http://github.com/gaearon/react-redux)** Старайтесь делать это только с компонентами верхнего уровня или обработчиками роутов. Хотя, технически, Вы можете обернуть в вызов `connect()` любой компонент, старйтесь избегать этого на более глубоких уровнях иерархии компонентов, т.к. это усложнит отслеживание потока данных.
 
-**Any component wrapped with `connect()` call will receive a [`dispatch`](../api/Store.md#dispatch) function as a prop, and any state it needs from the global state.** The only argument to `connect()` is a function we call a **selector**. This function takes the global Redux store’s state, and returns the props you need for the component. In the simplest case, you can just return the `state` given to you, but you may also wish to transform it first.
+**Любой компонент, обернутый в вызов функции `connect()`, получит функцию [`dispatch`](../api/Store.md#dispatch), как свойство (as a prop) и любое состояние, которое ему потребуется, из глобального состояния**. Функция `connect()` имеет единственный аргумент (единственный в контексте данного примера, а [вообще их 4](https://github.com/rackt/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) *прим. переводчика*) - функцию, котрую мы назовем **селектор (selector)**. Эта функция принимает глобальное состояние хранилища Redux и должна возвращать props, которые нужны компоненту. В простейшем случае Вы просто можете вернуть из этой функции приходящий в нее глобальный `state`, но, скорее всего, Вы захотите сначала немного его преобразовать. (Т.е. благодаря этой функции мы можем из всего огромного дерева состояния, которое хранится в Redux хранилище, вытащить именно те ветки/срезы/куски состояния, которые нужны конретному компоненту *прим. переводчика*)
 
-To make performant memoized transformations with composable selectors, check out [reselect](https://github.com/faassen/reselect). In this example, we won’t use it, but it works great for larger apps.
+Для того, чтобы делать высококачественные, оптимизированные в плане производительности и памяти (мемоизацией например) трансформации стейта с помощью компонуемых селекторов (речь идет о функции *selector*, описанной выше), Вы должны обратить внимние на [reselect](https://github.com/faassen/reselect). В этом примере мы не будем его использовать, но он отлично работает в больших приложениях. 
 
 #### `containers/App.js`
 
@@ -312,7 +312,7 @@ import Footer from '../components/Footer';
 
 class App extends Component {
   render() {
-    // Injected by connect() call:
+    // Получено благодаря вызову connect():
     const { dispatch, visibleTodos, visibilityFilter } = this.props;
     return (
       <div>
@@ -358,8 +358,8 @@ function selectTodos(todos, filter) {
   }
 }
 
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
+// Какие именно props мы хотим получить из приходящего как аргумент глобального состояния?
+// Обртите внимание: испльзуйте https://github.com/faassen/reselect для более лучшей производительности.
 function select(state) {
   return {
     visibleTodos: selectTodos(state.todos, state.visibilityFilter),
@@ -367,12 +367,12 @@ function select(state) {
   };
 }
 
-// Wrap the component to inject dispatch and state into it
+// Оборачиваем компонент `App` для внедрения  в него функции `dispatch` и состояния
 export default connect(select)(App);
 ```
 
-That’s it! The tiny todo app now functions correctly.
+Вот и все! Простенькое ToDo приложение теперь полностью работоспособно.
 
-## Next Steps
+## Следующие шаги
 
-Read the [complete source code for this tutorial](ExampleTodoList.md) to better internalize the knowledge you have gained. Then, head straight to the [advanced tutorial](../advanced/README.md) to learn how to handle network requests and routing!
+Прочитайте [полный исходный код для этого руководства](ExampleTodoList.md) для лучшего усваивания полученных знаний. А затем прямиком в [руководство для опытных](../advanced/README.md) для изучения обработки сетевых запросов и роутинга!
