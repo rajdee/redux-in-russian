@@ -1,8 +1,8 @@
-# Example: Reddit API
+# Пример: Reddit API
 
-This is the complete source code of the Reddit headline fetching example we built during the [advanced tutorial](README.md).
+Это полный исходный код примера выборки заголовков Reddit, который мы строили в [продвинутом руководстве](README.md).
 
-## Entry Point
+## Входная точка (Entry Points)
 
 #### `index.js`
 
@@ -19,7 +19,7 @@ render(
 );
 ```
 
-## Action Creators and Constants
+## Генераторы действий и константы (Action Creators and Constants)
 
 #### `actions.js`
 
@@ -67,7 +67,7 @@ function fetchPosts(reddit) {
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(req => req.json())
       .then(json => dispatch(receivePosts(reddit, json)));
-  }
+  };
 }
 
 function shouldFetchPosts(state, reddit) {
@@ -90,7 +90,7 @@ export function fetchPostsIfNeeded(reddit) {
 }
 ```
 
-## Reducers
+## Редьюсеры (Reducers)
 
 #### `reducers.js`
 
@@ -158,7 +158,7 @@ const rootReducer = combineReducers({
 export default rootReducer;
 ```
 
-## Store
+## Хранилища (Store)
 
 #### `configureStore.js`
 
@@ -180,7 +180,7 @@ export default function configureStore(initialState) {
 }
 ```
 
-## Smart Components
+## Умные компоненты (Smart Components)
 
 #### `containers/Root.js`
 
@@ -310,7 +310,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(AsyncApp);
 ```
 
-## Dumb Components
+## Глупые компоненты (Dumb Components)
 
 #### `components/Picker.js`
 

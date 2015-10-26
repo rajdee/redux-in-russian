@@ -1,4 +1,4 @@
-# Next Steps
+# Следующие шаги
 
-Sorry, but we’re still writing this doc.  
-Stay tuned, it will appear in a day or two.
+Извините, но мы еще пишем этот документ.
+Следите за обновлениями, он появится через день или два.
