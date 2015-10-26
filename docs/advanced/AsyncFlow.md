@@ -1,15 +1,16 @@
-# Async Flow
+# Асинхронный поток
 
-Without [middleware](Middleware.md), Redux store only supports [synchronous data flow](../basics/DataFlow.md). This is what you get by default with [`createStore()`](../api/createStore.md).
+Без [посредника (middleware)](Middleware.md), хранилище Redux поддерживает только [синхронный поток данных](../basics/DataFlow.md). Это то, что вы получаете по умолчанию с [`createStore()`](../api/createStore.md).
 
-You may enhance [`createStore()`](../api/createStore.md) with [`applyMiddleware()`](../api/applyMiddleware.md). It is not required, but it lets you [express asynchronous actions in a convenient way](AsyncActions.md).
+Вы можете расширить [`createStore()`](../api/createStore.md) с помощью [`applyMiddleware()`](../api/applyMiddleware.md). Это не требуется, но это позволяет вам [выразить асинхронные действия в удобном виде](AsyncActions.md).
 
-Asynchronous middleware like [redux-thunk](https://github.com/gaearon/redux-thunk) or [redux-promise](https://github.com/acdlite/redux-promise) wraps the store’s [`dispatch()`](../api/Store.md#dispatch) method and allows you to dispatch something other than actions, for example, functions or Promises. Any middleware you use can then interpret anything you dispatch, and in turn, can pass actions to the next middleware in chain. For example, a Promise middleware can intercept Promises and dispatch a pair of begin/end actions asynchronously in response to each Promise.
+Асинхронный посредник, типа [redux-thunk](https://github.com/gaearon/redux-thunk) или [redux-promise](https://github.com/acdlite/redux-promise) оборачивает метод хранилища [`dispatch()`](../api/Store.md#dispatch) и позволяет вам вызывать что-то другое, чем действия, например, функции или Промисы. Любые посредники которое вы используете, могут интерпретировать все, что вы вызываете, и, в свою очередь, может передать действие следующему посреднику в цепочке. Например, посредник промисов (Promise middleware) может перехватить промисы и отправить пару начало/конец действия асинхронно в ответ на каждый промис.
 
-When the last middleware in the chain dispatches an action, it has to be a plain object. This is when the [synchronous Redux data flow](../basics/DataFlow.md) takes place.
+Когда последний посредник в цепочке отправляет действие, он должен быть простым объектом. Это когда [синхронный Redux поток данных](../basics/DataFlow.md) имеет место.
 
-Check out [the full source code for the async example](ExampleRedditAPI.md).
+Изучите [полные исходные коды асинхронного примера](ExampleRedditAPI.md).
 
-## Next Steps
+## Следующие шаги
 
-Now you saw an example of what middleware can do in Redux, it’s time to learn how it actually works, and how you can create your own. Go on to the next detailed section about [Middleware](Middleware.md). 
+Сейчас вы видели пример того, что посредник (middleware) может сделать в Redux,
+пришло время, чтобы узнать, как это на самом деле работает и как вы можете создать свой собственный. Перейдите к следующему подробному разделу о [Посреднике](Middleware.md).
