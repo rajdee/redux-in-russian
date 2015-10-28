@@ -346,7 +346,9 @@ export function fetchPosts(reddit) {
     dispatch(requestPosts(reddit));
 
     // Функция, вызываемая thunk-миддлваром, может возвращать значение,
-    // которое передается, как возвращаемое значение метода dispatch.
+    // которое передается, как возвращаемое значение в метод dispatch,
+    // в который редьюсер fetchPosts был передан как аргумент 
+    // (store.dispatch(fetchPosts('reactjs'));).
 
     // В данном случае мы возвращаем promise.
     // Это не обязательно для thunk-миддлвара, но это удобно для нас.
@@ -367,25 +369,25 @@ export function fetchPosts(reddit) {
 }
 ```
 
->##### Note on `fetch`
+>##### Обратите внимание на `fetch`
 
->We use [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) in the examples. It is a new API for making network requests that replaces `XMLHttpRequest` for most common needs. Because most browsers don’t yet support it natively, we suggest that you use [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) library:
+>В это м примере Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API). Это новый API для осуществления сетевых запросов, который призван заменить `XMLHttpRequest` в большинстве случаев. Поскольку пока еще не все браузеры поддерживают его нативно, мы предполашаем, что Вы пользуетесь библиотекой [`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch):
 
 >```js
-// Do this in every file where you use `fetch`
+// Делайте так в каждом файле, в котором используете `fetch`
 >import fetch from 'isomorphic-fetch';
 >```
 
->Internally, it uses [`whatwg-fetch` polyfill](https://github.com/github/fetch) on the client, and [`node-fetch`](https://github.com/bitinn/node-fetch) on the server, so you won’t need to change API calls if you change your app to be [universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
+>Внутри, эта библиотека использует [`whatwg-fetch` полифил](https://github.com/github/fetch) на стороне клиента и [`node-fetch`](https://github.com/bitinn/node-fetch) на стороне сервера, т.о. Вам не нужно будет менять вызовы API в случае, если Вы перепишете свое приложение так, что оно станет [универсальным](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
 
->Be aware that any `fetch` polyfill assumes a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill is already present. The easiest way to ensure you have a Promise polyfill is to enable Babel’s ES6 polyfill in your entry point before any other code runs:
+>Имейте ввиду, что любой `fetch` полифил рассчитывает на присутствие [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) полифила. Простейший путь убедиться в том, что уВас есть Promise полифил - активировать Babel ES6 полифил в точке входа приложения перед тем, как выполнять какой-либо код:
 
 >```js
->// Do this once before any other code in your app
+>// Сделайте это один раз перед любым выполнения любого другого кода в Вашем приложении
 >import 'babel-core/polyfill';
 >```
 
-How do we include the Redux Thunk middleware in the dispatch mechanism? We use the [`applyMiddleware()`](../api/applyMiddleware.md) method from Redux, as shown below:
+Как же мы включаем Redux Thunk миддлвар в механизм отправки действий (dispatch mechanism)? Мы используем [`applyMiddleware()`](../api/applyMiddleware.md) метод из Redux:
 
 #### `index.js`
 
@@ -399,8 +401,8 @@ import rootReducer from './reducers';
 const loggerMiddleware = createLogger();
 
 const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
+  thunkMiddleware, // позволяет нам отправлять (dispatch()) функции вместо объектов
+  loggerMiddleware // аккуратный миддлвар, который логирует действия (actions)
 )(createStore);
 
 const store = createStoreWithMiddleware(rootReducer);
@@ -411,7 +413,7 @@ store.dispatch(fetchPosts('reactjs')).then(() =>
 );
 ```
 
-The nice thing about thunks is that they can dispatch results of each other:
+Приятным моментом при использовании thunks является то, что они могут отправлять (dispatch) результаты друг друга:
 
 #### `actions.js`
 
@@ -458,25 +460,25 @@ function shouldFetchPosts(state, reddit) {
 
 export function fetchPostsIfNeeded(reddit) {
 
-  // Note that the function also receives getState()
-  // which lets you choose what to dispatch next.
+  // Обратите внимание на то, что функция также принимает getState(),
+  // который позвояет Вам выбрать какое действие отправлять (dispatch) следующим.
 
-  // This is useful for avoiding a network request if
-  // a cached value is already available.
+  // Это полезно для избежания сетевых запросов в том случае,
+  // если доступно закешированное значение.
 
   return (dispatch, getState) => {
     if (shouldFetchPosts(getState(), reddit)) {
-      // Dispatch a thunk from thunk!
+      // Отправка (Dispatch) thunk из thunk!
       return dispatch(fetchPosts(reddit));
     } else {
-      // Let the calling code know there's nothing to wait for.
+      // Дать вызывающему коду знать, что ждать больше нечего.
       return Promise.resolve();
     }
   };
 }
 ```
 
-This lets us write more sophisticated async control flow gradually, while the consuming code can stay pretty much the same:
+Это позволяет нам писать более сложную асинхронную управляющую логику постепенно, вто время как потребляющий код, который ее использует, может оставаться почти неизменным:
 
 #### `index.js`
 
@@ -486,16 +488,16 @@ store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
 );
 ```
 
->##### Note about Server Rendering
+>##### Замечание по поводу рендеринга на сервере (Server Rendering)
 
->Async action creators are especially convenient for server rendering. You can create a store, dispatch a single async action creator that dispatches other async action creators to fetch data for a whole section of your app, and only render after the Promise it returns, completes. Then your store will already be hydrated with the state you need before rendering.
+>Асинхронные генераторы действий особенно удобны для рендеринга на сервере. Вы можете создать хранилище (store), отправить (dispatch) единственный асинхронный генератор действия (async action creator), который отправляет другие асинхронные генераторы действий для выборки данных для всего раздела приложения и отрендерить только после завершения Promise, который он (единственный асинхронный генератор) возвращает. Затем Ваше хранилище (store) уже будет наполнено (hydrated) состоянием, которое Вам нужно перед рендерингом
 
-[Thunk middleware](https://github.com/gaearon/redux-thunk) isn’t the only way to orchestrate asynchronous actions in Redux. You can use [redux-promise](https://github.com/acdlite/redux-promise) or [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) to dispatch Promises instead of functions. You can dispatch Observables with [redux-rx](https://github.com/acdlite/redux-rx). You can even write a custom middleware to describe calls to your API, like the [real world example](../introduction/Examples.html#real-world) does. It is up to you to try a few options, choose a convention you like, and follow it, whether with, or without the middleware.
+[Thunk миддлвар](https://github.com/gaearon/redux-thunk) это не единственный способ организовать асинхронные действия (actions) в Redux. Вы можете использовать [redux-promise](https://github.com/acdlite/redux-promise) или [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) для отправки (dispatch) Promis'ов вместо функций. Вы можете отправлять (dispatch) Observables c [redux-rx](https://github.com/acdlite/redux-rx). Вы даже можете писать свои миддлвары для описания вызовов вашего API, как в [примере из реальной жизни](../introduction/Examples.html#real-world). Только от Вас зависит какие арианты попробовать, какой выбрать в качестве наиболее удобного, и использовать его с миддлваром или без.
 
-## Connecting to UI
+## Привязка к UI (Connecting to UI)
 
-Dispatching async actions is no different from dispatching synchronous actions, so we won’t discuss this in detail. See [Usage with React](../basics/UsageWithReact.md) for an introduction into using Redux from React components. See [Example: Reddit API](ExampleRedditAPI.md) for the complete source code discussed in this example.
+Отправка (dispatching) асинхронных действий (actions) не отличается от отправки (dispatching) синохронных действий (actions), следовательно мы не будем детально обсуждать это. Взгляните на [Использование с React](../basics/UsageWithReact.md) в качестве введения в использование Redux с React компонентами. Взгляните на [Пример: Reddit API](ExampleRedditAPI.md) для того, чтобы увидеть полный исходный код, который осбуждался в этом примере.
 
-## Next Steps
+## Следующие шаги
 
-Read [Async Flow](AsyncFlow.md) to recap how async actions fit into the Redux flow.
+Прочтите [Асинхронный поток (Async Flow)](AsyncFlow.md) для подведения итогов о том, как  асинхронные действия работают в потоке Redux.
