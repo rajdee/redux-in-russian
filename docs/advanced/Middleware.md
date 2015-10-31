@@ -1,40 +1,40 @@
-# Middleware
+# Посредники (Middleware)
 
-You’ve seen middleware in action in the [Async Actions](../advanced/AsyncActions.md) example. If you’ve used server-side libraries like [Express](http://expressjs.com/) and [Koa](http://koajs.com/), you were also probably already familiar with the concept of *middleware*. In these frameworks, middleware is some code you can put between the framework receiving a request, and the framework generating a response. For example, Express or Koa middleware may add CORS headers, logging, compression, and more. The best feature of middleware is that it’s composable in a chain. You can use multiple independent third-party middleware in a single project.
+Вы видели посредники в действии в [примере асинхронных действий](../advanced/AsyncActions.md). Если вы когда-либо использовали такие серверные библиотеки как [Express](http://expressjs.com/) и [Koa](http://koajs.com/), то, вероятно, вы уже хорошо знакомы с концепцией *посредник*. В этих фреймворках посредники - это части кода, которые вы можете поместить между фреймворком, принимающим запрос, и фреймворком, генерирующим ответ. Например посредники из Express или Koa могут добавлять CORS заголовки, логирование, сжатие и т.д. Лучшая особенность посредников заключается в том, что их можно соединять в цепочки/последовательности. Вы можете использовать множество независимых сторонних посредников в одном проекте.
 
-Redux middleware solves different problems than Express or Koa middleware, but in a conceptually similar way. **It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer.** People use Redux middleware for logging, crash reporting, talking to an asynchronous API, routing, and more.
+Redux посредники, в отличии от посредников Express или Koa, решают немного дургие проблемы, но концептуально схожим способом. **Они предоставляют стороннюю точку расширения между отправкой действия и моментом, когда это действие достигает редьюсера.** Люди используют Redux посредники для логирования, сообщения об ошибках, общения с асинхронным API, роутинга и т.д.
 
-This article is divided into an in-depth intro to help you grok the concept, and [a few practical examples](#seven-examples) to show the power of middleware at the very end. You may find it helpful to switch back and forth between them, as you flip between feeling bored and inspired.
+Эта статься разделена на углубленное введение, которое поможет вам хорошо разобраться в концепте, и [пару практических примеров](#seven-examples) в самом конце, которые покажут вам всю силу посредников. Вам может показаться полезным периодическое переключение между этими частями, так же, как между скукой и вдохновением.
 
-## Understanding Middleware
+## Понимание посредников
 
-While middleware can be used for a variety of things, including asynchronous API calls, it’s really important that you understand where it comes from. We’ll guide you through the thought process leading to middleware, by using logging and crash reporting as examples.
+Т.к. посредники могут использоваться для различных задач, в том числе и для асинхронных обращений к API, то очень важно, чтобы вы понимали откуда они пришли. Мы покажем вам ход мыслей, шаг за шагом ведущий к посредникам, используя логирование и сообщения об ошибках в качестве примера.
 
-### Problem: Logging
+### Проблема: логирование
 
-One of the benefits of Redux is that it makes state changes predictable and transparent. Every time an action is dispatched, the new state is computed and saved. The state cannot change by itself, it can only change as a consequence of a specific action.
+Одно из достоинств Redux - он делает изменения состояния приложения предсказуемыми и прозрачными. Каждый раз, когда посылается действие, вычисляется и сохраняется новое состояние. Состояние не может измениться самостоятельно, оно может меняться только как последовательность определенных действий.
 
-Wouldn’t it be nice if we logged every action that happens in the app, together with the state computed after it? When something goes wrong, we can look back at our log, and figure out which action corrupted the state.
+Разве не было бы хорошо, если бы мы записывали каждое действие, которое происходило в приложении, вместе с состоянием, которое было вычислено после этого действия? Когда что-то идет не так, мы можем просмотреть наш лог и понять, какое именно действие испортило наше состояние.
 
 <img src='http://i.imgur.com/BjGBlES.png' width='70%'>
 
-How do we approach this with Redux?
+Как мы подходим к этому с Redux?
 
-### Attempt #1: Logging Manually
+### Попытка #1: Логгируем вручную
 
-The most naïve solution is just to log the action and the next state yourself every time you call [`store.dispatch(action)`](../api/Store.md#dispatch). It’s not really a solution, but just a first step towards understanding the problem.
+Простейшее решение - самостоятельно записывать действие и состояние каждый раз, когда вы вызываете [`store.dispatch(action)`](../api/Store.md#dispatch). На самом деле это не слишком хорошее решение, это просто первый шаг на пути к пониманию проблемы.
 
->##### Note
+>##### Обратите внимание
 
->If you’re using [react-redux](https://github.com/gaearon/react-redux) or similar bindings, you likely won’t have direct access to the store instance in your components. For the next few paragraphs, just assume you pass the store down explicitly.
+>Если вы используете [react-redux](https://github.com/gaearon/react-redux) или похожий биндинг, вы, вероятно, хотите иметь непосредственный доступ к экземпляру состояния в ваших компонентах. Для следующих нескольких параграфов представьте, что вы передаете состояние явно.
 
-Say, you call this when creating a todo:
+Например, вы вызываете такой код, когда создаете todo-элемент:
 
 ```js
 store.dispatch(addTodo('Use Redux'));
 ```
 
-To log the action and state, you can change it to something like this:
+Для того, чтобы логировать действие и состояние, вы можете изменить код примерно так:
 
 ```js
 let action = addTodo('Use Redux');
@@ -44,11 +44,11 @@ store.dispatch(action);
 console.log('next state', store.getState());
 ```
 
-This produces the desired effect, but you wouldn’t want to do it every time.
+Это даст желаемый эффект, но вы бы не хотели делать так каждый раз.
 
-### Attempt #2: Wrapping Dispatch
+### Попытка #2: Оборачиваем Dispatch
 
-You can extract logging into a function:
+Вы можете вынести логирование в функцию:
 
 ```js
 function dispatchAndLog(store, action) {
@@ -58,17 +58,17 @@ function dispatchAndLog(store, action) {
 }
 ```
 
-You can then use it everywhere instead of `store.dispatch()`:
+Вы можете использовать ее везде вместо обычного `store.dispatch()`:
 
 ```js
 dispatchAndLog(store, addTodo('Use Redux'));
 ```
 
-We could end this here, but it’s not very convenient to import a special function every time.
+Мы бы могли закончить на этом, но не очень удобно импортировать специальную функцию каждый раз.
 
-### Attempt #3: Monkeypatching Dispatch
+### Попытка #3: [Monkeypatching](https://ru.wikipedia.org/wiki/Monkey_patch) для Dispatch
 
-What if we just replace the `dispatch` function on the store instance? The Redux store is just a plain object with [a few methods](../api/Store.md), and we’re writing JavaScript, so we can just monkeypatch the `dispatch` implementation:
+Что, если мы просто заменим функцию `dispatch` в экземпляре хранилища? Redux хранилище - это простой объект с [парой методов](../api/Store.md), а мы пишем на JavaScript, следовательно мы можем применить технику monkeypatch для реализации `dispatch`:
 
 ```js
 let next = store.dispatch;
@@ -80,19 +80,19 @@ store.dispatch = function dispatchAndLog(action) {
 };
 ```
 
-This is already closer to what we want!  No matter where we dispatch an action, it is guaranteed to be logged. Monkeypatching never feels right, but we can live with this for now.
+Это уже ближе к тому, что нам нужно! Не важно где мы посылаем действие, оно гарантированно будет залогировано. Monkeypatching никогда не покажется правильным ходом, но пока мы можем с этим жить.
 
-### Problem: Crash Reporting
+### Проблема: Сообщения об ошибках.
 
-What if we want to apply **more than one** such transformation to `dispatch`?
+Что, если мы захотим применить **больше одого такого** преобразования к `dispatch`?
 
-A different useful transformation that comes to my mind is reporting JavaScript errors in production. The global `window.onerror` event is not reliable because it doesn’t provide stack information in some older browsers, which is crucial to understand why an error is happening.
+Другое такое изменение, котрое приходит мне в голову, это сообщения о JavaScript ошибках в продакшене. Глобальное событие `window.onerror` не надежно потому, что оно в некоторых старых браузерах не предоставляет информацию о стеке вызовов, которая важна для понимания того, почему же произошла ошибка.
 
-Wouldn’t it be useful if, any time an error is thrown as a result of dispatching an action, we would send it to a crash reporting service like [Sentry](https://getsentry.com/welcome/) with the stack trace, the action that caused the error, and the current state? This way it’s much easier to reproduce the error in development.
+Разве не было бы полезно, если бы каждый раз, когда ошибка выбрасывалась как результат отправки какого-либо действия, мы могли бы отправить ее (ошибку), вместе со стеком вызовов, действием, которое вызвало ошибку и актуальным состоянием в сервис сообщения об ошибках, такой как [Sentry](https://getsentry.com/welcome/). В такм случае гораздо легче воспроизвести ошибку в разработке.
 
-However, it is important that we keep logging and crash reporting separate. Ideally we want them to be different modules, potentially in different packages. Otherwise we can’t have an ecosystem of such utilities. (Hint: we’re slowly getting to what middleware is!)
+Однако, важно, чтобы мы держали логирование и сообщения об ошибках раздельно. В идельном случае мы хотим получить их как разные модули из разных пакетов. В противном случае мы не сможем иметь экосистему из таого рода утилит. (Подсказка: Мы медленно подходим к тому, что такое посредники!)
 
-If logging and crash reporting are separate utilities, they might look like this:
+Если логирование и сообщения об ошибках являются отдельными утилитами, то они могут выглядеть так:
 
 ```js
 function patchStoreToAddLogging(store) {
@@ -124,24 +124,24 @@ function patchStoreToAddCrashReporting(store) {
 }
 ```
 
-If these functions are published as separate modules, we can later use them to patch our store:
+Если эти функции опубликованы как отдельные модули, то позже мы можем использовать их для изменения нашего хранилища:
 
 ```js
 patchStoreToAddLogging(store);
 patchStoreToAddCrashReporting(store);
 ```
 
-Still, this isn’t nice.
+Но это все еще не очень хорошо.
 
-### Attempt #4: Hiding Monkeypatching
+### Попытка #4: Прячем Monkeypatching
 
-Monkeypatching is a hack. “Replace any method you like”, what kind of API is that? Let’s figure out the essence of it instead. Previously, our functions replaced `store.dispatch`. What if they *returned* the new `dispatch` function instead?
+Monkeypatching это хак. "Замените любой метод, который хотите", что это за вид API? Давайте разберемся в его сути. Ранее наши функции заменяли `store.dispatch`. Что если бы они вместо этого *возвращали* новую функцию `dispatch`?
 
 ```js
 function logger(store) {
   let next = store.dispatch;
 
-  // Previously:
+  // ранее было так:
   // store.dispatch = function dispatchAndLog(action) {
 
   return function dispatchAndLog(action) {
@@ -153,36 +153,36 @@ function logger(store) {
 }
 ```
 
-We could provide a helper inside Redux that would apply the actual monkeypatching as an implementation detail:
+Мы могли бы предоствить функцию-помощник внутри Redux, которая могла бы применять актуальный monkeypatching как часть имплементации:
 
 ```js
 function applyMiddlewareByMonkeypatching(store, middlewares) {
   middlewares = middlewares.slice();
   middlewares.reverse();
 
-  // Transform dispatch function with each middleware.
+  // Изменяем функцию dispatch каждым посредником.
   middlewares.forEach(middleware =>
     store.dispatch = middleware(store)
   );
 }
 ```
 
-We could use it to apply multiple middleware like this:
+Мы можем использовать такой подход для применения нескольких посредников:
 
 ```js
 applyMiddlewareByMonkeypatching(store, [logger, crashReporter]);
 ```
 
-However, it is still monkeypatching.  
-The fact that we hide it inside the library doesn’t alter this fact.
+Тем не менее это все еще monkeypatching.
+Факто того, что мы прячем его внутри библиотеки не отменяет использования monkeypatching.
 
-### Attempt #5: Removing Monkeypatching
+### Попытка #5: Убираем Monkeypatching
 
-Why do we even overwrite `dispatch`? Of course, to be able to call it later, but there’s also another reason: so that every middleware can access (and call) the previously wrapped `store.dispatch`:
+Зачем мы перезаписываем `dispatch`? Конечно же для того, чтобы иметь возможность потом его вызвать. Но есть еще и другая причина: каждый посредник имеет доступ (и возможномть вызвать) ранее обернутый `store.dispatch`:
 
 ```js
 function logger(store) {
-  // Must point to the function returned by the previous middleware:
+  // Обязательно нужно закешировать функцию, которую вернул предыдущий посредник:
   let next = store.dispatch;
 
   return function dispatchAndLog(action) {
@@ -194,11 +194,11 @@ function logger(store) {
 }
 ```
 
-It is essential to chaining middleware!
+Это важно для возможности объединять посредников в цепочки!
 
-If `applyMiddlewareByMonkeypatching` doesn’t assign `store.dispatch` immediately after processing the first middleware, `store.dispatch` will keep pointing to the original `dispatch` function. Then the second middleware will also be bound to the original `dispatch` function.
+Если `applyMiddlewareByMonkeypatching` не сохранит `store.dispatch` сразу после обработки первого посредника, `store.dispatch` будет продолжать ссылаться на оригинальную функцию `dispatch`. Следовательно второй посредник тоже будет связан с оригинальной функцией `dispatch`.
 
-But there’s also a different way to enable chaining. The middleware could accept the `next()` dispatch function as a parameter instead of reading it from the `store` instance.
+Но есть еще другой метод реализации объединения посредников в цепочки (chaining). Посредник мог бы принимать функцию отправки действия `next()` в параметрах вместо того, чтобы читать ее из экземпляра хранилища.
 
 ```js
 function logger(store) {
@@ -213,7 +213,7 @@ function logger(store) {
 }
 ```
 
-It’s a [“we need to go deeper”](http://knowyourmeme.com/memes/we-need-to-go-deeper) kind of moment, so it might take a while for this to make sense. The function cascade feels intimidating. ES6 arrow functions make this [currying](https://en.wikipedia.org/wiki/Currying) easier on eyes:
+Это тот момент, когда [“we need to go deeper”](http://knowyourmeme.com/memes/we-need-to-go-deeper), так что имеет смысл потратить некоторе время на это. Каскад функций выглядит пугающим. Стрелочные функции из ES6 делают это [каррирование](https://en.wikipedia.org/wiki/Currying) чуть более простым для глаз:
 
 ```js
 const logger = store => next => action => {
@@ -239,17 +239,18 @@ const crashReporter = store => next => action => {
 }
 ```
 
-**This is exactly what Redux middleware looks like.**
+**Именно так выглядят посредники в Redux.**
 
-Now middleware takes the `next()` dispatch function, and returns a dispatch function, which in turn serves as `next()` to the middleware to the left, and so on. It’s still useful to have access to some store methods like `getState()`, so `store` stays available as the top-level argument.
+Теперь посредник принимает функцию отправки действия (dispatch) `next()` и возвращает другую функцию отправки действия (dispatch), которая, в свою очередь, является функцией отправки действия `next()` для посредника слева. Все еще полезно иметь доступ к некоторым методам хранилища, например к `getState()`, следовательно `store` остается доступен как аргумент самого верхнего уровня.
 
-### Attempt #6: Naïvely Applying the Middleware
 
-Instead of `applyMiddlewareByMonkeypatching()`, we could write `applyMiddleware()` that first obtains the final, fully wrapped `dispatch()` function, and returns a copy of the store using it:
+### Попытка #6: Простейшее применение Посредников
+
+Вместо `applyMiddlewareByMonkeypatching()` мы могли бы написать функцию `applyMiddleware()`, которая сначала получает финальную, полностью обернутую функцию `dispatch()` и возвращает копию хранилища, которая использует эту функцию:
 
 ```js
-// Warning: Naïve implementation!
-// That's *not* Redux API.
+// Осторожно: Простейшая имплементация!
+// Это *не* Redux API.
 
 function applyMiddleware(store, middlewares) {
   middlewares = middlewares.slice();
@@ -264,18 +265,17 @@ function applyMiddleware(store, middlewares) {
 }
 ```
 
-The implementation of [`applyMiddleware()`](../api/applyMiddleware.md) that ships with Redux is similar, but **different in three important aspects**:
+Реализация [`applyMiddleware()`](../api/applyMiddleware.md), которая поставляется с Redux, похожа на эту, но **отличается тремя важными аспектами**:
 
-* It only exposes a subset of the [store API](../api/Store.md) to the middleware: [`dispatch(action)`](../api/Store.md#dispatch) and [`getState()`](../api/Store.
-md#getState).
+* Она предоставляет посреднику подмножество [API хранилища](../api/Store.md): методы [`dispatch(action)`](../api/Store.md#dispatch) и [`getState()`](../api/Store.md#getState).
 
-* It does a bit of trickery to make sure that if you call `store.dispatch(action)` from your middleware instead of `next(action)`, the action will actually travel the whole middleware chain again, including the current middleware. This is useful for asynchronous middleware, as we have seen [previously](AsyncActions.md).
+* Она использует некоторые хитрости для того, чтобы убедиться, что, действие снова пройдет через всю цепочку посредников, включая текущий, если вы вызываете `store.dispatch(action)` из вашего посредника вместо `next(action)`. Это полезно для асинхронных посредников, как мы [ранее](AsyncActions.md) выидели.
 
-* To ensure that you may only apply middleware once, it operates on `createStore()` rather than on `store` itself. Instead of `(store, middlewares) => store`, its signature is `(...middlewares) => (createStore) => createStore`.
+* Для того, чтобы гарантировать, что вы можете применить посредник только один раз, она работает с `createStore()`, а не с самим `store`. Вместо `(store, middlewares) => store`, ее сигнатурой является `(...middlewares) => (createStore) => createStore`.
 
-### The Final Approach
+### Финальный подход
 
-Given this middleware we just wrote:
+Дан посредник который мы только что написали:
 
 ```js
 const logger = store => next => action => {
@@ -301,36 +301,36 @@ const crashReporter = store => next => action => {
 }
 ```
 
-Here’s how to apply it to a Redux store:
+Вот так можно его применить к Redux хранилищу:
 
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 
-// applyMiddleware takes createStore() and returns
-// a function with a compatible API.
+// applyMiddleware принимает createStore() и возвращает
+// функцию с сопоставимым API.
 let createStoreWithMiddleware = applyMiddleware(logger, crashReporter)(createStore);
 
-// Use it like you would use createStore()
+// Используйте ее так, как Вы использовали бы createStore()
 let todoApp = combineReducers(reducers);
 let store = createStoreWithMiddleware(todoApp);
 ```
 
-That’s it! Now any actions dispatched to the store instance will flow through `logger` and `crashReporter`:
+Вот и все! Теперь любое действие, отправленное в экземпляр хранилища будет проходить через `logger` и `crashReporter`:
 
 ```js
-// Will flow through both logger and crashReporter middleware!
+// будет проходить через `logger` и `crashReporter`!
 store.dispatch(addTodo('Use Redux'));
 ```
 
-## Seven Examples
+## Семь примеров
 
-If your head boiled from reading the above section, imagine what it was like to write it. This section is meant to be a relaxation for you and me, and will help get your gears turning.
+Если ваша голова вскипела от прочтения предыдущего раздела, представьте каково было написать это. Этот раздел предназначен для расслабления меня и вас и поможет запустить ваши шестеренки.
 
-Each function below is a valid Redux middleware. They are not equally useful, but at least they are equally fun.
+Каждая из функций, приведенных ниже, является валидным Redux посредником. Они не являются в равной степени полезными, но, по крайней мере, они в равной степени забавны.
 
 ```js
 /**
- * Logs all actions and states after they are dispatched.
+ * Логирует все действия и состояния после того, как действия будут отправлены.
  */
 const logger = store => next => action => {
   console.group(action.type);
@@ -342,7 +342,7 @@ const logger = store => next => action => {
 };
 
 /**
- * Sends crash reports as state is updated and listeners are notified.
+ * Отправляет отчеты об ошибках когда обновляется состояние и уведомляются слушатели.
  */
 const crashReporter = store => next => action => {
   try {
@@ -360,8 +360,8 @@ const crashReporter = store => next => action => {
 }
 
 /**
- * Schedules actions with { meta: { delay: N } } to be delayed by N milliseconds.
- * Makes `dispatch` return a function to cancel the timeout in this case.
+ * Планирует действия с { meta: { delay: N } }, которые будут отложены на N милисекунд.
+ * Создает `dispatch`, возвращающий функцию, для отмены таймаута.
  */
 const timeoutScheduler = store => next => action => {
   if (!action.meta || !action.meta.delay) {
@@ -379,9 +379,8 @@ const timeoutScheduler = store => next => action => {
 };
 
 /**
- * Schedules actions with { meta: { raf: true } } to be dispatched inside a rAF loop 
- * frame.  Makes `dispatch` return a function to remove the action from the queue in 
- * this case.
+ * Планирует действия с { meta: { raf: true } }, которые будут отправлены внутри фрейма rAF цикла. 
+ * Создает  `dispatch`, который возвращает функцию для удаления действия из очереди.
  */
 const rafScheduler = store => next => {
   let queuedActions = [];
@@ -419,9 +418,9 @@ const rafScheduler = store => next => {
 };
 
 /**
- * Lets you dispatch promises in addition to actions.
- * If the promise is resolved, its result will be dispatched as an action.
- * The promise is returned from `dispatch` so the caller may handle rejection.
+ * Позволяет вам отправлять промисы в дополнение к действиям.
+ * Если промис зарезолвден, его результат будет отправлен как действие.
+ * Промис возвращается из `dispatch`, т.о. вызываюая функция может обрабатывать отказ (rejection) промиса.
  */
 const vanillaPromise = store => next => action => {
   if (typeof action.then !== 'function') {
@@ -432,12 +431,11 @@ const vanillaPromise = store => next => action => {
 };
 
 /**
- * Lets you dispatch special actions with a { promise } field.
+ * Позволяет вам отправлять специальные действия с полем { promise }.
+ * Этот посредник превратит их в единственное действие в начале,
+ * и в единственное успешное (или неудачное) действие, когда `promise` будет зарезолвлен.
  *
- * This middleware will turn them into a single action at the beginning,
- * and a single success (or failure) action when the `promise` resolves.
- *
- * For convenience, `dispatch` will return the promise so the caller can wait.
+ * Для удобства, `dispatch` будет возвращать промис, т.е. вызывающая функция может ожидать разрешения этого промиса.
  */
 const readyStatePromise = store => next => action => {
   if (!action.promise) {
@@ -458,13 +456,13 @@ const readyStatePromise = store => next => action => {
 };
 
 /**
- * Lets you dispatch a function instead of an action.
- * This function will receive `dispatch` and `getState` as arguments.
+ * Позволяет вам отправлять функцию вместо действия.
+ * Функция будет принимать `dispatch` и `getState` в качестве аргументов.
  *
- * Useful for early exits (conditions over `getState()`), as well
- * as for async control flow (it can `dispatch()` something else).
- *
- * `dispatch` will return the return value of the dispatched function.
+ * Полезно для раннего выхода (условия над `getState()`), а также для 
+ * асинхронного потока управления (может `dispatch()` что-то другое)
+ * 
+ * `dispatch` будет возвращать значение отправляемой функции.
  */
 const thunk = store => next => action =>
   typeof action === 'function' ?
@@ -472,7 +470,7 @@ const thunk = store => next => action =>
     next(action);
 
 
-// You can use all of them! (It doesn’t mean you should.)
+// Вы можете использовать их все! (Это не значит, что вы должны.)
 let createStoreWithMiddleware = applyMiddleware(
   rafScheduler,
   timeoutScheduler,
