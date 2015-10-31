@@ -158,7 +158,7 @@ const rootReducer = combineReducers({
 export default rootReducer;
 ```
 
-## Хранилища (Store)
+## Хранилище (Store)
 
 #### `configureStore.js`
 
