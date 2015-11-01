@@ -4,9 +4,9 @@
 
 В этом руководстве мы создадим простое ToDo приложение.
 
-* [Действия (ActionsActions)](Actions.md)
-* [Редьюсеры (ReducersReducers)](Reducers.md)
+* [Действия (Actions)](Actions.md)
+* [Редьюсеры (Reducers)](Reducers.md)
 * [Хранилище (Store)](Store.md)
-* [Поток Данных (Data Flow)](DataFlow.md)
+* [Поток данных (Data Flow)](DataFlow.md)
 * [Использвание с React](UsageWithReact.md)
 * [Пример: Todo List](ExampleTodoList.md)
