@@ -1,19 +1,18 @@
 # `createStore(reducer, [initialState])`
 
-Creates a Redux [store](Store.md) that holds the complete state tree of your app.  
-There should only be a single store in your app.
+Создает Redux [хранилище](Store.md) которое хранит полное дерево состояния вашего приложения. Оно должно быть единственным хранилищем в вашем приложении.
 
-#### Arguments
+#### Параметры
 
-1. `reducer` *(Function)*: A [reducing function](../Glossary.md#reducer) that returns the next [state tree](../Glossary.md#state), given the current state tree and an [action](../Glossary.md#action) to handle.
+  1. `reducer` *(Function)*: [Функция редьюсера](../Glossary.md#reducer) которая возвращает следующее [дерево состояния](../Glossary.md#state), принимая текущее состояние и [действие](../Glossary.md#action) к обработке.
 
-2. [`initialState`] *(any)*: The initial state. You may optionally specify it to hydrate the state from the server in universal apps, or to restore a previously serialized user session. If you produced `reducer` with [`combineReducers`](combineReducers.md), this must be a plain object with the same shape as the keys passed to it. Otherwise, you are free to pass anything that your `reducer` can understand.
+  2. [`initialState`] *(any)*: Начальное состояние. Вы можете дополнительно указать это для гидрирования состояния с сервера в универсальных приложениях или для восстановления предыдущей сериализированной сессии пользователя. Если вы создали `редьюсер` с помощью [` combineReducers`](combineReducers.md) - это должно быть простым объектом с той же формой, как и ключи переданные ему. Иначе, вы можете передать все, что ваш `редьюсер` может понять.
 
-#### Returns
+#### Возвращает
 
-([*`Store`*](Store.md)): An object that holds the complete state of your app. The only way to change its state is by [dispatching actions](Store.md#dispatch). You may also [subscribe](Store.md#subscribe) to the changes to its state to update the UI.
+([*`Store`*](Store.md)): объект, который содержит полное состояние вашего приложения. Единственный способ изменить его состояние — путем [отправки действий](Store.md#dispatch). Вы можете также [подписаться](Store.md#subscribe) на изменения его состояния, чтобы обновить пользовательский интерфейс.
 
-#### Example
+#### Пример
 
 ```js
 import { createStore } from 'redux';
@@ -38,14 +37,14 @@ console.log(store.getState());
 // ['Use Redux', 'Read the docs']
 ```
 
-#### Tips
+#### Советы
 
-* Don’t create more than one store in an application! Instead, use [`combineReducers`](combineReducers.md) to create a single root reducer out of many.
+  * Не создавайте более одного хранилища в приложении! Вместо этого используйте [`combineReducers`](combineReducers.md) для создания единого корневого редьюсера из нескольких.
 
-* It is up to you to choose the state format. You can use plain objects or something like [Immutable](http://facebook.github.io/immutable-js/). If you’re not sure, start with plain objects.
+  * Выбор формата состояния на ваше усмотрение. Можно использовать простые объекты или что-то вроде [Immutable](http://facebook.github.io/immutable-js/). Если вы не уверены, начните с простых объектов.
 
-* If your state is a plain object, make sure you never mutate it! For example, instead of returning something like `Object.assign(state, newData)` from your reducers, return `Object.assign({}, state, newData)`. This way you don’t override the previous `state`. You can also write `return { ...state, ...newData }` if you enable [ES7 object spread proposal](https://github.com/sebmarkbage/ecmascript-rest-spread) with [Babel stage 1](http://babeljs.io/docs/usage/experimental/).
+  * Если ваше состояние является простым объектом, убедитесь, что вы никогда его не изменяете! Например, вместо того, чтобы возвращать что-то вроде `Object.assign (state, newData)` из ваших редьюсеров, возвращайте `Object.assign ({}, state, newData)`. Таким образом, не переопределяется предыдущее `состояние`. Вы также можете написать `return { ...state, ...newData }` если вы включите [ES7 object spread proposa](https://github.com/sebmarkbage/ecmascript-rest-spread) с [Babel stage 1](http://babeljs.io/docs/usage/experimental/).
 
-* For universal apps that run on the server, create a store instance with every request so that they are isolated. Dispatch a few data fetching actions to a store instance and wait for them to complete before rendering the app on the server.
+  * Для универсальных приложений, которые выполняются на сервере, создавайте экземпляр хранилища с каждым запросом, так чтобы они были изолированы. Отправляйте несколько извлеченных действий для экземпляра хранилища и ждите их завершения перед рендерингом приложения на сервере.
 
-* When a store is created, Redux dispatches a dummy action to your reducer to populate the store with the initial state. You are not meant to handle the dummy action directly. Just remember that your reducer should return some kind of initial state if the state given to it as the first argument is `undefined`, and you’re all set.
+  * Когда хранилище создано, Redux отправляет фиктивное действие для вашего редьюсера, для заполнения хранилища с начальным состоянием. Вам не надо обрабатывать фиктивное действие напрямую. Просто помните, что ваш редьюсер должен возвращать какое-то начальное состояние, если состояние переданое ему в качестве первого аргумента не `определено (undefined)` и все готово.
