@@ -1,21 +1,21 @@
 # `compose(...functions)`
 
-Composes functions from right to left.
+Объединяет функции слева направо.
 
-This is a functional programming utility, and is included in Redux as a convenience.  
-You might want to use it to apply several [store enhancers](../Glossary.md#store-enhancer) in a row.
+Это утилита функционального программирования, которая включена в Redux для удобства.   
+Вы можете использовать ее, чтобы применить несколько [расширителей хранилища](../Glossary.md#store-enhancer) последовательно.
 
-#### Arguments
+#### Параметры
 
-1. (*arguments*): The functions to compose. Each function is expected to accept a single parameter. Its return value will be provided as an argument to the function standing to the left, and so on.
+  1. (*аргументы*): функции для композиции. Ожидается, что каждая функция принимает один параметр. Ее возвращаемое значение будет представлено в качестве аргумента для функции стоящей слева, и так далее.
 
-#### Returns
+#### Возвращает
 
-(*Function*): The final function obtained by composing the given functions from right to left.
+(*Функция*): конечная функция полученая путем композиции переданных функций слева направо.
 
-#### Example
+#### Пример
 
-This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a few developer tools from the [redux-devtools](https://github.com/gaearon/redux-devtools) package.
+В этом примере показано, как использовать `compose` для расширения [хранилища](Store.md) с [`applyMiddleware`](applyMiddleware.md) и несколько инструментов для разработки из пакета [redux devtools](https://github.com/gaearon/redux-devtools).
 
 ```js
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
@@ -27,9 +27,9 @@ let middleware = [thunk];
 
 let finalCreateStore;
 
-// In production, we want to use just the middleware.
-// In development, we want to use some store enhancers from redux-devtools.
-// UglifyJS will eliminate the dead code depending on the build environment.
+// В продакшене мы хотим использовать только этот посредник.
+// В разработке мы хотим использовать некоторые расширители хранилища из redux devtools.
+// UglifyJS удалит "мертвый код" в зависимости от среды сборки.
 
 if (process.env.NODE_ENV === 'production') {
   finalCreateStore = applyMiddleware(...middleware)(createStore);
@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === 'production') {
     )
   )(createStore);
 
-  // Same code without the `compose` helper:
+  // Некоторы код без хелперов `compose`:
   //
   // finalCreateStore = applyMiddleware(middleware)(
   //   require('redux-devtools').devTools()(
@@ -54,6 +54,6 @@ if (process.env.NODE_ENV === 'production') {
 let store = finalCreateStore(reducer);
 ```
 
-#### Tips
+#### Советы
 
-* All `compose` does is let you write deeply nested function transformations without the rightward drift of the code. Don’t give it too much credit!
+  * `compose` позволяет вам писать глубоко вложенные функция преобразований без дрейфа вправо (rightward drift) в коде. Не предоставляйте ей слишком многого!
