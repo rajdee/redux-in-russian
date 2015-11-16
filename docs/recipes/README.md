@@ -1,11 +1,11 @@
-# Recipes
+# Рецепты
 
-These are some use cases and code snippets to get you started with Redux in a real app. They assume you understand the topics in [basic](../basics/README.md) and [advanced](../advanced/README.md) tutorials.
+Вот некоторые примеры использования и фрагменты кода, чтобы вы начали с Redux в реальном приложении. Они предполагают, что вы понимаете темы в [начальном](../basics/README.md) и [продвинутом](../advanced/README.md) руководствах.
 
-* [Migrating to Redux](MigratingToRedux.md)
-* [Reducing Boilerplate](ReducingBoilerplate.md)
-* [Server Rendering](ServerRendering.md)
-* [Writing Tests](WritingTests.md)
-* [Computing Derived Data](ComputingDerivedData.md)
-* [Implementing Undo History](ImplementingUndoHistory.md)
+* [Мигрирование на Redux](MigratingToRedux.md)
+* [Шаблон редуцирования](ReducingBoilerplate.md)
+* [Серверный рендеринг](ServerRendering.md)
+* [Написание тестов](WritingTests.md)
+* [Вычисление полученных данных](ComputingDerivedData.md)
+* [Реализация истории отмен](ImplementingUndoHistory.md)
 
