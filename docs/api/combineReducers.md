@@ -1,38 +1,38 @@
 # `combineReducers(reducers)`
 
-As your app grows more complex, you’ll want to split your [reducing function](../Glossary.md#reducer) into separate functions, each managing independent parts of the [state](../Glossary.md#state).
+Как только ваше приложение становится все более сложным, вы захотите разделить ваши [функции редьюсеры](../Glossary.md#reducer) на отдельные функции, которые управляют независимыми частями [состояния](../Glossary.md#state).
 
-The `combineReducers` helper function turns an object whose values are different reducing functions into a single reducing function you can pass to [`createStore`](createStore.md).
+Вспомогательная функция `combineReducers` преобразует объект, значенями которого являются различные функции редьюсеры, в одну функцию редьюсер, которую можно передать в метод [`createStore`](createStore.md).
 
-The resulting reducer calls every child reducer, and gather their results into a single state object. The shape of the state object matches the keys of the passed `reducers`.
+Результирующий редьюсер вызывает вложенные редьюсеры и собирает их результаты в единый объект состояния. Форма объекта состояния соответствует ключам переданных `редьюсеров`.
 
-> ##### A Note for Flux Users
+> ##### Примечания для пользователей Flux
+> 
+> Эта функция поможет вам организовать ваши редьюсеры для управления их собственными частями состояния, подобно тому, как вы бы имели различные Flux хранилища для управления разными состояниями. С Redux у вас есть только одно хранилище, но `combineReducers` помогает вам сохранять такое же логическое разделение между редьюсерами.
 
-> This function helps you organize your reducers to manage their own slices of state, similar to how you would have different Flux Stores to manage different state. With Redux, there is just one store, but `combineReducers` helps you keep the same logical division between reducers.
+#### Параметры
 
-#### Arguments
+  1. `reducers` (*Object*): объект, значения которого соответствуют различным функциям редьюсерам, которые должны быть объединены в один. Ниже идут примечания для некоторых правил, которым должен следовать каждый переданный редьюсер.
 
-1. `reducers` (*Object*): An object whose values correspond to different reducing functions that need to be combined into one. See the notes below for some rules every passed reducer must follow.
+> Ранее документация предлагала использовать ES6-синтаксис `import * as reducers` для получения объекта редьюсеров. Это было источником многочисленной путаницы, поэтому сейчас рекомендуется экспортировать один редьюсер, полученный с помощью `combineReducers()` из `reducers/index.js` вместо этого. Ниже приведен пример.
 
-> Earlier documentation suggested the use of the ES6 `import * as reducers` syntax to obtain the reducers object. This was the source of a lot of confusion, which is why we now recommend exporting a single reducer obtained using `combineReducers()` from `reducers/index.js` instead. An example is included below.
+#### Возвращает
 
-#### Returns
+(* Function *): редьюсер, который вызывает каждый редьюсер внутри объекта `reducers` и создает объект состояния с той же формой.
 
-(*Function*): A reducer that invokes every reducer inside the `reducers` object, and constructs a state object with the same shape.
+#### Примечания
 
-#### Notes
+Эта функция слегка самоуверенная и со смещенным акцентом в сторону оказания помощи новичкам избежания распространенных ошибок. Именно поэтому она пытается применять некоторые правила, которым не нужно следовать, если вы пишете корневой редьюсер вручную.
 
-This function is mildly opinionated and is skewed towards helping beginners avoid common pitfalls. This is why it attempts to enforce some rules that you don’t have to follow if you write the root reducer manually.
+Любой редьюсер передаваемый `combineReducers` должен соответствовать этим правила:
 
-Any reducer passed to `combineReducers` must satisfy these rules:
+  * Для любых действий, которые не определены, он должен возвращать `state`, переданный ему в качестве первого аргумента.
 
-* For any action that is not recognized, it must return the `state` given to it as the first argument.
+  * Он никогда не должен возвращать ` undefined `. Это слишком легко сделать это по ошибке через предыдущие `return`, поэтому `combineReducers` создает исключение, если вы сделали это, вместо того, чтобы ошибка проявлялась где-нибудь еще.
 
-* It must never return `undefined`. It is too easy to do this by mistake via an early `return` statement, so `combineReducers` throws if you do that instead of letting the error manifest itself somewhere else.
+  * Если `state` переданный ему ` не определен (undefined)`, то он должен возвратить начальное состояние (state) для этого конкретного редьюсера. Согласно предыдущему правилу, начальное состояние (state) не должно быть равно `undefined`. Это удобно указывать с ES6-синтаксисом опциональных аргументов, но вы можете также явно проверить первый аргумент на `undefined`.
 
-* If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to specify it with ES6 optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
-
-While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them.
+В то время как `combineReducers` пытается проверить, что ваши редьюсеры соответствуют некоторым из этих правил, вам следует помнить о них и сделать все возможное, чтобы следовать им.
 
 #### Example
 
@@ -101,8 +101,8 @@ console.log(store.getState());
 // }
 ```
 
-#### Tips
+#### Советы
 
-* This helper is just a convenience! You can write your own `combineReducers` that [works differently](https://github.com/acdlite/reduce-reducers), or even assemble the state object from the child reducers manually and write a root reducing function explicitly, like you would write any other function.
+  * Этот помощник – это всего лишь удобство! Вы можете написать свой собственный `combineReducers` который [работает иначе](https://github.com/acdlite/reduce-reducers) или даже вручную собрать объект состояния из вложенного редьюсера и написать родительскую функцию-редьюсер явно, как можно было бы написать любую другую функцию.
 
-* You may call `combineReducers` at any level of the reducer hierarchy. It doesn’t have to happen at the top. In fact you may use it again to split the child reducers that get too complicated into independent grandchildren, and so on.
+  * Вы можете вызвать `combineReducers` на любом уровне иерархии редьюсера. Это не обязательно должно произойти наверху. На самом деле вы можете использовать его снова, чтобы разделить "детские" редьюсеры, которые получаются слишком сложным на независимых "внуков" и так далее.

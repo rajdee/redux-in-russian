@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === 'production') {
     )
   )(createStore);
 
-  // Некоторы код без хелперов `compose`:
+  // Некоторый код без хелперов `compose`:
   //
   // finalCreateStore = applyMiddleware(middleware)(
   //   require('redux-devtools').devTools()(
@@ -56,4 +56,4 @@ let store = finalCreateStore(reducer);
 
 #### Советы
 
-  * `compose` позволяет вам писать глубоко вложенные функция преобразований без дрейфа вправо (rightward drift) в коде. Не предоставляйте ей слишком многого!
+  * `compose` позволяет вам писать глубоко вложенные функции преобразований без дрейфа вправо (rightward drift) в коде. Не предоставляйте ей слишком многого!
