@@ -1,31 +1,31 @@
-# Migrating to Redux
+# Переход к Redux
 
-Redux is not a monolithic framework, but a set of contracts and a [few functions that make them work together](../api/README.md). The majority of your “Redux code” will not even use Redux APIs, as most of the time you’ll be writing functions. 
+Redux - это не монолитный фреймворк, но набор контрактов и [несколько функций, которые заставляют их работать вместе](../api/README.md). Большая часть вашего «Redux кода» не будет использовать Redux API, когда большую часть времени вы будете писать функции.
 
-This makes it easy to migrate both to and from Redux.  
-We don’t want to lock you in!
+Это позволяет быть легко переносимым как в, так и из Redux.   
+Мы не хотим вас ограничивать!
 
-## From Flux
+## Из Flux
 
-[Reducers](../Glossary.md#reducer) capture “the essence” of Flux Stores, so it’s possible to gradually migrate an existing Flux project towards Redux, whether you are using [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [traditional Flux](https://github.com/facebook/flux), or any other Flux library.
+[Редьюсеры](../Glossary.md#reducer) сохраняют «суть» хранилищ Flux, так что можно постепенно перенести существующий Flux-проект в Redux, используете ли вы [Flummox](http://github.com/acdlite/flummox), [Alt](http://github.com/goatslacker/alt), [традиционный Flux](https://github.com/facebook/flux) или любую другую Flux библиотеку.
 
-It is also possible to do the reverse and migrate from Redux to any of these libraries following the same steps.
+Это также можно сделать и обратно и мигрировать из Redux в любую из этих библиотек, следуя теми же шагами.
 
-Your process will look like this:
+Ваш процесс будет выглядеть следующим образом:
 
-* Create a function called `createFluxStore(reducer)` that creates a Flux store compatible with your existing app from a reducer function. Internally it might look similar to [`createStore`](../api/createStore.md) ([source](https://github.com/rackt/redux/blob/master/src/createStore.js)) implementation from Redux. Its dispatch handler should just call the `reducer` for any action, store the next state, and emit change.
+  * Создайте функцию под названием `createFluxStore(reducer)`, которая создает Flux-хранилище совместимое с вашим существующим приложением из функции редьюсера. Внутри она может выглядеть аналогично [`методу createStore`](../api/createStore.md) ([source](https://github.com/rackt/redux/blob/master/src/createStore.js)) из Redux. Ее обработчик отправки должен просто вызвать `редьюсер` для любых действий, сохранить следующее состояние и запустить изменения.
 
-* This allows you to gradually rewrite every Flux Store in your app as a reducer, but still export `createFluxStore(reducer)` so the rest of your app is not aware that this is happening and sees the Flux stores.
+  * Это позволяет постепенно переписать каждый Flux Store в вашем приложении, как редьюсер, но по-прежнему экспортировать `createFluxStore(reducer)`, чтобы остальная часть вашего приложения не знала, что это происходит и видела хранилища Flux.
 
-* As you rewrite your Stores, you will find that you need to avoid certain Flux anti-patterns such as fetching API inside the Store, or triggering actions inside the Stores. Your Flux code will be easier to follow once you port it to be based on reducers!
+  * Когда вы перепишите ваши Хранилища, вы обнаружите, что вам нужно избегать определенных Flux анти-шаблонов, таких как, извлечение данных внутри Хранилища или запуск действия внутри Хранилища. Ваш Flux код будет легче сопровождать, после того, как вы портируете его, основываясь на редьюсерах!
 
-* When you have ported all of your Flux Stores to be implemented on top of reducers, you can replace the Flux library with a single Redux store, and combine those reducers you already have into one using [`combineReducers(reducers)`](../api/combineReducers.md).
+  * Когда вы портировали все ваши Flux Stores, реализованые поверх редьюсеров, вы можете заменить Flux библиотеку на единственное хранилище Redux и объединить те редьюсеры, которые у вас уже есть, в один, с помощью [`combineReducers(reducers)`](../api/combineReducers.md).
 
-* Now all that’s left to do is to port the UI to [use react-redux](../basics/UsageWithReact.md) or equivalent.
+  * Теперь все что осталось сделать - это портировать UI, чтобы [использовать react-redux](../basics/UsageWithReact.md) или эквивалент.
 
-* Finally, you might want to begin using some Redux idioms like middleware to further simplify your asynchronous code.
+  * Наконец вы можете начать использовать некоторые Redux-идиомы в качестве посредников, для дальнейшего упрощения асинхронного кода.
 
-## From Backbone
+## Из Backbone
 
-Sorry, you’ll need to rewrite your model layer.  
-It’s way too different!
+Извините, вам будет нужно переписать ваш уровень модели.  
+Они слишком разные!
