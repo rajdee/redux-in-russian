@@ -2,7 +2,7 @@
 
 Во-первых, давайте определим некоторые действия.
 
-**Действия** - это структура, которая передает данные из вашего приложения в хранилище. Они являются *единственным* источником информации для хранилища. Вы отправляете их в хранилище используя метод [`store.dispatch()`](../api/Store.md#dispatch).
+**Действия** - это структура, которая передает данные из вашего приложения в хранилище. Они являются *единственными* источниками информации для хранилища. Вы отправляете их в хранилище используя метод [`store.dispatch()`](../api/Store.md#dispatch).
 
 Например, вот действие которое представляет добавление нового пункта в список дел:
 
@@ -13,7 +13,7 @@
 }
 ```
 
-Действия - это обычный объект JavaScript. По соглашению, действия должны иметь строковое поле `type`, которое указывает на тип исполняемого действия. Типы должны, как правило, определяться как строковые константы. После того, как ваше приложение разрастется, вы можете захотеть переместить их в отдельный модуль.
+Действия - это обычные JavaScript объекты. Действия должны иметь поле `type`, которое указывает на тип исполняемого действия. Типы должны, как пр   авило, определяться как строковые константы. После того, как ваше приложение разрастется, вы можете захотеть переместить их в отдельный модуль.
 
 ```js
 import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
@@ -25,7 +25,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 
 Кроме `type`, структуру объекта действий вы можете строить на ваше усмотрение. Если вам интересно, изучите [Flux Standard Action](https://github.com/acdlite/flux-standard-action) для рекомендаций о том, как могут строиться действия.
 
-Мы добавим еще один тип действия, которое будет отмечать задачу, как выполненную. Мы обращаемся к конкретному todo по `index`, потому что мы храним их в виде массива. В реальном приложении, разумнее генерировать уникальный ID каждый раз, когда что-то новое создается.
+Мы добавим еще один тип действия, который будет отмечать задачу, как выполненную. Мы обращаемся к конкретному todo по `index`, потому что мы храним их в виде массива. В реальном приложении, разумнее генерировать уникальный ID каждый раз, когда что-то новое создается.
 
 ```js
 {
@@ -61,7 +61,7 @@ function addTodoWithDispatch(text) {
 }
 ```
 
-В противоположность этому, в Redux генераторы действий (action creators) являются  **чистыми функциями** с нулевыми сайд-эффектами. Они просто возвращают action:
+В противоположность этому, в Redux генераторы действий (action creators) просто возвращают action:
 
 ```js
 function addTodo(text) {
@@ -72,7 +72,7 @@ function addTodo(text) {
 }
 ```
 
-Это делает их более подвижными (portable ориг.) и легкими для тестирования. На самом деле, чтобы запустить отправку действия - передайте результат action creator в функцию `dispatch()`:
+Это делает их более переносимыми (portable ориг.) и легкими для тестирования. На самом деле, чтобы запустить отправку действия - передайте результат action creator в функцию `dispatch()`:
 
 ```js
 dispatch(addTodo(text));
@@ -82,15 +82,15 @@ dispatch(completeTodo(index));
 Или создайте **связанный генератор действия (bound action creator)** который автоматически запускает отправку действия:
 
 ```js
-const boundAddTodo = (text) => dispatch(addTodo(text));
-const boundCompleteTodo = (index) => dispatch(completeTodo(index));
+const boundAddTodo = (text) => dispatch(addTodo(text))
+const boundCompleteTodo = (index) => dispatch(completeTodo(index))
 ```
 
-Вы сразу же сможете его вызвать:
+Теперь вы можете вызвать его напрямую:
 
 ```
-boundAddTodo(text);
-boundCompleteTodo(index);
+boundAddTodo(text)
+boundCompleteTodo(index)
 ```
 
 Доступ к функции `dispatch()` может быть получен непосредственно из хранилища (store) [`store.dispatch()`](../api/Store.md#dispatch), но, что более вероятно, вы будете получать доступ к ней при помощи чего-то типа `connect()` из [react-redux](http://github.com/gaearon/react-redux). Вы можете использовать функцию [`bindActionCreators()`](../api/bindActionCreators.md) для автоматического привязывания большого количества генераторов действий (action creators) к функции `dispatch()`.
@@ -101,37 +101,37 @@ boundCompleteTodo(index);
 
 ```js
 /*
- * action types
+ * типы действий
  */
 
-export const ADD_TODO = 'ADD_TODO';
-export const COMPLETE_TODO = 'COMPLETE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
+export const ADD_TODO = 'ADD_TODO'
+export const COMPLETE_TODO = 'COMPLETE_TODO'
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 
 /*
- * other constants
+ * другие константы
  */
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
   SHOW_COMPLETED: 'SHOW_COMPLETED',
   SHOW_ACTIVE: 'SHOW_ACTIVE'
-};
+}
 
 /*
- * action creators
+ * генераторы действий
  */
 
 export function addTodo(text) {
-  return { type: ADD_TODO, text };
+  return { type: ADD_TODO, text }
 }
 
 export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index };
+  return { type: COMPLETE_TODO, index }
 }
 
 export function setVisibilityFilter(filter) {
-  return { type: SET_VISIBILITY_FILTER, filter };
+  return { type: SET_VISIBILITY_FILTER, filter }
 }
 ```
 
