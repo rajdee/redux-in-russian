@@ -1,6 +1,6 @@
 # Использование в связке с React (Usage with React)
 
-Для начала стоит подчеркнуть, что Redux не завязан только на React. Вы можете создавать Redux приложения c помощью React, Angular, Ember, jQuery или обычного javascript.
+Для начала стоит подчеркнуть, что Redux не имеет отношения к React. Вы можете создавать Redux приложения c помощью React, Angular, Ember, jQuery или обычного javascript.
 
 И все-таки, Redux работает особенно хорошо с такими фреймворками, как [React](http://facebook.github.io/react/) и [Deku](https://github.com/dekujs/deku) потому что они позволяют Вам описать UI, как функцию состояния, и, кроме того, Redux умеет менять состояние (state) приложения в ответ на произошедшие действия (actions).
 
@@ -14,24 +14,24 @@
 npm install --save react-redux
 ```
 
-## Умные и глупые компоенты (Smart and Dumb Components)
+## Компоненты-контейнеры и презентационные компонены (Container and Presentational Components)
 
-React bindings для Redux охвачены идеей [разделения компонентов на “умные” и “глупые”](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
+React bindings для Redux охвачены идеей [разделения компонентов на компоненты-контейнеры и презентационные компонеты](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
 
-Желательно, чтобы только компоненты верхнего уровня вашего приложения (например, обработчики роутов (route handlers) знали о Redux. Компоненты, которые находятся ниже в иерархии, должны быть "глупыми" и принимать все данные только через `props`.
+Желательно, чтобы только компоненты верхнего уровня вашего приложения (например, обработчики роутов (route handlers) знали о Redux. Компоненты, которые находятся ниже в иерархии, должны быть презентационными и принимать все данные только через `props`.
 
 <table>
     <thead>
         <tr>
             <th></th>
-            <th scope="col" style="text-align:left">“Умные” Компоненты</th>
-            <th scope="col" style="text-align:left">“Глупые” Компоненты</th>
+            <th scope="col" style="text-align:left">Компоненты- контейнеры</th>
+            <th scope="col" style="text-align:left">Презентационные Компоненты</th>
         </tr>
     </thead>
     <tbody>
         <tr>
           <th scope="row" style="text-align:right">Расположение</th>
-          <td>Верхний уровень, Обработчики роутов</td>
+          <td>Верхний уровень, обработчики роутов</td>
           <td>Средний уровень и компоненты-"листья" (leaf components)</td>
         </tr>
         <tr>
@@ -52,11 +52,11 @@ React bindings для Redux охвачены идеей [разделения к
     </tbody>
 </table>
 
-В нашем ToDo приложении будет один "умный" компонент на вершине иерархии представлений (view). В более сложных приложениях таких "умных" компонентов может быть несколько. Мы советуем не вкладывать "умные" компоненты друг в друга, а передавать `props` вниз по иерархии компонентов всегда, когда это возможно.
+В нашем ToDo приложении будет один компонент-контейнер на вершине иерархии представлений (view). В более сложных приложениях таких "умных" компонентов может быть несколько. Мы советуем не вкладывать "умные" компоненты друг в друга, а передавать `props` вниз по иерархии компонентов всегда, когда это возможно.
 
 ## Проектирование иерархии компонентов (Designing Component Hierarchy)
 
-Помните как мы [спроектировали структуру объекта состояния](Reducers.md)? В этот раз мы спроектируем иерархию UI компонентов, которая будет соответствовать этой структуре. С такого рода задачей Вы можете столкнуться разрабатывая и не Redux приложение. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) - это великолепное руководство, которое поясняет весь процесс решения этой задачи.
+Помните как мы [спроектировали структуру объекта состояния](Reducers.md)? В этот раз мы спроектируем иерархию UI компонентов, которая будет соответствовать этой структуре. С такого рода задачей Вы можете столкнуться разрабатывая и не Redux приложение. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) - великолепное руководство, которое поясняет весь процесс решения этой задачи.
 
 Наше техническое задание для проектирования довольно простое. Мы хотим показать список дел. По клику мы должны зачеркнуть дело, что будет означать, что оно выполнено. Также мы хотим показать поле ввода, с помощью которого пользователь сможет добавить новое дело в список. В футере должны быть переключатели, с помощью которых мы будем показывать все дела / только завершенные / только не завершенные.
 
@@ -75,20 +75,20 @@ React bindings для Redux охвачены идеей [разделения к
     * `filter: string` текущий фильтр: `'SHOW_ALL'`, `'SHOW_COMPLETED'` или `'SHOW_ACTIVE'`.
     * `onFilterChange(nextFilter: string)`: функция-колбек, которая будет вызвана если пользователь выберет другой фильтр.
 
-Все это - "глупые" компоненты. Они не знают **откуда** приходят данные и **как** их изменить. Они лишь только рендерят то, что им передали.
+Все это - презентационные компоненты. Они не знают **откуда** приходят данные и **как** их изменить. Они лишь только рендерят то, что им передали.
 
 Если Вы замените Redux чем-то другим, то все равно сможете пользоваться этими компонентами. Они никак не зависят от Redux.
 
 Давайте напишем их! Пока нам не нужно думать о привязке Redux. Мы можем просто передавать им фейковые данные, чтобы убедиться, что компоненты рендерятся корректно.
 
-## Глупые компоненты (Dumb Components)
+## Презентационные компоненты (Presentational Components)
 
 Это обычные React компоненты, так что давайте не будем сильно задерживаться на их изучении. Вот они:
 
 #### `components/AddTodo.js`
 
 ```js
-import React, { findDOMNode, Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
 export default class AddTodo extends Component {
   render() {
@@ -99,26 +99,26 @@ export default class AddTodo extends Component {
           Add
         </button>
       </div>
-    );
+    )
   }
 
   handleClick(e) {
-    const node = findDOMNode(this.refs.input);
-    const text = node.value.trim();
-    this.props.onAddClick(text);
-    node.value = '';
+    const node = this.refs.input
+    const text = node.value.trim()
+    this.props.onAddClick(text)
+    node.value = ''
   }
 }
 
 AddTodo.propTypes = {
   onAddClick: PropTypes.func.isRequired
-};
+}
 ```
 
 #### `components/Todo.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
 export default class Todo extends Component {
   render() {
@@ -131,7 +131,7 @@ export default class Todo extends Component {
         }}>
         {this.props.text}
       </li>
-    );
+    )
   }
 }
 
@@ -139,14 +139,14 @@ Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
   text: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired
-};
+}
 ```
 
 #### `components/TodoList.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
-import Todo from './Todo';
+import React, { Component, PropTypes } from 'react'
+import Todo from './Todo'
 
 export default class TodoList extends Component {
   render() {
@@ -158,7 +158,7 @@ export default class TodoList extends Component {
                 onClick={() => this.props.onTodoClick(index)} />
         )}
       </ul>
-    );
+    )
   }
 }
 
@@ -168,28 +168,28 @@ TodoList.propTypes = {
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   }).isRequired).isRequired
-};
+}
 ```
 
 #### `components/Footer.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react'
 
 export default class Footer extends Component {
   renderFilter(filter, name) {
     if (filter === this.props.filter) {
-      return name;
+      return name
     }
 
     return (
       <a href='#' onClick={e => {
-        e.preventDefault();
-        this.props.onFilterChange(filter);
+        e.preventDefault()
+        this.props.onFilterChange(filter)
       }}>
         {name}
       </a>
-    );
+    )
   }
 
   render() {
@@ -204,7 +204,7 @@ export default class Footer extends Component {
         {this.renderFilter('SHOW_ACTIVE', 'Active')}
         .
       </p>
-    );
+    )
   }
 }
 
@@ -215,7 +215,7 @@ Footer.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}
 ```
 
 Вот и все! Мы можем проверить работоспособность наших компонентов, написав простенький `App`, который будет рендерить их:
@@ -223,10 +223,10 @@ Footer.propTypes = {
 #### `containers/App.js`
 
 ```js
-import React, { Component } from 'react';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
-import Footer from '../components/Footer';
+import React, { Component } from 'react'
+import AddTodo from '../components/AddTodo'
+import TodoList from '../components/TodoList'
+import Footer from '../components/Footer'
 
 export default class App extends Component {
   render() {
@@ -237,15 +237,20 @@ export default class App extends Component {
             console.log('add todo', text)
           } />
         <TodoList
-          todos={[{
-            text: 'Use Redux',
-            completed: true
-          }, {
-            text: 'Learn to connect it to React',
-            completed: false
-          }]}
-          onTodoClick={todo =>
-            console.log('todo clicked', todo)
+          todos={
+            [
+              {
+                text: 'Use Redux',
+                completed: true
+              },
+              {
+                text: 'Learn to connect it to React',
+                completed: false
+              }
+            ]
+          }
+          onTodoClick={index =>
+            console.log('todo clicked', index)
           } />
         <Footer
           filter='SHOW_ALL'
@@ -253,7 +258,7 @@ export default class App extends Component {
             console.log('filter change', filter)
           } />
       </div>
-    );
+    )
   }
 }
 ```
@@ -273,26 +278,25 @@ export default class App extends Component {
 #### `index.js`
 
 ```js
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import App from './containers/App';
-import todoApp from './reducers';
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from './containers/App'
+import todoApp from './reducers'
 
-let store = createStore(todoApp);
+let store = createStore(todoApp)
 
-let rootElement = document.getElementById('root');
-React.render(
-  // Ребенок должен быть обернут в функцию
-  // чтобы обойти баг в React 0.13.
+let rootElement = document.getElementById('root')
+render(
   <Provider store={store}>
-    {() => <App />}
+    <App />
   </Provider>,
   rootElement
-);
+)
 ```
 
-Это сделает наш экземпляр хранилища доступным для всех компонентов, которые располагаются в `Provider` компоненте. (Внутри это реализовано благодаря [недокументированной возможности React - “context”](http://www.youtube.com/watch?v=H7vlH-wntD4))
+Это сделает наш экземпляр хранилища доступным для всех нижестоящих компонентов. (Внутри это реализовано благодаря [возможности React - “context”](http://facebook.github.io/react/docs/context.html))
 
 Затем нам **нужно обернуть компоненты, которые мы хотим связать с Redux, в вызов функции `connect()` из [`react-redux`](http://github.com/gaearon/react-redux)** Старайтесь делать это только с компонентами верхнего уровня или обработчиками роутов. Хотя, технически, Вы можете обернуть в вызов `connect()` любой компонент, старйтесь избегать этого на более глубоких уровнях иерархии компонентов, т.к. это усложнит отслеживание потока данных.
 
@@ -303,17 +307,17 @@ React.render(
 #### `containers/App.js`
 
 ```js
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions';
-import AddTodo from '../components/AddTodo';
-import TodoList from '../components/TodoList';
-import Footer from '../components/Footer';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../actions'
+import AddTodo from '../components/AddTodo'
+import TodoList from '../components/TodoList'
+import Footer from '../components/Footer'
 
 class App extends Component {
   render() {
     // Получено благодаря вызову connect():
-    const { dispatch, visibleTodos, visibilityFilter } = this.props;
+    const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
         <AddTodo
@@ -331,7 +335,7 @@ class App extends Component {
             dispatch(setVisibilityFilter(nextFilter))
           } />
       </div>
-    );
+    )
   }
 }
 
@@ -339,36 +343,36 @@ App.propTypes = {
   visibleTodos: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
-  })),
+  }).isRequired).isRequired,
   visibilityFilter: PropTypes.oneOf([
     'SHOW_ALL',
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired
-};
+}
 
 function selectTodos(todos, filter) {
   switch (filter) {
-  case VisibilityFilters.SHOW_ALL:
-    return todos;
-  case VisibilityFilters.SHOW_COMPLETED:
-    return todos.filter(todo => todo.completed);
-  case VisibilityFilters.SHOW_ACTIVE:
-    return todos.filter(todo => !todo.completed);
+    case VisibilityFilters.SHOW_ALL:
+      return todos
+    case VisibilityFilters.SHOW_COMPLETED:
+      return todos.filter(todo => todo.completed)
+    case VisibilityFilters.SHOW_ACTIVE:
+      return todos.filter(todo => !todo.completed)
   }
 }
 
 // Какие именно props мы хотим получить из приходящего, как аргумент глобального состояния?
-// Обратите внимание: используйте https://github.com/faassen/reselect для более лучшей производительности.
+// Обратите внимание: используйте https://github.com/faassen/reselect для лучшей производительности.
 function select(state) {
   return {
     visibleTodos: selectTodos(state.todos, state.visibilityFilter),
     visibilityFilter: state.visibilityFilter
-  };
+  }
 }
 
-// Оборачиваем компонент `App` для внедрения  в него функции `dispatch` и состояния
-export default connect(select)(App);
+// Оборачиваем компонент `App` для внедрения в него функции `dispatch` и состояния
+export default connect(select)(App)
 ```
 
 Вот и все! Простенькое ToDo приложение теперь полностью работоспособно.
