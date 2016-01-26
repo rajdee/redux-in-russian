@@ -14,16 +14,15 @@
 Очень легко создать Хранилище (Store), если у Вас есть редьюсер. В [предыдущем разделе](Reducers.md) мы использовали [`combineReducers()`](../api/combineReducers.md) для комбинирования редьюсеров в один глобальный редьюсер. Теперь мы их импортируем и передадим в [`createStore()`](../api/createStore.md).
 
 ```js
-import { createStore } from 'redux';
-import todoApp from './reducers';
-
-let store = createStore(todoApp);
+import { createStore } from 'redux'
+import todoApp from './reducers'
+let store = createStore(todoApp)
 ```
 
-Вы можете объявить начальное состояние, передав его вторым аргументом в [`createStore()`](../api/createStore.md). Это полезно для пробрасывания состояния на клиент из состояния приложения Redux, работающего на сервере, когда Вы пишете универсальное приложение. 
+Вы можете объявить начальное состояние, передав его вторым аргументом в [`createStore()`](../api/createStore.md). Это полезно для пробрасывания состояния на клиент из состояния приложения Redux, работающего на сервере, когда вы пишете универсальное приложение.
 
 ```js
-let store = createStore(todoApp, window.STATE_FROM_SERVER);
+let store = createStore(todoApp, window.STATE_FROM_SERVER)
 ```
 
 ## Отправка действий (Dispatching Actions)
@@ -31,26 +30,27 @@ let store = createStore(todoApp, window.STATE_FROM_SERVER);
 На текущий момент у нас есть созданное хранилище, давайте проверим, как работает наше приложение! Даже без UI части мы уже можем проверить логику обновления состояния.
 
 ```js
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions';
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from './actions'
 
-// Log the initial state
-console.log(store.getState());
+// Выведем в консоль начальное состояние
+console.log(store.getState())
 
-// Every time the state changes, log it
+// Каждый раз при обновлении состояния - выводим его
+// Отметим, что subscribe() возвращает функцию для отмены регистрации слушателя
 let unsubscribe = store.subscribe(() =>
   console.log(store.getState())
-);
+)
 
-// Dispatch some actions
-store.dispatch(addTodo('Learn about actions'));
-store.dispatch(addTodo('Learn about reducers'));
-store.dispatch(addTodo('Learn about store'));
-store.dispatch(completeTodo(0));
-store.dispatch(completeTodo(1));
-store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED));
+// Отправим несколько действий
+store.dispatch(addTodo('Learn about actions'))
+store.dispatch(addTodo('Learn about reducers'))
+store.dispatch(addTodo('Learn about store'))
+store.dispatch(completeTodo(0))
+store.dispatch(completeTodo(1))
+store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
 
-// Stop listening to state updates
-unsubscribe();
+// Прекратим слушать обновление состояния
+unsubscribe()
 ```
 
 Вы можете видеть, как выполнение кода, приведенного выше, меняет состояние, содержащееся в хранилище:
