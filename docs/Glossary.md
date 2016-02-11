@@ -1,16 +1,16 @@
-# Glossary
+# Глоссарий
 
-This is a glossary of the core terms in Redux, along with their type signatures. The types are documented using [Flow notation](http://flowtype.org/docs/quick-reference.html).
+Это глоссарий основных терминов в Redux, наряду с их сигнатурами типа. Типы описаны при помощи [Flow notation](http://flowtype.org/docs/quick-reference.html).
 
-## State
+## Состояние (State)
 
 ```js
 type State = any;
 ```
 
-*State* (also called the *state tree*) is a broad term, but in the Redux API it usually refers to the single state value that is managed by the store and returned by [`getState()`](api/Store.md#getState). It represents the entire state of a Redux application, which is often a deeply nested object.
+*Состояние* (также *дерево состояния*) — широкое понятие, но в Redux API это, как правило, отсылка к единственному состояню, которое управляется хранилищем (store) и возвращается [`getState()`](api/Store.md#getState). Оно представляет собой все состояние Redux приложения, которое обычно является объектом с глубокой вложенностью.
 
-By convention, the top-level state is an object or some other key-value collection like a Map, but technically it can be any type. Still, you should do your best to keep the state serializable. Don’t put anything inside it that you can’t easily turn into JSON.
+Как правило, состояние верхнего уровня — это объект или какая-то другая коллекция вида ключ-значение (например Map), но технически это может быть любой тип. Вместе с тем вам нужно стараться поддерживать состояние сериализуемым. Не кладите внутрь ничего, что потом не сможете легко превратить в JSON.
 
 ## Action
 
