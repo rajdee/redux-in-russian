@@ -12,19 +12,19 @@ type State = any;
 
 By convention, the top-level state is an object or some other key-value collection like a Map, but technically it can be any type. Still, you should do your best to keep the state serializable. Don’t put anything inside it that you can’t easily turn into JSON.
 
-## Action
+## Действие (Action)
 
 ```js
 type Action = Object;
 ```
 
-An *action* is a plain object that represents an intention to change the state. Actions are the only way to get data into the store. Any data, whether from UI events, network callbacks, or other sources such as WebSockets needs to eventually be dispatched as actions.
+*Действие* — это простой объект, который представляет намерение изменить состояние. Действия — единственный путь получить данные в хранилище. Любые данные, будь то события UI, коллбэки сетевых запросов или любые другие ресурсы как веб-сокеты, должны быть в итоге обработаны как действия.
 
-Actions must have a `type` field that indicates the type of action being performed. Types can be defined as constants and imported from another module. It’s better to use strings for `type` than [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) because strings are serializable.
+Действия обязаны иметь поле `type`, которое указывает тип производимого действия. Типы также могут быть определены как константы и импортированы из другого модуля. Лучше использовать строки для `type` чем [Символы](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol), потому что строки сериализуемы.
 
-Other than `type`, the structure of an action object is really up to you. If you’re interested, check out [Flux Standard Action](https://github.com/acdlite/flux-standard-action) for recommendations on how actions should be constructed.
+Вся остальная структура, кроме `type`, полностью на ваше усмотрение. Если вы заинтересованы, посмотрите [Flux Standard Action](https://github.com/acdlite/flux-standard-action) для рекоммендаций как нужно создавать действия.
 
-See also [async action](#async-action) below.
+Также смотрите [асинхронное действие](#async-action) ниже.
 
 ## Reducer
 
