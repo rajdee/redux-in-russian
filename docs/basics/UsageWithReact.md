@@ -2,7 +2,7 @@
 
 Для начала стоит подчеркнуть, что Redux не имеет отношения к React. Вы можете создавать Redux приложения c помощью React, Angular, Ember, jQuery или обычного javascript.
 
-И все-таки, Redux работает особенно хорошо с такими фреймворками, как [React](http://facebook.github.io/react/) и [Deku](https://github.com/dekujs/deku) потому что они позволяют Вам описать UI, как функцию состояния, и, кроме того, Redux умеет менять состояние (state) приложения в ответ на произошедшие действия (actions).
+И все-таки, Redux работает особенно хорошо с такими фреймворками, как [React](http://facebook.github.io/react/) и [Deku](https://github.com/dekujs/deku) потому что они позволяют Вам описать UI как функцию состояния, и, кроме того, Redux умеет менять состояние (state) приложения в ответ на произошедшие действия (actions).
 
 Для построения нашего простенького ToDo приложения мы будем использовать React.
 
@@ -13,6 +13,7 @@
 ```
 npm install --save react-redux
 ```
+
 
 ## Компоненты-контейнеры и презентационные компонены (Container and Presentational Components)
 
@@ -47,7 +48,7 @@ React bindings для Redux охвачены идеей [разделения к
         <tr>
           <th scope="row" style="text-align:right">Изменяют данные</th>
           <td>Отправляют Redux действия (actions)</td>
-          <td>Вызывают каллбэки из props</td>
+          <td>Вызывают колбэки из props</td>
         </tr>
     </tbody>
 </table>
