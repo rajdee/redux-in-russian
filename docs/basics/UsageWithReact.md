@@ -15,9 +15,9 @@ npm install --save react-redux
 ```
 
 
-## Компоненты-контейнеры и презентационные компонены (Container and Presentational Components)
+## Компоненты-контейнеры и презентационные компоненты (Container and Presentational Components)
 
-React bindings для Redux охвачены идеей [разделения компонентов на компоненты-контейнеры и презентационные компонеты](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
+React bindings для Redux охвачены идеей [разделения компонентов на компоненты-контейнеры и презентационные компоненты](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
 
 Желательно, чтобы только компоненты верхнего уровня вашего приложения (например, обработчики роутов (route handlers) знали о Redux. Компоненты, которые находятся ниже в иерархии, должны быть презентационными и принимать все данные только через `props`.
 
