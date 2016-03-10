@@ -105,7 +105,7 @@ type Store = {
 В приложении должно быть только одно хранилище, так построение происходит на уровне преобразователя (Reducer).
  
 
-- [`dispatch(action)`](api/Store.md#dispatch) is the base dispatch function described above. базовая функция посыла (dispatch), описанная выше.
+- [`dispatch(action)`](api/Store.md#dispatch) базовая функция посыла (dispatch), описанная выше.
 - [`getState()`](api/Store.md#getState) возвращает текущее состояние хранилища.
 - [`subscribe(listener)`](api/Store.md#subscribe) регистрирует функцию, которая будет вызвана при изменении состояния.
 - [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) может быть использован для реализации горячей перезагрузки (hot reload) и разделения кода. Скорее всего Вы не будете использовать его.
