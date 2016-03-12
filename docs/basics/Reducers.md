@@ -69,7 +69,7 @@ function todoApp(state, action) {
 }
 ```
 
-Использование [синтаксиса аргументов по умолчанию из ES6](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/default_parameters) для более компактного написания - просто аккуратный трюк:
+Использование [синтаксиса аргументов по умолчанию из ES6](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Functions/Default_parameters) для более компактного написания - просто аккуратный трюк:
 
 ```js
 function todoApp(state = initialState, action) {
