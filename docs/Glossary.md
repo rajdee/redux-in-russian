@@ -90,7 +90,7 @@ Middleware is composable using function composition. It is useful for logging ac
 
 See [`applyMiddleware(...middlewares)`](./api/applyMiddleware.md) for a detailed look at middleware.
 
-## Store
+## Хранилище
 
 ```js
 type Store = {
@@ -101,15 +101,16 @@ type Store = {
 };
 ```
 
-A store is an object that holds the application’s state tree.  
-There should only be a single store in a Redux app, as the composition happens on the reducer level.
+Хранилище это объект, котрый хранит дерево состояний приложения.
+В приложении должно быть только одно хранилище, так построение происходит на уровне преобразователя (Reducer).
+ 
 
-- [`dispatch(action)`](api/Store.md#dispatch) is the base dispatch function described above.
-- [`getState()`](api/Store.md#getState) returns the current state of the store.
-- [`subscribe(listener)`](api/Store.md#subscribe) registers a function to be called on state changes.
-- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) can be used to implement hot reloading and code splitting. Most likely you won’t use it.
+- [`dispatch(action)`](api/Store.md#dispatch) базовая функция посыла (dispatch), описанная выше.
+- [`getState()`](api/Store.md#getState) возвращает текущее состояние хранилища.
+- [`subscribe(listener)`](api/Store.md#subscribe) регистрирует функцию, которая будет вызвана при изменении состояния.
+- [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) может быть использован для реализации горячей перезагрузки (hot reload) и разделения кода. Скорее всего Вы не будете использовать ee.
 
-See the complete [store API reference](api/Store.md#dispatch) for more details.
+См. [store API reference](api/Store.md#dispatch) для получения дополнительной информации.
 
 ## Store creator
 
