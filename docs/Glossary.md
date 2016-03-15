@@ -90,7 +90,7 @@ Middleware is composable using function composition. It is useful for logging ac
 
 See [`applyMiddleware(...middlewares)`](./api/applyMiddleware.md) for a detailed look at middleware.
 
-## Хранилище
+## Хранилище (Store)
 
 ```js
 type Store = {
