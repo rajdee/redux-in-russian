@@ -10,7 +10,7 @@ type State = any;
 
 *Состояние* (также *дерево состояния*) — широкое понятие, но в Redux API это, как правило, отсылка к единственному состоянию, которое управляется хранилищем (store) и возвращается [`getState()`](api/Store.md#getState). Оно представляет собой все состояние Redux приложения, которое обычно является объектом с глубокой вложенностью.
 
-Как правило, состояние верхнего уровня — это объект или какая-то другая коллекция вида ключ-значение (например Map), но технически это может быть любой тип. Вместе с тем вам нужно стараться поддерживать состояние сериализуемым. Не кладите внутрь ничего, что потом не сможете легко превратить в JSON.
+Как правило, состояние верхнего уровня — это объект или какая-то другая коллекция вида ключ-значение, например Map, но технически это может быть любой тип. Вместе с тем, вам нужно стараться поддерживать состояние сериализуемым. Не кладите внутрь ничего, что потом не сможете легко превратить в JSON.
 
 ## Действие (Action)
 
@@ -18,15 +18,15 @@ type State = any;
 type Action = Object;
 ```
 
-*Действие* — это простой объект, который представляет намерение изменить состояние. Действия — единственный путь получить данные в хранилище. Любые данные, будь то события UI, коллбэки сетевых запросов или любые другие ресурсы как веб-сокеты, должны быть в итоге обработаны как действия.
+*Действие* — это простой объект, который представляет намерение изменить состояние. Действия — единственный путь получить данные в хранилище. Любые данные, будь то события UI, коллбэки сетевых запросов или любые другие ресурсы как веб-сокеты, должны быть в итоге обработаны, как действия.
 
-Действия обязаны иметь поле `type`, которое указывает тип производимого действия. Типы также могут быть определены как константы и импортированы из другого модуля. Лучше использовать строки для `type` чем [Символы](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol), потому что строки сериализуемы.
+Действия обязаны иметь поле `type`, которое указывает тип производимого действия. Типы также могут быть определены как константы и импортированы из другого модуля. Лучше использовать строки для `type`, чем [Символы](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol), потому что строки сериализуемы.
 
 Вся остальная структура, кроме `type`, полностью на ваше усмотрение. Если вы заинтересованы, посмотрите [Flux Standard Action](https://github.com/acdlite/flux-standard-action) для рекомендаций как нужно создавать действия.
 
 Также смотрите [асинхронное действие](#async-action) ниже.
 
-## Reducer
+## Редьюсер (Reducer)
 
 ```js
 type Reducer<S, A> = (state: S, action: A) => S;
@@ -77,18 +77,18 @@ type AsyncAction = any;
 
 An *async action* is a value that is sent to a dispatching function, but is not yet ready for consumption by the reducer. It will be transformed by [middleware](#middleware) into an action (or a series of actions) before being sent to the base [`dispatch()`](api/Store.md#dispatch) function. Async actions may have different types, depending on the middleware you use. They are often asynchronous primitives, like a Promise or a thunk, which are not passed to the reducer immediately, but trigger action dispatches once an operation has completed.
 
-## Middleware
+## Посредник (Middleware)
 
 ```js
 type MiddlewareAPI = { dispatch: Dispatch, getState: () => State };
 type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch;
 ```
 
-A middleware is a higher-order function that composes a [dispatch function](#dispatching-function) to return a new dispatch function. It often turns [async actions](#async-action) into actions.
+Посредник — это функция высшего порядка, которая создает [функцию отправки (dispatch function)](#dispatching-function), возвращающую новую функцию отправки. It often turns [async actions](#async-action) into actions.
 
-Middleware is composable using function composition. It is useful for logging actions, performing side effects like routing, or turning an asynchronous API call into a series of synchronous actions.
+Посредники компонуемы с помощью функции композиции. Это полезно для регистрации действий, выполнения побочных действий (side effects), таких как маршрутизация или превращения асинхронного вызова API в серию синхронных действий
 
-See [`applyMiddleware(...middlewares)`](./api/applyMiddleware.md) for a detailed look at middleware.
+См. [`applyMiddleware(...middlewares)`](./api/applyMiddleware.md) для более детальной информации по посредникам.
 
 ## Хранилище (Store)
 
@@ -101,35 +101,34 @@ type Store = {
 };
 ```
 
-Хранилище это объект, котрый хранит дерево состояний приложения.
-В приложении должно быть только одно хранилище, так построение происходит на уровне преобразователя (Reducer).
+Хранилище — это объект, который хранит дерево состояний приложения.
+В приложении должно быть только одно хранилище, так построение происходит на уровне преобразователя (reducer).
  
-
-- [`dispatch(action)`](api/Store.md#dispatch) базовая функция посыла (dispatch), описанная выше.
+- [`dispatch(action)`](api/Store.md#dispatch) базовая функция отправки (dispatch), описанная выше.
 - [`getState()`](api/Store.md#getState) возвращает текущее состояние хранилища.
 - [`subscribe(listener)`](api/Store.md#subscribe) регистрирует функцию, которая будет вызвана при изменении состояния.
 - [`replaceReducer(nextReducer)`](api/Store.md#replaceReducer) может быть использован для реализации горячей перезагрузки (hot reload) и разделения кода. Скорее всего Вы не будете использовать ee.
 
 См. [store API reference](api/Store.md#dispatch) для получения дополнительной информации.
 
-## Store creator
+## Генератор хранилища (Store creator)
 
 ```js
 type StoreCreator = (reducer: Reducer, initialState: ?State) => Store;
 ```
 
-A store creator is a function that creates a Redux store. Like with dispatching function, we must distinguish the base store creator, [`createStore(reducer, initialState)`](api/createStore.md) exported from the Redux package, from store creators that are returned from the store enhancers.
+Генератор хранилища — это функция, которая создает хранилище Redux. Как и в случаи с отправляющей функцией, мы должны различать базовый генератор хранилища, [`createStore(reducer, initialState)`](api/createStore.md) экспортирумый из Redux, от генератора хранилища, возвращаемого из расширителей хранилища (store enhancers).
 
-## Store enhancer
+## Расширитель хранилища (Store enhancer)
 
 ```js
 type StoreEnhancer = (next: StoreCreator) => StoreCreator;
 ```
 
-A store enhancer is a higher-order function that composes a store creator to return a new, enhanced store creator. This is similar to middleware in that it allows you to alter the store interface in a composable way.
+Расширитель хранилища — это функция высшего порядка, которая создает генератор хранилища, возвращающий новый, расширенный генератор хранилища. Это похоже на посредник (middleware) тем, что позволяет вам изменять интерфейс в композиционном стиле.
 
-Store enhancers are much the same concept as higher-order components in React, which are also occasionally called “component enhancers”.
+Расширители хранилища аналогичны понятию - "компоненты высшего порядка" в React, которые также иногда называются "усилителями компонент".
 
-Because a store is not an instance, but rather a plain-object collection of functions, copies can be easily created and modified without mutating the original store. There is an example in [`compose`](api/compose.md) documentation demonstrating that.
+Поскольку хранилище является не инстансом, а скорее объектом-коллекцией функций, то копии могут быть запросто созданы и модифицированы, без изменения оригинального хранилища. Пример в описании [`compose`](api/compose.md) демонстрирует это.
 
-Most likely you’ll never write a store enhancer, but you may use the one provided by the [developer tools](https://github.com/gaearon/redux-devtools). It is what makes time travel possible without the app being aware it is happening. Amusingly, the [Redux middleware implementation](api/applyMiddleware.md) is itself a store enhancer.
+Скорее всего, вы никогда не будете писать магазин энхансер, но вы можете использовать один предоставленный [developer tools](https://github.com/gaearon/redux-devtools). Это то, что делает "путешествие во времени" (time travel) возможным без информирования приложения, о том, что происходит. Занятно, что [реализация Redux посредников](api/applyMiddleware.md) сама по себе является расширителем хранилища.
