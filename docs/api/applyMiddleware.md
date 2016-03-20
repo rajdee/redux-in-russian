@@ -1,8 +1,8 @@
 # `applyMiddleware(...middlewares)`
 
-Посредник является предполагаемым способом расширения Redux пользовательской функциональностью. Посредник позволяет вам обернуть [`dispatch`](Store.md#dispatch) метод хранилища для пользы и дела. Ключевой особенностью посредника является то, что они компонуемы. Несколько посредников могут быть объединены вместе, при этом каждый посредник не требует знания о том, что происходит до или после него в цепочке .
+Посредник (middleware) является предложенным способом расширения Redux с помощью пользовательской функциональности. Посредник позволяет вам обернуть метод хранилища [`dispatch`](Store.md#dispatch) для пользы и дела. Ключевой особенностью посредника является то, что они компонуемы. Несколько посредников могут быть объединены вместе, при этом каждый посредник не требует знания о том, что происходит до или после него в цепочке.
 
-Наиболее распространенным случаем использования посредников является поддержка асинхронных действий без большого количества шаблонного кода или зависимости от библиотек типа [Rx](https://github.com/Reactive-Extensions/RxJS). Он делает это, позволяя вам вызывать [асинхронное действия](../Glossary.md#async-action) помимо обычных действий.
+Наиболее распространенным случаем использования посредников является поддержка асинхронных действий без большого количества шаблонного кода или зависимости от библиотек типа [Rx](https://github.com/Reactive-Extensions/RxJS). Это позволяет вам вызывать [асинхронное действия](../Glossary.md#async-action) помимо обычных действий.
 
 Например, [redux-thunk](https://github.com/gaearon/redux-thunk) позволяет генераторам действий инвертировать управление вызывающими функциями. Они будут получать [`dispatch`](Store.md#dispatch), как аргумент и могут вызывать его асинхронно. Такие функции называются *преобразователями (thunks)*. Другим примером посредника является [redux-promise](https://github.com/acdlite/redux-promise). Он позволяет вам вызывать асинхронное действие c [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) и вызывать обычные действия, когда промис вернет resolve.
 
@@ -10,7 +10,7 @@
 
 #### Параметры
 
-* `...middlewares` (*arguments*): Функции, которые соответствуют Redux *middleware API*. Каждый посредник получает [`dispatch`](Store.md#dispatch) [`хранилища`](Store.md) и [`getState`](Store.md#getState) функциий в качестве именованных аргументов и возвращает функцию. Эта функция будет предоставленя the `next` middleware’s dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real store’s [`dispatch`](Store.md#dispatch) method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
+* `...middlewares` (*arguments*): Функции, которые соответствуют Redux *middleware API*. Каждый посредник получает функции [`dispatch`](Store.md#dispatch) и [`getState`](Store.md#getState) в качестве именованных аргументов и возвращает функцию. Эта функция будет передана the `next` middleware’s dispatch method, and is expected to return a function of `action` calling `next(action)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real store’s [`dispatch`](Store.md#dispatch) method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ getState, dispatch }) => next => action`.
 
 #### Возвращает
 
