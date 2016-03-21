@@ -20,7 +20,7 @@ Redux’s **_only_** job on the server side is to provide the **initial state** 
 
 ## Setting Up
 
-In the following recipe, we are going to look at how to set up server-side rendering. We’ll use the simplistic [Counter app](https://github.com/rackt/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
+In the following recipe, we are going to look at how to set up server-side rendering. We’ll use the simplistic [Counter app](https://github.com/reactjs/redux/tree/master/examples/counter) as a guide and show how the server can render state ahead of time based on the request.
 
 ### Install Packages
 
@@ -37,25 +37,25 @@ The following is the outline for what our server side is going to look like. We 
 ##### `server.js`
 
 ```js
-import path from 'path';
-import Express from 'express';
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import counterApp from './reducers';
-import App from './containers/App';
+import path from 'path'
+import Express from 'express'
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import counterApp from './reducers'
+import App from './containers/App'
 
-const app = Express();
-const port = 3000;
+const app = Express()
+const port = 3000
 
 // This is fired every time the server side receives a request
-app.use(handleRender);
+app.use(handleRender)
 
 // We are going to fill these out in the sections to follow
 function handleRender(req, res) { /* ... */ }
 function renderFullPage(html, initialState) { /* ... */ }
 
-app.listen(port);
+app.listen(port)
 ```
 
 ### Handling the Request
@@ -69,24 +69,24 @@ The key step in server side rendering is to render the initial HTML of our compo
 We then get the initial state from our Redux store using [`store.getState()`](../api/Store.md#getState). We will see how this is passed along in our `renderFullPage` function.
 
 ```js
-import { renderToString } from 'react-dom/server';
+import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // Create a new Redux store instance
-  const store = createStore(counterApp);
+  const store = createStore(counterApp)
 
   // Render the component to a string
   const html = renderToString(
     <Provider store={store}>
       <App />
     </Provider>
-  );
+  )
 
   // Grab the initial state from our Redux store
-  const initialState = store.getState();
+  const initialState = store.getState()
 
   // Send the rendered page back to the client
-  res.send(renderFullPage(html, initialState));
+  res.send(renderFullPage(html, initialState))
 }
 ```
 
@@ -107,14 +107,14 @@ function renderFullPage(html, initialState) {
         <title>Redux Universal Example</title>
       </head>
       <body>
-        <div id="app">${html}</div>
+        <div id="root">${html}</div>
         <script>
-          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
+          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
     </html>
-    `;
+    `
 }
 ```
 
@@ -131,25 +131,25 @@ Let’s take a look at our new client file:
 #### `client.js`
 
 ```js
-import React from 'react';
-import { render } from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import App from './containers/App';
-import counterApp from './reducers';
+import React from 'react'
+import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import App from './containers/App'
+import counterApp from './reducers'
 
 // Grab the state from a global injected into server-generated HTML
-const initialState = window.__INITIAL_STATE__;
+const initialState = window.__INITIAL_STATE__
 
 // Create Redux store with initial state
-const store = createStore(counterApp, initialState);
+const store = createStore(counterApp, initialState)
 
 render(
   <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById('root')
-);
+)
 ```
 
 You can set up your build tool of choice (Webpack, Browserify, etc.) to compile a bundle file into `dist/bundle.js`.
@@ -168,37 +168,37 @@ Because the client side executes ongoing code, it can start with an empty initia
 
 The only input for server side code is the request made when loading up a page in your app in your browser. You may choose to configure the server during its boot (such as when you are running in a development vs. production environment), but that configuration is static.
 
-The request contains information about the URL requested, including any query parameters, which will be useful when using something like [React Router](https://github.com/rackt/react-router). It can also contain headers with inputs like cookies or authorization, or POST body data. Let’s see how we can set the initial counter state based on a query parameter.
+The request contains information about the URL requested, including any query parameters, which will be useful when using something like [React Router](https://github.com/reactjs/react-router). It can also contain headers with inputs like cookies or authorization, or POST body data. Let’s see how we can set the initial counter state based on a query parameter.
 
 #### `server.js`
 
 ```js
-import qs from 'qs'; // Add this at the top of the file
-import { renderToString } from 'react-dom/server';
+import qs from 'qs' // Add this at the top of the file
+import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // Read the counter from the request, if provided
-  const params = qs.parse(req.query);
-  const counter = parseInt(params.counter) || 0;
+  const params = qs.parse(req.query)
+  const counter = parseInt(params.counter, 10) || 0
 
   // Compile an initial state
-  let initialState = { counter };
+  let initialState = { counter }
 
   // Create a new Redux store instance
-  const store = createStore(counterApp, initialState);
+  const store = createStore(counterApp, initialState)
 
   // Render the component to a string
   const html = renderToString(
     <Provider store={store}>
       <App />
     </Provider>
-  );
+  )
 
   // Grab the initial state from our Redux store
-  const finalState = store.getState();
+  const finalState = store.getState()
 
   // Send the rendered page back to the client
-  res.send(renderFullPage(html, finalState));
+  res.send(renderFullPage(html, finalState))
 }
 ```
 
@@ -216,13 +216,13 @@ For our example, we’ll imagine there is an external datastore that contains th
 
 ```js
 function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min
 }
 
 export function fetchCounter(callback) {
   setTimeout(() => {
-    callback(getRandomInt(1, 100));
-  }, 500);
+    callback(getRandomInt(1, 100))
+  }, 500)
 }
 ```
 
@@ -234,39 +234,39 @@ On the server side, we simply wrap our existing code in the `fetchCounter` and r
 
 ```js
 // Add this to our imports
-import { fetchCounter } from './api/counter';
-import { renderToString } from 'react-dom/server';
+import { fetchCounter } from './api/counter'
+import { renderToString } from 'react-dom/server'
 
 function handleRender(req, res) {
   // Query our mock API asynchronously
   fetchCounter(apiResult => {
     // Read the counter from the request, if provided
-    const params = qs.parse(req.query);
-    const counter = parseInt(params.counter) || apiResult || 0;
+    const params = qs.parse(req.query)
+    const counter = parseInt(params.counter, 10) || apiResult || 0
 
     // Compile an initial state
-    let initialState = { counter };
+    let initialState = { counter }
 
     // Create a new Redux store instance
-    const store = createStore(counterApp, initialState);
+    const store = createStore(counterApp, initialState)
 
     // Render the component to a string
     const html = renderToString(
       <Provider store={store}>
         <App />
       </Provider>
-    );
+    )
 
     // Grab the initial state from our Redux store
-    const finalState = store.getState();
+    const finalState = store.getState()
 
     // Send the rendered page back to the client
-    res.send(renderFullPage(html, finalState));
-  });
+    res.send(renderFullPage(html, finalState))
+  })
 }
 ```
 
-Because we `res.send()` inside of the callback, the server will hold open the connection and won’t send any data until that callback executes. You’ll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
+Because we call `res.send()` inside of the callback, the server will hold open the connection and won’t send any data until that callback executes. You’ll notice a 500ms delay is now added to each server request as a result of our new API call. A more advanced usage would handle errors in the API gracefully, such as a bad response or timeout.
 
 ### Security Considerations
 
@@ -282,4 +282,4 @@ Furthermore, you can add additional layers of security by sanitizing your state 
 
 You may want to read [Async Actions](../advanced/AsyncActions.md) to learn more about expressing asynchronous flow in Redux with async primitives such as Promises and thunks. Keep in mind that anything you learn there can also be applied to universal rendering.
 
-If you use something like [React Router](https://github.com/rackt/react-router), you might also want to express your data fetching dependencies as static `fetchData()` methods on your route handler components. They may return [async actions](../advanced/AsyncActions.md), so that your `handleRender` function can match the route to the route handler component classes, dispatch `fetchData()` result for each of them, and render only after the Promises have resolved. This way the specific API calls required for different routes are colocated with the route handler component definitions. You can also use the same technique on the client side to prevent the router from switching the page until its data has been loaded.
+If you use something like [React Router](https://github.com/reactjs/react-router), you might also want to express your data fetching dependencies as static `fetchData()` methods on your route handler components. They may return [async actions](../advanced/AsyncActions.md), so that your `handleRender` function can match the route to the route handler component classes, dispatch `fetchData()` result for each of them, and render only after the Promises have resolved. This way the specific API calls required for different routes are colocated with the route handler component definitions. You can also use the same technique on the client side to prevent the router from switching the page until its data has been loaded.

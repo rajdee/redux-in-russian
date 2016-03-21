@@ -24,7 +24,7 @@
 * [Рецепты](/docs/recipes/README.md)
   * [Мигрирование на Redux](/docs/recipes/MigratingToRedux.md)
   * [Упрощенный шаблон](/docs/recipes/ReducingBoilerplate.md)
-  * Серверный рендеринг
+  * [Серверный рендеринг](/docs/recipes/ServerRendering.md)
   * [Оперирование полученными данными](/docs/recipes/ComputingDerivedData.md)
   * [Написание тестов](/docs/recipes/WritingTests.md)
 * [Поиск неисправностей](/docs/Troubleshooting.md)
