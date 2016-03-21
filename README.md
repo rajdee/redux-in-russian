@@ -70,15 +70,15 @@ import { createStore } from 'redux'
 
 /**
  * Это редьюсер - чистая функция в формате(state, action) => state.
- * It describes how an action transforms the state into the next state.
+ * Это описывает то, как действие преобразовывает состояние в следующее состояние 
  *
- * The shape of the state is up to you: it can be a primitive, an array, an object,
- * or even an Immutable.js data structure. The only important part is that you should
- * not mutate the state object, but return a new object if the state changes.
+ * Формат состояния зависит от вас: это может быть примитивом, массивом, объектом или даже структурой данных Immutable.js.
+ * Важно только одно, вы не должны изменять объект состояния напрямую, а возвращать новый объект, если состояние изменилось
  *
- * In this example, we use a `switch` statement and strings, but you can use a helper that
- * follows a different convention (such as function maps) if it makes sense for your
- * project.
+ * В это примере мы использует `switch` и строки, но вы можете
+ * использовать хелпер, который следует другому соглашению
+ * (например, function maps), если это имеет смысл для вашего
+ * проекта.
  */
 function counter(state = 0, action) {
   switch (action.type) {
@@ -139,18 +139,18 @@ store.dispatch({ type: 'DECREMENT' })
 
 #### [Посмотрите 30 бесплатных уроков!](https://egghead.io/series/getting-started-with-redux)
 
-Если вам понравился мой курс, подумайте о Egghead путем [покупки подписки] (https://egghead.io/pricing). Абоненты имеют доступ к исходному коду, для примера, в каждом из моих видео, а также к массе продвинутых уроков по другим темам, включая JavaScript in depth, React, Angular и многое другое. Многие [преподаватели Egghead] (https://egghead.io/instructors) также являются авторами библиотек с открытым исходным кодом, т.ч. покупка подписки - это хороший способ, чтобы поблагодарить их за работу, которую они сделали.
+Если вам понравился мой курс, подумайте о поддержки Egghead путем [покупки подписки] (https://egghead.io/pricing). Абоненты имеют доступ к исходному коду, для примера, в каждом из моих видео, а также к массе продвинутых уроков по другим темам, включая JavaScript in depth, React, Angular и многое другое. Многие [преподаватели Egghead] (https://egghead.io/instructors) также являются авторами библиотек с открытым исходным кодом, т.ч. покупка подписки - это хороший способ, чтобы поблагодарить их за работу, которую они сделали.
 
 
 ### Документация
 
-* [Вступление](/docs/introduction/index.html)
-* [Основы](/docs/basics/index.html)
-* [Продвинутое использование](/docs/advanced/index.html)
-* [Рецепты](/docs/recipes/index.html)
-* [Поиск неисправностей](/docs/Troubleshooting.html)
-* [Глоссарий](/docs/Glossary.html)
-* [Справочник по API](/docs/api/index.html)
+* [Вступление](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/index.html)
+* [Основы](https://rajdee.gitbooks.io/redux-in-russian/content/docs/basics/index.html)
+* [Продвинутое использование](https://rajdee.gitbooks.io/redux-in-russian/content/docs/advanced/index.html)
+* [Рецепты](https://rajdee.gitbooks.io/redux-in-russian/content/docs/recipes/index.html)
+* [Поиск неисправностей](https://rajdee.gitbooks.io/redux-in-russian/content/docs/Troubleshooting.html)
+* [Глоссарий](https://rajdee.gitbooks.io/redux-in-russian/content/docs/Glossary.html)
+* [Справочник по API](https://rajdee.gitbooks.io/redux-in-russian/content/docs/api/index.html)
 
 Для экпорта в PDF, ePub MOBI или чтения в оффлайн и инструкциям, как это можно осуществить, обратите внимание на: [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
 
