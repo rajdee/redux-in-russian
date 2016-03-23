@@ -7,8 +7,12 @@
 Например, вот действие которое представляет добавление нового пункта в список дел:
 
 ```js
+const ADD_TODO = 'ADD_TODO'
+```
+
+```js
 {
-  type: 'ADD_TODO',
+  type: ADD_TODO,
   text: 'Build my first Redux app'
 }
 ```
