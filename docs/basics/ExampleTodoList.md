@@ -149,7 +149,7 @@ import Footer from '../components/Footer'
 
 class App extends Component {
   render() {
-    // Получено благодаря вызову call():
+    // Получено благодаря вызову connect():
     const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
       <div>
