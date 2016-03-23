@@ -16,13 +16,16 @@
 ```js
 {
   visibilityFilter: 'SHOW_ALL',
-  todos: [{
-    text: 'Consider using Redux',
-    completed: true,
-  }, {
-    text: 'Keep all state in a single tree',
-    completed: false
-  }]
+  todos: [
+    {
+      text: 'Consider using Redux',
+      completed: true,
+    },
+    {
+      text: 'Keep all state in a single tree',
+      completed: false
+    }
+  ]
 }
 ```
 
@@ -84,12 +87,12 @@ function todoApp(state = initialState, action) {
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    default:
+      return state
   }
 }
 ```
@@ -120,19 +123,22 @@ function todoApp(state = initialState, action) {
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-    return Object.assign({}, state, {
-      todos: [...state.todos, {
-        text: action.text,
-        completed: false
-      }]
-    });    
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      })    
+    default:
+      return state
   }
 }
 ```
@@ -144,14 +150,15 @@ function todoApp(state = initialState, action) {
 ```js
 case COMPLETE_TODO:
   return Object.assign({}, state, {
-    todos: [
-      ...state.todos.slice(0, action.index),
-      Object.assign({}, state.todos[action.index], {
-        completed: true
-      }),
-      ...state.todos.slice(action.index + 1)
-    ]
-  });
+    todos: state.todos.map((todo, index) => {
+      if (index === action.index) {
+        return Object.assign({}, todo, {
+          completed: true
+        })
+      }
+      return todo
+    })
+  })
 ```
 
 В силу того, что мы хотим обновить конкретный `todo` элемент в массиве не прибегая к изменению исходного массива, мы должны использовать функцию slice для массива. Мы как бы создадим новый массив из кусочков старого - `[элементы до интересующего нас элемента, обновленный интересующий нас элемент, элементы после интересующего нас элемента]`. Если Вы поймаете себя на частом написании такого рода решений, то, возможно, Вам стоит обратить внимание на такие утилиты как [React.addons.update](https://facebook.github.io/react/docs/update.html), [updeep](https://github.com/substantial/updeep) или даже такие библиотеки, как [Immutable](http://facebook.github.io/immutable-js/), которые имеют нативную поддержку глубоких обновлений (deep updates). Просто запомните, что нельзя присваивать ничего внутри `state` пока вы его не склонировали.
@@ -163,29 +170,33 @@ case COMPLETE_TODO:
 ```js
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-    return Object.assign({}, state, {
-      todos: [...state.todos, {
-        text: action.text,
-        completed: false
-      }]
-    });
-  case COMPLETE_TODO:
-    return Object.assign({}, state, {
-      todos: [
-        ...state.todos.slice(0, action.index),
-        Object.assign({}, state.todos[action.index], {
-          completed: true
-        }),
-        ...state.todos.slice(action.index + 1)
-      ]
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      })
+    case COMPLETE_TODO:
+      return Object.assign({}, state, {
+        todos: state.todos.map((todo, index) => {
+          if(index === action.index) {
+            return Object.assign({}, todo, {
+              completed: true
+            })
+          }
+          return todo
+        })
+      })
+    default:
+      return state
   }
 }
 ```
@@ -195,37 +206,41 @@ function todoApp(state = initialState, action) {
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case COMPLETE_TODO:
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
+    default:
+      return state
   }
 }
 
 function todoApp(state = initialState, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return Object.assign({}, state, {
-      visibilityFilter: action.filter
-    });
-  case ADD_TODO:
-  case COMPLETE_TODO:
-    return Object.assign({}, state, {
-      todos: todos(state.todos, action)
-    });
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      })
+    case ADD_TODO:
+    case COMPLETE_TODO:
+      return Object.assign({}, state, {
+        todos: todos(state.todos, action)
+      })
+    default:
+      return state
   }
 }
 ```
@@ -238,9 +253,9 @@ function todoApp(state = initialState, action) {
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
   case SET_VISIBILITY_FILTER:
-    return action.filter;
+    return action.filter
   default:
-    return state;
+    return state
   }
 }
 ```
@@ -253,30 +268,34 @@ function visibilityFilter(state = SHOW_ALL, action) {
 ```js
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case COMPLETE_TODO:
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
+    default:
+      return state
   }
 }
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
   }
 }
 
@@ -284,7 +303,7 @@ function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
-  };
+  }
 }
 ```
 
@@ -295,24 +314,24 @@ function todoApp(state = {}, action) {
 Наконец, Redux предоставляет утилиту называемую [`combineReducers()`](../api/combineReducers.md), которая реализует точно такой же логический шаблон, который мы только что реализовали в `todoApp`. С ее помощью мы можем переписать `todoApp` следующим образом:
 
 ```js
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
 const todoApp = combineReducers({
   visibilityFilter,
   todos
-});
+})
 
-export default todoApp;
+export default todoApp
 ```
 
 Обратите внимание, что это полностью эквивалентно такому коду:
 
 ```js
-export default function todoApp(state, action) {
+export default function todoApp(state = {}, action) {
   return {
     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
     todos: todos(state.todos, action)
-  };
+  }
 }
 ```
 
@@ -323,16 +342,16 @@ const reducer = combineReducers({
   a: doSomethingWithA,
   b: processB,
   c: c
-});
+})
 ```
 
 ```js
-function reducer(state, action) {
+function reducer(state = {}, action) {
   return {
     a: doSomethingWithA(state.a, action),
     b: processB(state.b, action),
     c: c(state.c, action)
-  };
+  }
 }
 ```
 
@@ -343,8 +362,8 @@ function reducer(state, action) {
 >Т.к. `combineReducers` ожидает на входе объект, мы можем поместить все редьюсеры верхнего уровня в разные файлы, экспортировать каждую функцию-редьюсер и использовать `import * as reducers` для получения их в формате объекта, ключами которого будут имена экспортируемых функций.
 
 >```js
->import { combineReducers } from 'redux';
->import * as reducers from './reducers';
+>import { combineReducers } from 'redux'
+>import * as reducers from './reducers'
 >
 >const todoApp = combineReducers(reducers);
 >```
@@ -356,45 +375,49 @@ function reducer(state, action) {
 #### `reducers.js`
 
 ```js
-import { combineReducers } from 'redux';
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions';
-const { SHOW_ALL } = VisibilityFilters;
+import { combineReducers } from 'redux'
+import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
+const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
-  case SET_VISIBILITY_FILTER:
-    return action.filter;
-  default:
-    return state;
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
   }
 }
 
 function todos(state = [], action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case COMPLETE_TODO:
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case COMPLETE_TODO:
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
+    default:
+      return state
   }
 }
 
 const todoApp = combineReducers({
   visibilityFilter,
   todos
-});
+})
 
-export default todoApp;
+export default todoApp
 ```
 
 ## Следующие шаги
