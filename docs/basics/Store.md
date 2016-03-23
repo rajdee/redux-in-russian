@@ -8,6 +8,13 @@
 * Предоставляет доступ к состоянию с помощью [`getState()`](../api/Store.md#getState);
 * Предоставляет возможность обновления состояния с помощью [`dispatch(action)`](../api/Store.md#dispatch);
 * Регистрирует слушатели (listeners) c помощью [`subscribe(listener)`](../api/Store.md#subscribe).
+* Убирает подписку у слушателей [`subscribe(listener)`](../api/Store.md#subscribe).
+
+> От переводчика: пример снятия подписки 
+```js
+let unsubscribe = store.subscribe(handleChange)
+unsubscribe()
+```
 
 Важно отметить, что у Вас будет только одно хранилище в Redux приложении. Если Вы захотите разделить логику обработки данных, то нужно будет использовать [компоновку редьюсеров (reducer composition)](Reducers.md#splitting-reducers), вместо использования множества хранилищ (stores).
 
@@ -64,8 +71,8 @@ unsubscribe()
 #### `index.js`
 
 ```js
-import { createStore } from 'redux';
-import todoApp from './reducers';
+import { createStore } from 'redux'
+import todoApp from './reducers'
 
 let store = createStore(todoApp);
 ```
