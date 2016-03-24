@@ -254,7 +254,7 @@ export default App
 
 ###  Компоненты Контейнеры (Container Components)
 
-Настало время связать наши презентационные компоненты с Redux с помощью создания нескольких компонентов-контейнеров. Технически компонент-контейнер это просто React компонент, который использует [`store.subscribe()`](../api/Store.md#subscribe) для чтения части дерева состояния (state tree) Redux, а также предоставляет props  презентационным компонентам, которые их рендерят. Вы можете написать контейнер сами, но React Redux включает много полезных оптимизаций, потому мы советуем генерировать контейнер с помощью  [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) функцией из библиотеки React Redux
+Настало время связать наши презентационные компоненты с Redux с помощью создания нескольких компонентов-контейнеров. Технически компонент-контейнер это просто React компонент, который использует [`store.subscribe()`](../api/Store.md#subscribe) для чтения части дерева состояния (state tree) Redux, а также предоставляет props  презентационным компонентам, которые их рендерят. Вы можете написать контейнер сами, но React Redux включает много полезных оптимизаций, потому мы советуем генерировать контейнер с помощью функции [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)  из библиотеки React Redux
 
 Чтобы использовать `connect()`, вам нужно определить специальную функцию `mapStateToProps`, которая скажет как трансформировать текущее состояние хранилища (store state) Redux в props'ы , которые вы хотите передать в оборачиваемые презентационные компоненты.
 Например, `VisibleTodoList` будет определять передаваемые `todos` в `TodoList`, поэтому мы напишем функцию, которая будет фильтровать `state.todos` согласно `state.visibilityFilter`, и будет использовать это в своём `mapStateToProps`.
@@ -279,7 +279,7 @@ const mapStateToProps = (state) => {
   }
 }
 ```
-В добавление к чтению состояния (state), компонент-контейнер может отправлять действия (dispatch actions). В том же духе, вы можете определить функию `mapDispatchToProps()`, которая принимает [`dispatch()`](../api/Store.md#dispatch) метод и возвращает колбэк props, которые вы хотите вставить в презентационный компонент. Например, мы хотим чтобы `VisibleTodoList` вставил prop `onTodoClick` в `TodoList` компонент, еще мы хотим `onTodoClick` чтобы отправить (dispatch) `TOGGLE_TODO` действие (action).
+В добавление к чтению состояния (state), компонент-контейнер может отправлять действия (dispatch actions). В том же духе, вы можете определить функцию `mapDispatchToProps()`, которая принимает [`dispatch()`](../api/Store.md#dispatch) метод и возвращает колбэк props, которые вы хотите вставить в презентационный компонент. Например, мы хотим чтобы `VisibleTodoList` вставил prop `onTodoClick` в `TodoList` компонент, еще мы хотим `onTodoClick`, чтобы отправить (dispatch) `TOGGLE_TODO` действие (action).
 
 
 ```js
@@ -303,7 +303,7 @@ const VisibleTodoList = connect(
 
 export default VisibleTodoList
 ```
-Это базовая часть API React Redux, так же мы рекомендуем посмотреть остальную часть [its documentation](https://github.com/reactjs/react-redux) детально.
+Это базовая часть API React Redux, так же мы рекомендуем посмотреть остальную часть [документации](https://github.com/reactjs/react-redux) детально.
 Если Вы беспокоитесь, что mapStateToProps создаются новые объекты слишком часто, вы можете изучить [оперирование полученными данными ](../recipes/ComputingDerivedData.md) с [reselect](https://github.com/rackt/reselect).
 
 
