@@ -20,8 +20,7 @@ npm install --save react-redux
 ## Компоненты-контейнеры и презентационные компоненты (Container and Presentational Components)
 
 React bindings для Redux охвачены идеей [разделения компонентов на компоненты-контейнеры и презентационные компоненты](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0).
-
-Желательно, чтобы только компоненты верхнего уровня вашего приложения (например, обработчики роутов (route handlers) знали о Redux. Компоненты, которые находятся ниже в иерархии, должны быть презентационными и принимать все данные только через `props`.
+Важно понимать эту концепцию.
 
 <table>
     <thead>
@@ -114,11 +113,11 @@ React bindings для Redux охвачены идеей [разделения к
 
 ## Имплементация компонентов
 
-Давайте напишеи компоненты! Начнем с презентационных компонентов, пока нам не нужно думать о связке с Redux.
+Давайте напишем компоненты! Начнем с презентационных компонентов, пока нам не нужно думать о связке с Redux.
 
 ### Презентационные Компоненты (Presentational Components)
 
-Это обычные React компоненты, ничего особенного. Мы пишем функциональные stateless компоненты, пока нам не будут нужны локальный state и методы lifecycle. Это не значит что презентационные компоненты *должны быть* функциональными, так просто легче их объявлять. Когда вам понадобятся  локальный state, lifecycle методы, оптимизация - вы может сконвертировать компоненты в классы.
+Это обычные React компоненты, ничего особенного. Мы пишем функциональные stateless компоненты, пока нам не будут нужны локальный state и методы lifecycle. Это не значит что презентационные компоненты *должны быть* функциональными, так просто легче их объявлять. Когда вам понадобятся  локальный state, lifecycle методы, оптимизация - вы можете сконвертировать компоненты в классы.
 
 #### `components/Todo.js`
 
@@ -279,8 +278,8 @@ const mapStateToProps = (state) => {
   }
 }
 ```
-В добавление к чтению состояния (state), компонент-контейнер может оправлять действия (dispatch actions)
-In addition to reading the state(state), container components can dispatch actions. In a similar fashion, you can define a function called `mapDispatchToProps()` that receives the [`dispatch()`](../api/Store.md#dispatch) method and returns callback props that you want to inject into the presentational component. For example, we want the `VisibleTodoList` to inject a prop called `onTodoClick` into the `TodoList` component, and we want `onTodoClick` to dispatch a `TOGGLE_TODO` action:
+В добавление к чтению состояния (state), компонент-контейнер может отправлять действия (dispatch actions). В том же духе, вы можете определить функию `mapDispatchToProps()`, которая принимает [`dispatch()`](../api/Store.md#dispatch) метод и возвращает колбэк props, которые вы хотите вставить в презентационный компонент. Например, мы хотим чтобы `VisibleTodoList` вставил prop `onTodoClick` в `TodoList` компонент, еще мы хотим `onTodoClick` чтобы отправить (dispatch) `TOGGLE_TODO` действие (action).
+
 
 ```js
 const mapDispatchToProps = (dispatch) => {
@@ -291,8 +290,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 ```
-
-Finally, we create the `VisibleTodoList` by calling `connect()` and passing these two functions:
+В окончании, мы создадим `VisibleTodoList` через вызов `connect()` и передадим наши две функции.
 
 ```js
 import { connect } from 'react-redux'
@@ -304,8 +302,9 @@ const VisibleTodoList = connect(
 
 export default VisibleTodoList
 ```
+Это базовая часть API React Redux, так же мы рекомендуем посмореть остульную часть [its documentation](https://github.com/reactjs/react-redux) детально.
 
-These are the basics of the React Redux API, but there are a few shortcuts and power options so we encourage you to check out [its documentation](https://github.com/reactjs/react-redux) in detail. In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/rackt/reselect).
+In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/rackt/reselect).
 
 Find the rest of the container components defined below:
 
@@ -409,11 +408,13 @@ AddTodo = connect()(AddTodo)
 export default AddTodo
 ```
 
-## Passing the Store
+## Передача хранилища (Passing the Store)
 
-All container components need access to the Redux store so they can subscribe to it. One option would be to pass it as a prop to every container component. However it gets tedious, as you have to wire `store` even through presentational components just because they happen to render a container deep in the component tree.
+Всем компонентам контейнерам необходим доступ к хранилищу Redux, поэтому они могут подписаться на него. Одним из вариантов было бы передать его в качестве prop для каждого контейнера компонента.
+ Но это довольно утомительно - "пробрасовать"  по дереву компонентов `store`, даже через презентационные компоненты  - из-за того что они содержат в себе компоненты-контейнеры
 
-The option we recommend is to use a special React Redux component called [`<Provider>`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store) to [magically](https://facebook.github.io/react/docs/context.html) make the store available to all container components in the application without passing it explicitly. You only need to use it once when you render the root component:
+Для этого мы рекомендуем использвать специальный React Redux компонент [`<Provider>`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store) чтобы  [магическим образом](https://facebook.github.io/react/docs/context.html) делать доступным хранилище всем компонентам контейнерам в приложение без явной передачи. Вам нужно использовать его только однажды, в рендере root компонента
+
 
 #### `index.js`
 
@@ -441,33 +442,5 @@ render(
 Прочитайте [полный исходный код для этого руководства](ExampleTodoList.md) для лучшего усваивания полученных знаний. А затем, прямиком в [руководство для опытных](../advanced/README.md) для изучения обработки сетевых запросов и роутинга!
 
 
-////////////////////////////////////////////////////////////////////////
-Вот и все! Мы можем проверить работоспособность наших компонентов, написав простенький `App`, который будет рендерить их:
 
-
-
-Вот то, что мы увидим, когда отрендерим `<App />`:
-
-<img src='http://i.imgur.com/lj4QTfD.png' width='40%'>
-
-Само по себе это не очень интересно. Давайте прикрутим Redux!
-
-## Интеграция Redux (Connecting to Redux)
-
-Мы должны сделать два изменения для того, чтобы интегрировать Redux в наш `App` и научить его запускать действия (dispatch actions) и читать состояние (state) из Redux хранилища (store).
-
-Для начала нам нужно импортировать `Provider` из [`react-redux`](http://github.com/gaearon/react-redux), который мы установили чуть раньше, и **обернуть корневой компонент в `<Provider>`** перед рендерингом.
-
-
-Это сделает наш экземпляр хранилища доступным для всех нижестоящих компонентов. (Внутри это реализовано благодаря [возможности React - “context”](http://facebook.github.io/react/docs/context.html))
-
-Затем нам **нужно обернуть компоненты, которые мы хотим связать с Redux, в вызов функции `connect()` из [`react-redux`](http://github.com/gaearon/react-redux)** Старайтесь делать это только с компонентами верхнего уровня или обработчиками роутов. Хотя, технически, Вы можете обернуть в вызов `connect()` любой компонент, старайтесь избегать этого на более глубоких уровнях иерархии компонентов, т.к. это усложнит отслеживание потока данных.
-
-**Любой компонент, обернутый в вызов функции `connect()`, получит функцию [`dispatch`](../api/Store.md#dispatch), как свойство (as a prop) и любое состояние, которое ему потребуется, из глобального состояния**. Функция `connect()` имеет единственный аргумент (единственный в контексте данного примера, а [вообще их 4](https://github.com/rackt/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) *прим. переводчика*) - функцию, которую мы назовем **селектор (selector)**. Эта функция принимает глобальное состояние хранилища Redux и должна возвращать props, которые нужны компоненту. В простейшем случае, Вы просто можете вернуть из этой функции приходящий в нее глобальный `state`, но, скорее всего, Вы захотите сначала немного его преобразовать. (Т.е. благодаря этой функции мы можем из всего огромного дерева состояния, которое хранится в Redux хранилище, вытащить именно те ветки/срезы/куски состояния, которые нужны конкретному компоненту *прим. переводчика*)
-
-Для того, чтобы делать высококачественные, оптимизированные в плане производительности и памяти (мемоизацией, например) трансформации состояния с помощью компонуемых селекторов (речь идет о функции *selector*, описанной выше), Вы должны обратить внимание на [reselect](https://github.com/faassen/reselect). В этом примере мы не будем его использовать, но он отлично работает в больших приложениях. 
-
-
-
-Вот и все! Простенькое ToDo приложение теперь полностью работоспособно.
 
