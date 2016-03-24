@@ -8,9 +8,9 @@
 * Предоставляет доступ к состоянию с помощью [`getState()`](../api/Store.md#getState);
 * Предоставляет возможность обновления состояния с помощью [`dispatch(action)`](../api/Store.md#dispatch);
 * Регистрирует слушатели (listeners) c помощью [`subscribe(listener)`](../api/Store.md#subscribe).
-* Снимает регестрацию слушателей [`subscribe(listener)`](../api/Store.md#subscribe).
+* Снимает регистрации слушателей [`subscribe(listener)`](../api/Store.md#subscribe).
 
-> От переводчика: пример снятия регестрации (подписки) 
+> От переводчика: пример снятия регистрации (подписки) 
 ```js
 let unsubscribe = store.subscribe(handleChange)
 unsubscribe()
