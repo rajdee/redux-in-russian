@@ -26,40 +26,41 @@ React bindings для Redux охвачены идеей [разделения к
     <thead>
         <tr>
             <th></th>
-            <th scope="col" style="text-align:left">Компоненты- контейнеры</th>
+
             <th scope="col" style="text-align:left">Презентационные Компоненты</th>
+                        <th scope="col" style="text-align:left">Компоненты- контейнеры</th>
         </tr>
     </thead>
     <tbody>
           <tr>
           <th scope="row" style="text-align:right">Назначение</th>
-          <td>Отвечают за логику ( работа с данными, обновление состояния (state) )</td>
+      
           <td>Отвечают за внешний вид ( разметка, стили ) </td>
-        </tr>
-        <tr>
-          <th scope="row" style="text-align:right">Расположение</th>
-          <td>Верхний уровень, обработчики роутов</td>
-          <td>Средний уровень и компоненты-"листья" (leaf components)</td>
+              <td>Отвечают за логику ( работа с данными, обновление состояния (state) )</td>
         </tr>
         <tr>
           <th scope="row" style="text-align:right">Знают о Redux</th>
-          <td>Да</th>
+     
           <td>Нет</th>
+               <td>Да</th>
         </tr>
         <tr>
           <th scope="row" style="text-align:right">Получают / читают данные</th>
-          <td>Подписываются на Redux состояние (Redux state)</td>
+ 
           <td>Получают данные из props</td>
+                   <td>Подписываются на Redux состояние (Redux state)</td>
         </tr>
         <tr>
           <th scope="row" style="text-align:right">Изменяют данные</th>
-          <td>Отправляют Redux действия (actions)</td>
+
           <td>Вызывают колбэки из props</td>
+                    <td>Отправляют Redux действия (actions)</td>
         </tr>
           <tr>
           <th scope="row" style="text-align:right">Пишутся</th>
-          <td>Обычно генерируются React Redux</td>
+
           <td>Руками</td>
+                    <td>Обычно генерируются React Redux</td>
         </tr>
     </tbody>
 </table>
@@ -303,10 +304,10 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 Это базовая часть API React Redux, так же мы рекомендуем посмотреть остальную часть [its documentation](https://github.com/reactjs/react-redux) детально.
+Если Вы беспокоитесь, что mapStateToProps создаются новые объекты слишком часто, вы можете изучить [оперирование полученными данными ](../recipes/ComputingDerivedData.md) с [reselect](https://github.com/rackt/reselect).
 
-In case you are worried about `mapStateToProps` creating new objects too often, you might want to learn about [computing derived data](../recipes/ComputingDerivedData.md) with [reselect](https://github.com/rackt/reselect).
 
-Find the rest of the container components defined below:
+Определим оставшиеся компоненты контейнеры ниже
 
 #### `containers/FilterLink.js`
 
