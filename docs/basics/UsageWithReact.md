@@ -66,14 +66,12 @@ React bindings для Redux охвачены идеей [разделения к
 </table>
 Большинство компонентов, которые мы напишем, будут презентационными. Но нам нужно сгенерировать несколько компонентов-контейнеров, чтобы соеденить их с хранилищем Redux.
  
-Технически Вы можете написать компоненты-контейнеры вручную, используя [`store.subscribe()`](../api/Store.md#subscribe). Но это не рекомендуется делалать , т.к в React Redux релизовано много оптимизаций производительности. Поэтому, вместо того чтобы писать самим, мы будет генерировать компоненты-контейнеры с помощью [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options). Далее Вы увидете как мы будем это делать.
+Технически Вы можете написать компоненты-контейнеры вручную, используя [`store.subscribe()`](../api/Store.md#subscribe). Но это не рекомендуется делалать , т.к в React Redux релиазовано много оптимизаций производительности. Поэтому, вместо того чтобы писать самим, мы будет генерировать компоненты-контейнеры с помощью [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options). Далее Вы увидете как мы будем это делать.
 
 
 ## Проектирование иерархии компонентов (Designing Component Hierarchy)
 
 Помните как мы [спроектировали структуру объекта состояния](Reducers.md)? В этот раз мы спроектируем иерархию UI компонентов, которая будет соответствовать этой структуре. С такого рода задачей Вы можете столкнуться разрабатывая и не Redux приложение. [Thinking in React](https://facebook.github.io/react/docs/thinking-in-react.html) - великолепное руководство, которое поясняет весь процесс решения этой задачи.
-
-Our design brief is simple. We want to show a list of todo items. On click, a todo item is crossed out as completed. We want to show a field where the user may add a new todo. In the footer, we want to show a toggle to show all, only completed, or only active todos.
 
 Наше техническое задание для проектирования довольно простое. Мы хотим показать список дел. По клику мы должны зачеркнуть дело, что будет означать, что оно выполнено. Также мы хотим показать поле ввода, с помощью которого пользователь сможет добавить новое дело в список. В футере должны быть переключатели, с помощью которых мы будем показывать все дела / только завершенные / только не завершенные.
 
@@ -108,19 +106,19 @@ Our design brief is simple. We want to show a list of todo items. On click, a to
 
 ### Другие компоненты (Other Components)
 
-Sometimes it’s hard to tell if some component should be a presentational component or a container. For example, sometimes form and function are really coupled together, such as in case of this tiny component:
+Иногда трудно понять будет компонент "презентационным" или "контейнером". Например, иногда форма ввода и функция сильно связаны, как в нашем случае маленький компонент `AddTodo`:
 
-* **`AddTodo`** is an input field with an “Add” button
+* **`AddTodo`** Поле ввода с кнопкой "Добавить" (Add)
 
-Technically we could split it into two components but it might be too early at this stage. It’s fine to mix presentation and logic in a component that is very small. As it grows, it will be more obvious how to split it, so we’ll leave it mixed.
+Технически мы можем разделить это на два компонента, но это может быть слишком рано на этом этапе. Это нормально смешивать представление и логигу в компоненте, который очень мал. По мере роста приложения, станет вполне очевидно, когда нужно будет разделить на компоненты. В нашем случае мы делить не будем.
 
-## Implementing Components
+## Имплементация компонентов
 
-Let’s write the components! We begin with the presentational components so we don’t need to think about binding to Redux yet.
+Давайте напишеи компоненты! Начнем с презентационных компонентов, пока нам не нужно думать о связке с Redux.
 
-### Presentational Components
+### Презентационные Компоненты (Presentational Components)
 
-These are all normal React components, so we won’t examine them in detail. We write functional stateless components unless we need to use local state or the lifecycle methods. This doesn’t mean that presentational components *have to* be functions—it’s just easier to define them this way. If and when you need to add local state, lifecycle methods, or performance optimizations, you can convert them to classes.
+Это обычные React компоненты, ничего особенного. Мы пишем функциональные stateless компоненты, пока нам не будут нужны локальный state и методы lifecycle. Это не значит что презентационные компоненты *должны быть* функциональными, так просто легче их объявлять. Когда вам понадобятся  локальный state, lifecycle методы, оптимизация - вы может сконвертировать компоненты в классы.
 
 #### `components/Todo.js`
 
@@ -254,11 +252,14 @@ const App = () => (
 export default App
 ```
 
-### Container Components
+###  Компоненты Контейнеры (Container Components)
 
-Now it’s time to hook up those presentational components to Redux by creating some containers. Technically, a container component is just a React component that uses [`store.subscribe()`](../api/Store.md#subscribe) to read a part of the Redux state tree and supply props to a presentational component it renders. You could write a container component by hand but React Redux includes many useful optimizations so we suggest to generate container components with [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) function from the React Redux library.
+Настало время связать нащи презентационные компоненты с Redux с помощью создания нескольких компонентов-контейнеров. Технически компонент-контейнер это просто React компонент, который использует [`store.subscribe()`](../api/Store.md#subscribe) для чтения части дерева состояния (state tree) Redux, а также предоставляет props  презентационным компонентам, которые их рендерят. Вы можете написать контейнер сами, но React Redux включает много полезных оптимизаций, потому мы советуем генерировать контейнер с помощью  [`connect()`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) функцией из библиотеки React Redux
 
-To use `connect()`, you need to define a special function called `mapStateToProps` that tells how to transform the current Redux store state into the props you want to pass to a presentational component you are wrapping. For example, `VisibleTodoList` needs to calculate `todos` to pass to the `TodoList`, so we define a function that filters the `state.todos` according to the `state.visibilityFilter`, and use it in its `mapStateToProps`:
+Чтобы использовать `connect()`, вам нужно определить специальную функцию `mapStateToProps`, которая скажет как трансформировать текущиее состояние хранилища (store state) Redux в props'ы , которые вы хотите передать в оборачиваемые презентационные компоненты.
+Например, `VisibleTodoList` будет определять передоваемые `todos` в `TodoList`, поэтому мы напишем функицию, которая будет фильтровать `state.todos` согласно `state.visibilityFilter`, и будет использовать это в своём `mapStateToProps`.
+
+
 
 ```js
 const getVisibleTodos = (todos, filter) => {
@@ -278,8 +279,8 @@ const mapStateToProps = (state) => {
   }
 }
 ```
-
-In addition to reading the state, container components can dispatch actions. In a similar fashion, you can define a function called `mapDispatchToProps()` that receives the [`dispatch()`](../api/Store.md#dispatch) method and returns callback props that you want to inject into the presentational component. For example, we want the `VisibleTodoList` to inject a prop called `onTodoClick` into the `TodoList` component, and we want `onTodoClick` to dispatch a `TOGGLE_TODO` action:
+В добавление к чтению состояния (state), компонент-контейнер может оправлять действия (dispatch actions)
+In addition to reading the state(state), container components can dispatch actions. In a similar fashion, you can define a function called `mapDispatchToProps()` that receives the [`dispatch()`](../api/Store.md#dispatch) method and returns callback props that you want to inject into the presentational component. For example, we want the `VisibleTodoList` to inject a prop called `onTodoClick` into the `TodoList` component, and we want `onTodoClick` to dispatch a `TOGGLE_TODO` action:
 
 ```js
 const mapDispatchToProps = (dispatch) => {
