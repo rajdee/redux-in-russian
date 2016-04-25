@@ -122,7 +122,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 ### Изучайте Redux вместе с его создателем
 
-[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) - это видео-курс, состоящий из 30 роликов созданных Дэном Абрамовым, автором Redux. Он предназначен для дополнения часть документации «Основы», привнося дополнительные сведения о неизменности, тестировании, лучших практик Redux, а также использования Redux с React. **Данный курс является и всегда будет бесплатным.**
+[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) - это видео-курс, состоящий из 30 роликов созданных Дэном Абрамовым, автором Redux. Он предназначен для дополнения часть документации «Основы», привнося дополнительные сведения о неизменности, тестировании, лучших практиках Redux, а также об использовании Redux с React. **Данный курс является и всегда будет бесплатным.**
 
 >[“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
 >Sandrino Di Mattia
@@ -143,7 +143,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 #### [Посмотрите 30 бесплатных уроков!](https://egghead.io/series/getting-started-with-redux)
 
-Если вам понравился мой курс, подумайте о поддержки Egghead путем [покупки подписки] (https://egghead.io/pricing). Абоненты имеют доступ к исходному коду, для примера, в каждом из моих видео, а также к массе продвинутых уроков по другим темам, включая JavaScript in depth, React, Angular и многое другое. Многие [преподаватели Egghead] (https://egghead.io/instructors) также являются авторами библиотек с открытым исходным кодом, т.ч. покупка подписки - это хороший способ, чтобы поблагодарить их за работу, которую они сделали.
+Если вам понравился мой курс, подумайте о поддержке Egghead путем [покупки подписки] (https://egghead.io/pricing). Подписчики имеют доступ к исходному коду, для примера, в каждом из моих видео, а также к массе продвинутых уроков по другим темам, включая JavaScript in depth, React, Angular и многое другое. Многие [преподаватели Egghead] (https://egghead.io/instructors) также являются авторами библиотек с открытым исходным кодом, т.ч. покупка подписки - это хороший способ поблагодарить их за работу, которую они сделали.
 
 
 ### Документация
@@ -171,7 +171,7 @@ store.dispatch({ type: 'DECREMENT' })
 * [Universal](http://redux.js.org/docs/introduction/Examples.html#universal) ([source](https://github.com/reactjs/redux/tree/master/examples/universal))
 * [Real World](http://redux.js.org/docs/introduction/Examples.html#real-world) ([source](https://github.com/reactjs/redux/tree/master/examples/real-world))
 
-Если вы новичок в экосистеме NPM и имеете проблемы с получением и запуском проекта или не уверены, куда вставить шаблон, попробуйте [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) который использует Redux вместе React с Browserify.
+Если вы новичок в экосистеме NPM и имеете проблемы с получением и запуском проекта или не уверены, куда вставить шаблон, попробуйте [simplest-redux-example](https://github.com/jackielii/simplest-redux-example) который использует Redux вместе с React и Browserify.
 
 ### Обсуждения
 
@@ -179,11 +179,11 @@ store.dispatch({ type: 'DECREMENT' })
 
 ### Благодарности
 
-* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) за великолепное введение за моделирование обновление состояния посредством редьюсеров;
+* [The Elm Architecture](https://github.com/evancz/elm-architecture-tutorial) за великолепное введение в моделирование обновления состояния посредством редьюсеров;
 * [Turning the database inside-out](http://www.confluent.io/blog/turning-the-database-inside-out-with-apache-samza/) за взрыв моего сознания;
 * [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) за убеждение меня в том, что переоценка должна "просто работать";
 * [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) за Hot Module Replacement;
-* [Flummox](https://github.com/acdlite/flummox) за обучение меня подхода к Flux без шаблоннов или синглетонов;
+* [Flummox](https://github.com/acdlite/flummox) за обучение меня подходу Flux без шаблонов или синглетонов;
 * [disto](https://github.com/threepointone/disto) за доказательство концепции "hot reloadable" хранилищ;
 * [NuclearJS](https://github.com/optimizely/nuclear-js) за доказательство того, что такая архитектура может быть производительной;
 * [Om](https://github.com/omcljs/om) за популяризацию идеи одного атома состояния;
@@ -200,7 +200,7 @@ store.dispatch({ type: 'DECREMENT' })
 ### Меценаты
 
 Разработка Redux была [профинансирована сообществом](https://www.patreon.com/reactdx).  
-Познакомьтесь с некоторыми из выдающихся компаний, которые сделали возможным:
+Познакомьтесь с некоторыми из выдающихся компаний, которые сделали это возможным:
 
 * [Webflow](https://github.com/webflow)
 * [Ximedes](https://www.ximedes.com/)
