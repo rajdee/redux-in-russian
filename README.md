@@ -122,7 +122,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 ### Изучайте Redux вместе с его создателем
 
-[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) - это видео-курс, состоящий из 30 роликов созданных Дэном Абрамовым, автором Redux. Он предназначен для дополнения часть документации «Основы», привнося дополнительные сведения о неизменности, тестировании, лучших практиках Redux, а также об использовании Redux с React. **Данный курс является и всегда будет бесплатным.**
+[Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) - это видео-курс, состоящий из 30 роликов созданных Дэном Абрамовым, автором Redux. Он предназначен для дополнения части документации «Основы», привнося дополнительные сведения о неизменности, тестировании, лучших практиках Redux, а также об использовании Redux с React. **Данный курс является и всегда будет бесплатным.**
 
 >[“Great course on egghead.io by @dan_abramov - instead of just showing you how to use #redux, it also shows how and why redux was built!”](https://twitter.com/sandrinodm/status/670548531422326785)  
 >Sandrino Di Mattia
