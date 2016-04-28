@@ -34,12 +34,12 @@ npm install
 
 cd examples/counter
 npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
-Это описывает:
+Тут показаны:
 
 * Базовый шаблон разработки Redux;
 * Тестирование.
@@ -56,12 +56,12 @@ npm install
 
 cd examples/todomvc
 npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
-Это описывает:
+Тут показаны:
 
 * Базовый шаблон разработки Redux с двумя редьюсерами;
 * Обновление хранимой информации;
@@ -79,16 +79,16 @@ npm install
 
 cd examples/async
 npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
-Это описывает:
+Тут показаны:
 
-* Базовый шаблон асинхронный разработки Redux с [redux-thunk](https://github.com/gaearon/redux-thunk);
+* Базовый шаблон асинхронной разработки Redux с [redux-thunk](https://github.com/gaearon/redux-thunk);
 * Кеширование запросов и вывод спиннера, пока данные подгружаются;
-* Инвалидирование закэшированных данных.
+* Инвалидация закэшированных данных.
 
 ## Real World
 
@@ -102,19 +102,47 @@ npm install
 
 cd examples/real-world
 npm install
-
 npm start
+
 open http://localhost:3000/
 ```
 
-Это описывает:
+Тут показаны:
 
-* Real-world асинхронный Redux шаблон;
-* Сохрание объектов в упорядоченном кэше объектов;
+* Real-world пример асинхронной работы с Redux;
+* Сохранение объектов в упорядоченном кэше объектов;
 * Отдельный middleware для вызовов API;
 * Кеширование запросов и вывод спиннера, пока данные подгружаются;
 * Пагинация;
 * Роутинг.
+
+## Shopping Cart
+
+Запуск примера [Shopping Cart](https://github.com/rackt/redux/tree/master/examples/shopping-cart):
+
+```
+git clone https://github.com/gaearon/redux.git
+
+cd redux
+npm install
+
+cd examples/shopping-cart
+npm install
+npm start
+
+open http://localhost:3000/
+```
+
+Тут показаны:
+
+* Нормализованное состояние
+* Явное отслеживание ID сущностей
+* Компоновка редьюсеров
+* Использование очередей наряду с редьюсерами
+* Откат при ошибке
+* Безопасное распространение действий по условию
+* Использование только React Redux для привязки генераторов действий
+* Условные посредники (на примере логирования)
 
 ## Больше примеров
 

@@ -2,13 +2,13 @@
 
 В [базовом руководстве](../basics/README.md) мы построили простое приложение - список дел. Оно было совершенно синхронным. Состояние (State) обновлялось сразу же после того, как было сгенерировано и отправлено действие (dispatch action).
 
-В этом руководстве мы будем строить асинхронное приложение, которое будет использовать API Reddit'а для отображения текущих заголовков для выбранного subreddit'a. Так как же асинхронность вписывается в Redux поток (flow)?
+В этом руководстве мы будем строить асинхронное приложение, которое будет использовать API Reddit'а для отображения текущих заголовков для выбранного subreddit'a. Так как же асинхронность вписывается в концепцию Redux?
 
 ## Действия (Actions)
 
 Когда Вы вызываете асинхронное API, есть два ключевых момента времени: момент непосредственного вызова и момент получения ответа или timeout'a.
 
-Для каждого из этих моментов обычно может требоваться изменение состояния приложения (application state). Для изменения состояния Вы должны запустить (dispatch) нормальное действие, которое будет обработано редьюсером синхронно. Обычно для любого API запроса Вам понадобится запустить (dispatch) по крайней мере три разных вида действий (actions):
+Для каждого из этих моментов обычно может требоваться изменение состояния приложения (application state). Для изменения состояния вы должны запустить (dispatch) нормальное действие, которое будет обработано редьюсером синхронно. Обычно для любого API запроса вам понадобится запустить (dispatch) по крайней мере три разных вида действий (actions):
 
 * **Действие, информирующее редьюсер о том, что запрос начался.**
 
@@ -22,7 +22,7 @@
 
   Редьюсер может обрабатывать такой вид действия сбрасывая флаг `isFetching`. Также некоторые редьюсеры могут хотеть сохранить сообщение об ошибке, чтобы UI мог его отобразить.
 
-Для всего этого Вы можете использовать поле `status` в действиях (actions):
+Для всего этого вы можете использовать поле `status` в действиях (actions):
 
 ```js
 { type: 'FETCH_POSTS' }
@@ -30,7 +30,7 @@
 { type: 'FETCH_POSTS', status: 'success', response: { ... } }
 ```
 
-Или Вы можете обявить отдельные типы для таких действий:
+Или вы можете объявить отдельные типы для таких действий:
 
 ```js
 { type: 'FETCH_POSTS_REQUEST' }
@@ -38,28 +38,28 @@
 { type: 'FETCH_POSTS_SUCCESS', response: { ... } }
 ```
 
-Выбор использования одного типа действий с флагами или нескольких отдельных типов действий остается за Вами. Это соглашение, которое Вы должны утвердить с Вашей командой. 
+Выбор использования одного типа действий с флагами или нескольких отдельных типов действий остается за вами. Это соглашение, которое вы должны утвердить с вашей командой. 
 
-Использование нескольких типов действий оставляют меньше места для ошибки, но это не проблема, если Вы генерируете действия и редьюсеры с помощью таких библиотек, как [redux-actions](https://github.com/acdlite/redux-actions).
+Использование нескольких типов действий оставляют меньше места для ошибки, но это не проблема, если вы генерируете действия и редьюсеры с помощью таких библиотек, как [redux-actions](https://github.com/acdlite/redux-actions).
 
-Какое бы соглашение Вы не выбрали, следуйте ему на протяжении всего приложения.
+Какое бы соглашение вы не выбрали, следуйте ему на протяжении всего приложения.
 В этом руководстве мы будем использовать несколько отдельных типов действий.
 
 ## Синхронные генераторы действий (Synchronous Action Creators).
 
-Давайте начнем с объявления нескольких синхронный типов и генераторов действий, которые нам понадобятся в нашем приложении. Тут пользователь может выбрать reddit для отображения:
+Давайте начнем с объявления нескольких синхронных типов и генераторов действий, которые нам понадобятся в нашем приложении. Тут пользователь может выбрать reddit для отображения:
 
 #### `actions.js`
 
 ```js
 //тип действия
-export const SELECT_REDDIT = 'SELECT_REDDIT';
+export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 
 //генератор действия
-export function selectReddit(reddit) {
+export function selectSubreddit(subreddit) {
   return {
-    type: SELECT_REDDIT,
-    reddit
+    type: SELECT_SUBREDDIT,
+    subreddit
   };
 }
 ```
@@ -67,42 +67,42 @@ export function selectReddit(reddit) {
 Также пользователь может нажать кнопку "обновить" для обновления:
 
 ```js
-export const INVALIDATE_REDDIT = 'INVALIDATE_REDDIT';
+export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
-export function invalidateReddit(reddit) {
+export function invalidateSubreddit(subreddit) {
   return {
-    type: INVALIDATE_REDDIT,
-    reddit
+    type: INVALIDATE_SUBREDDIT,
+    subreddit
   };
 }
 ```
 
-Это были действия, отвечающие за взаимодействие с пользователем. Также у нас будет и другой тип действий, отвечающий за сетевые запросы. Сейчас мы просто определим их, а чуть позже, посмотрим, как посылать такие действия.
+Это были действия отвечающие за взаимодействие с пользователем. Также у нас будет и другой тип действий, отвечающий за сетевые запросы. Сейчас мы просто определим их, а чуть позже посмотрим, как посылать такие действия.
 
-Когда нужно будет фетчить посты для какого-нибудь reddit'a мы будем посылать действие `REQUEST_POSTS`:
+Когда нужно будет фетчить посты для какого-нибудь subreddit'a мы будем посылать действие `REQUEST_POSTS`:
 
 ```js
 export const REQUEST_POSTS = 'REQUEST_POSTS';
 
-export function requestPosts(reddit) {
+export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   };
 }
 ```
 
-Важно чтобы это действие было отделено от `SELECT_REDDIT` и `INVALIDATE_REDDIT`. Хотя они, действия, могут происходить одно за другим, но с возрастанием сложности приложения, Вам может понадобиться фетчить какие-то данные независимо от действий пользователя, например, для предзагрузки самых популярных reddit'ов или для того, чтобы изредка обновлять устаревшие данные. Вы можете также захотеть фетчить данные в ответ на смену роута, т.ч. не очень мудро связывать обновление данных с каким-то определенным UI-событием.
+Важно чтобы это действие было отделено от `SELECT_REDDIT` и `INVALIDATE_REDDIT`. Хотя они, действия, могут происходить одно за другим, но, с возрастанием сложности приложения вам может понадобится фетчить какие-то данные независимо от действий пользователя, например, для предзагрузки самых популярных subreddit'ов или для того, чтобы изредка обновлять устаревшие данные. Вы можете также захотеть фетчить данные в ответ на смену роута, т.ч. не очень мудро связывать обновление данных с каким-то определенным UI-событием.
 
 Наконец, когда сетевой запрос будет осуществлен, мы отправим действие `RECEIVE_POSTS`:
 
 ```js
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
-export function receivePosts(reddit, json) {
+export function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
@@ -117,7 +117,7 @@ export function receivePosts(reddit, json) {
 
 ## Разработка структуры хранилища (Designing the State Shape)
 
-Как и в базовом руководстве, Вам нужно [разработать структуру состояния приложения](../basics/Reducers.md#designing-the-state-shape), прежде чем начинать писать само приложение. В случае с асинхронным кодом, появляется больше состояний о которых нужно позаботиться, т.ч. нам нужно все как следует обдумать.
+Как и в базовом руководстве, вам нужно [разработать структуру состояния приложения](../basics/Reducers.md#designing-the-state-shape), прежде чем начинать писать само приложение. В случае с асинхронным кодом, появляется больше состояний о которых нужно позаботиться, т.ч. нам нужно все как следует обдумать.
 
 Часто именно эта часть сбивает с толку новичков, потому что сразу не ясно, какая информация описывает состояние в асинхронном приложении и как организовать все это, в одно дерево состояния.
 
@@ -127,8 +127,8 @@ export function receivePosts(reddit, json) {
 
 ```js
 {
-  selectedReddit: 'frontend',
-  postsByReddit: {
+  selectedSubreddit: 'frontend',
+  postsBySubreddit: {
     frontend: {
       isFetching: true,
       didInvalidate: false,
@@ -152,15 +152,15 @@ export function receivePosts(reddit, json) {
 
 тут есть несколько важных моментов:
 
-* Мы храним информацию о каждом subreddit’е отдельно, следовательно мы можем кешировать любой subreddit. Когда пользователь переключается между ними во второй раз, обновление UI будет мгновенным и сможем не перезагружать данные если мы этого не хотим. Не переживайте о том, что все эти элементы (subreddit'ы, а их может быть очень много) будут находиться в памяти: Вам не понадобятся никакие чистки памяти, если только Вы и Ваш пользователь не имеете дело с десятками тысяч элементов и при этом пользователь очень редко закрывает вкладку браузера.
+* Мы храним информацию о каждом subreddit’е отдельно, следовательно мы можем кешировать любой subreddit. Когда пользователь переключается между ними во второй раз, обновление UI будет мгновенным и сможем не перезагружать данные если мы этого не хотим. Не переживайте о том, что все эти элементы (subreddit'ы, а их может быть очень много) будут находиться в памяти: Вам не понадобятся никакие чистки памяти, если только вы и ваш пользователь не имеете дело с десятками тысяч элементов и при этом пользователь очень редко закрывает вкладку браузера.
 
-* Для каждого списка элементов Вы захотите хранить `isFetching` для показа спиннера, `didInvalidate`, который Вы потом сможете установить в true, если данные устрареют, `lastUpdated` для того, тчобы знать когда данные были обновлены в последний раз и собственно `items`. В реальном приложении Вы также захотите хранить состояние страничной навигации: `fetchedPageCount` и `nextPageUrl`.
+* Для каждого списка элементов вы захотите хранить `isFetching` для показа спиннера, `didInvalidate`, который вы потом сможете установить в true, если данные устареют, `lastUpdated` для того, чтобы знать когда данные были обновлены в последний раз и собственно `items`. В реальном приложении вы также захотите хранить состояние страничной навигации: `fetchedPageCount` и `nextPageUrl`.
 
 >##### Обратите внимание на вложенные сущности
 
-> В этом примере мы храним полученные элементы вместе с информацией о постраничной навигации. Однако этот подход будет очень плох, если у Вас будут вложенные сущности, которые ссылаются друг на друга или если Вы дадите пользователю возможность редактировать элементы. Представьте, что пользователь хочет отредактировать загруженный пост, но этот пост сдублирован в нескольких местах в дереве состояния (state tree). Реализация такого будет очень болезненна.
+> В этом примере мы храним полученные элементы вместе с информацией о постраничной навигации. Однако этот подход будет очень плох, если у вас будут вложенные сущности, которые ссылаются друг на друга или если Вы дадите пользователю возможность редактировать элементы. Представьте, что пользователь хочет отредактировать загруженный пост, но этот пост сдублирован в нескольких местах в дереве состояния (state tree). Реализация такого будет очень болезненна.
 
->Если у Вас есть вложенные сущности или если Вы даете возможность редактировать загруженные элементы, то Вы должны хранить их отдельно в состоянии (state), как если бы оно, (состояние), было базой данных. И в информации о постраничной навигации Вы можете ссылаться на такие элементы только по их ID. Это позволит Вам всегда держать их в актуальном состоянии. [Пример из реальной жизни](../introduction/Examples.html#real-world) демонстрирует этот подход вместе с [normalizr](https://github.com/gaearon/normalizr) для упорядочивания вложенных API ответов. С таким подходом Ваше состояние (state) может выглядеть вот так:
+>Если у вас есть вложенные сущности или если вы даете возможность редактировать загруженные элементы, то вы должны хранить их отдельно в состоянии (state), как если бы оно, (состояние), было базой данных. И в информации о постраничной навигации вы можете ссылаться на такие элементы только по их ID. Это позволит вам всегда держать их в актуальном состоянии. [Пример из реальной жизни](../introduction/Examples.html#real-world) демонстрирует этот подход вместе с [normalizr](https://github.com/gaearon/normalizr) для упорядочивания вложенных API ответов. С таким подходом ваше состояние (state) может выглядеть вот так:
 
 >```js
 > {
@@ -185,7 +185,7 @@ export function receivePosts(reddit, json) {
 >       }
 >     }
 >   },
->   postsByReddit: {
+>   postsBySubreddit: {
 >     frontend: {
 >       isFetching: true,
 >       didInvalidate: false,
@@ -201,29 +201,29 @@ export function receivePosts(reddit, json) {
 > }
 >```
 
->В этом руководстве мы не будем упорядочивать сущности, но это то, о чем Вам стоит задуматься для более динамичного приложения.
+>В этом руководстве мы не будем упорядочивать сущности, но это то, о чем вам стоит задуматься для более динамичного приложения.
 
 ## Обработка действий (Handling Actions)
 
-Перед тем, как переходить к деталям отправки действий (dispatching actions) вместе с сетевми запросами, мы напишем редьюсеры для действий, которые определили выше.
+Перед тем, как переходить к деталям отправки действий (dispatching actions) вместе с сетевыми запросами, мы напишем редьюсеры для действий, которые определили выше.
 
->##### Обратите внимание на компановку редьюсеров (Reducer Composition)
+>##### Обратите внимание на компоновку редьюсеров (Reducer Composition)
 
-> Предполагается, что Вы понимаете что такое компоновка редьюсеров с помощью функции [`combineReducers()`](../api/combineReducers.md), описанной в разделе [Разделение редьюсеров](../basics/Reducers.md#splitting-reducers) в [базовом руководстве](../basics/README.md). Если это не так, то пожалуйста [сначала прочтите это](../basics/Reducers.md#splitting-reducers).
+> Предполагается, что вы понимаете что такое компоновка редьюсеров с помощью функции [`combineReducers()`](../api/combineReducers.md), описанной в разделе [Разделение редьюсеров](../basics/Reducers.md#splitting-reducers) в [базовом руководстве](../basics/README.md). Если это не так, то пожалуйста [сначала прочтите это](../basics/Reducers.md#splitting-reducers).
 
 #### `reducers.js`
 
 ```js
 import { combineReducers } from 'redux';
 import {
-  SELECT_REDDIT, INVALIDATE_REDDIT,
+  SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
 } from '../actions';
 
-function selectedReddit(state = 'reactjs', action) {
+function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_REDDIT:
-    return action.reddit;
+  case SELECT_SUBREDDIT:
+    return action.subreddit;
   default:
     return state;
   }
@@ -235,7 +235,7 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-  case INVALIDATE_REDDIT:
+  case INVALIDATE_SUBREDDIT:
     return Object.assign({}, state, {
       didInvalidate: true
     });
@@ -256,13 +256,13 @@ function posts(state = {
   }
 }
 
-function postsByReddit(state = {}, action) {
+function postsBySubreddit(state = {}, action) {
   switch (action.type) {
-  case INVALIDATE_REDDIT:
+  case INVALIDATE_SUBREDDIT:
   case RECEIVE_POSTS:
   case REQUEST_POSTS:
     return Object.assign({}, state, {
-      [action.reddit]: posts(state[action.reddit], action)
+      [action.reddit]: posts(state[action.subreddit], action)
     });
   default:
     return state;
@@ -270,8 +270,8 @@ function postsByReddit(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
-  postsByReddit,
-  selectedReddit
+  postsBySubreddit,
+  selectedSubreddit
 });
 
 export default rootReducer;
@@ -283,14 +283,14 @@ export default rootReducer;
 
   ```js
   return Object.assign({}, state, {
-    [action.reddit]: posts(state[action.reddit], action)
+    [action.subreddit]: posts(state[action.subreddit], action)
   });
   ```
   эквивалентно этому:
 
   ```js
   let nextState = {};
-  nextState[action.reddit] = posts(state[action.reddit], action);
+  nextState[action.subreddit] = posts(state[action.subreddit], action);
   return Object.assign({}, state, nextState);
   ```
 * Мы извлекли `posts(state, action)`, который управляет состоянием конкретного списка постов. Это просто [компоновка редьюсеров](../basics/Reducers.md#splitting-reducers)! Нам выбирать, как разбить/разделить редьюсер на более мелкие редьюсеры и в этом случае, мы доверяем обновление элементов внутри объекта функции-редьюсеру `posts`. [Пример из реальной жизни](../introduction/Examples.html#real-world) идет еще дальше, показывая, как создавать фабрику редьюсеров для параметризированных редьюсеров постраничной навигации.
@@ -299,7 +299,7 @@ export default rootReducer;
 
 ## Асинхронные генераторы действий (Async Action Creators)
 
-Наконец, как мы используем синхронные генераторы действий, [созданные нами ранее](#synchronous-action-creators) вместе с сетевыми запросами? Стандартый для Redux путь - это использование [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). Этот посредник (middleware) содержится в отдельном пакете, который называется `redux-thunk`. Мы поясним, как работают посредники [позже](Middleware.md). Сейчас есть одна важная вещь, о которой вам нужно знать: при использовании конкретно этого посредника, генератор действий может вернуть функцию, вместо объекта действия. Таким образом, генератор действия превращается в [преобразователь (Thunk)](https://en.wikipedia.org/wiki/Thunk)
+Наконец, как мы используем синхронные генераторы действий, [созданные нами ранее](#synchronous-action-creators) вместе с сетевыми запросами? Стандартный для Redux путь - это использование [Redux Thunk middleware](https://github.com/gaearon/redux-thunk). Этот посредник (middleware) содержится в отдельном пакете, который называется `redux-thunk`. Мы поясним, как работают посредники [позже](Middleware.md). Сейчас есть одна важная вещь, о которой вам нужно знать: при использовании конкретно этого посредника, генератор действий может вернуть функцию, вместо объекта действия. Таким образом, генератор действия превращается в [преобразователь (Thunk)](https://en.wikipedia.org/wiki/Thunk)
 
 Когда генератор действия вернет функцию, эта функция будет вызвана посредником Redux Thunk. Этой функции не обязательно быть чистой. Таким образом, в ней разрешается инициировать побочные эффекты (side effects), в том числе и асинхронные вызовы API. Также, эти функции могут вызывать действия (dispatch actions), такие же синхронные действия, которые мы отправляли ранее.
 
@@ -311,18 +311,18 @@ export default rootReducer;
 import fetch from 'isomorphic-fetch';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   };
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
@@ -332,7 +332,7 @@ function receivePosts(reddit, json) {
 // Хотя его содержимое отличается, вы должны использовать его, как и любой другой генератор действий:
 // store.dispatch(fetchPosts('reactjs'));
 
-export function fetchPosts(reddit) {
+export function fetchPosts(subreddit) {
 
   // Thunk middleware знает, как обращаться с функциями.
   // Он передает метод действия в качестве аргумента функции,
@@ -343,7 +343,7 @@ export function fetchPosts(reddit) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
-    dispatch(requestPosts(reddit));
+    dispatch(requestPosts(subreddit));
 
     // The function called by the thunk middleware can return a value,
     // that is passed on as the return value of the dispatch method.
@@ -358,7 +358,7 @@ export function fetchPosts(reddit) {
         // We can dispatch many times!
         // Here, we update the app state with the results of the API call.
 
-        dispatch(receivePosts(reddit, json))
+        dispatch(receivePosts(subreddit, json))
       );
 
       // In a real world app, you also want to
@@ -369,7 +369,7 @@ export function fetchPosts(reddit) {
 
 >##### Примечание по `fetch`
 
->Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) в примерах. Это новое API для создания сетевых запросов, которое заменяет `XMLHttpRequest` в большинства стандарных случаев. Поскольку большинство браузеров до сих пор не поддеживают его нативно, мы полагаем, что вы для этого используете[`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) библиотеку:
+>Мы используем [`fetch` API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) в примерах. Это новое API для создания сетевых запросов, которое заменяет `XMLHttpRequest` в большинства стандартных случаев. Поскольку большинство браузеров до сих пор не поддерживают его нативно, мы полагаем, что вы для этого используете[`isomorphic-fetch`](https://github.com/matthew-andrews/isomorphic-fetch) библиотеку:
 
 >```js
 // Добавьте это в каждый файл, где вы используете `fetch`
@@ -419,34 +419,34 @@ store.dispatch(fetchPosts('reactjs')).then(() =>
 import fetch from 'isomorphic-fetch';
 
 export const REQUEST_POSTS = 'REQUEST_POSTS';
-function requestPosts(reddit) {
+function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
-    reddit
+    subreddit
   };
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-function receivePosts(reddit, json) {
+function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
-    reddit,
+    subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
   };
 }
 
-function fetchPosts(reddit) {
+function fetchPosts(subreddit) {
   return dispatch => {
-    dispatch(requestPosts(reddit));
+    dispatch(requestPosts(subreddit));
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(reddit, json)));
+      .then(json => dispatch(receivePosts(subreddit, json)));
   };
 }
 
-function shouldFetchPosts(state, reddit) {
-  const posts = state.postsByReddit[reddit];
+function shouldFetchPosts(state, subreddit) {
+  const posts = state.postsBySubreddit[subreddit];
   if (!posts) {
     return true;
   } else if (posts.isFetching) {
@@ -456,7 +456,7 @@ function shouldFetchPosts(state, reddit) {
   }
 }
 
-export function fetchPostsIfNeeded(reddit) {
+export function fetchPostsIfNeeded(subreddit) {
 
   // Note that the function also receives getState()
   // which lets you choose what to dispatch next.
@@ -465,9 +465,9 @@ export function fetchPostsIfNeeded(reddit) {
   // a cached value is already available.
 
   return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), reddit)) {
+    if (shouldFetchPosts(getState(), subreddit)) {
       // Dispatch a thunk from thunk!
-      return dispatch(fetchPosts(reddit));
+      return dispatch(fetchPosts(subreddit));
     } else {
       // Let the calling code know there's nothing to wait for.
       return Promise.resolve();

@@ -1,5 +1,15 @@
 {
-	"structure": {
-  	"summary": "docs/README.md"
-	}
-}
+  "gitbook": "2.6.7",
+  "structure": {
+    "summary": "SUMMARY.md"
+  },
+  "plugins": ["edit-link", "prism", "-highlight", "github"],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/rajdee/redux-in-russian/tree/master",
+      "label": "Edit This Page"
+    },
+    "github": {
+      "url": "https://github.com/rajdee/redux-in-russian/"
+    }
+  }
