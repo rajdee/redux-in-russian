@@ -53,7 +53,7 @@ export const toggleTodo = (id) => {
 }
 ```
 
-## Редьюсеры (Reducers)
+## Редюсеры (Reducers)
 
 #### `reducers/todos.js`
 

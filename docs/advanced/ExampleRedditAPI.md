@@ -90,7 +90,7 @@ export function fetchPostsIfNeeded(reddit) {
 }
 ```
 
-## Редьюсеры (Reducers)
+## Редюсеры (Reducers)
 
 #### `reducers.js`
 
