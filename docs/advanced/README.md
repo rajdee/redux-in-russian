@@ -4,7 +4,7 @@
 
 * [Асинхронные действия (Async Actions)](AsyncActions.md)
 * [Асинхронный поток (Async Flow)](AsyncFlow.md)
-* [Посредники (Middleware)](Middleware.md)
+* [Мидлвэры (Middleware)](Middleware.md)
 * [Использование с React Router (Usage with React Router)](UsageWithReactRouter.md)
 * [Пример: Reddit API (Example: Reddit API)](ExampleRedditAPI.md)
 * [Следующие шаги (Next Steps)](NextSteps.md)
