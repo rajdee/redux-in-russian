@@ -40,7 +40,7 @@ Redux - это небольшая библиотека, в которой сог
 
 * [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Оптимистичное использование действий (action) с возможностью их совершения или отмены в дальнейшем. 
 > От переводчика: например, можно инициировать `ADD_TODO` action, state изменится, UI обновится мгновенно, а затем отправится запрос на сохранение на сервер. Если на сервере все прошло успешно, то все ок и больше ничего не произойдет. Но если же что-то пошло не так, то state будет "отмотан" до состояния когда `ADD_TODO` action еще не был применен, state изменится, UI снова обновится мгновенно. Т.е. UI будет выглядеть так, словно ничего и не произошло.
-* [redux-undo](https://github.com/omnidan/redux-undo) — Позволяет без усилий получить undo/redo функциональность и историю действий для редьюсеров
+* [redux-undo](https://github.com/omnidan/redux-undo) — Позволяет без усилий получить undo/redo функциональность и историю действий для редюсеров
     * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
 * [redux-recycle](https://github.com/omnidan/redux-recycle) — Reset the redux state on certain actions
 * [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Dispatch several actions with a single subscriber notification
@@ -48,8 +48,8 @@ Redux - это небольшая библиотека, в которой сог
 ## Утилиты (Utilities)
 
 * [reselect](https://github.com/faassen/reselect) — Простая библиотека "селекторов" нашедшая вдохновение в геттерах NuclearJS
-* [normalizr](https://github.com/gaearon/normalizr) — Упорядочивание вложенных ответов API для облегчения дальнейшего их использования в редьюсерах
-* [redux-actions](https://github.com/acdlite/redux-actions) — Уменьшение шаблонности в написании редьюсеров и генераторов действий (action creators)
+* [normalizr](https://github.com/gaearon/normalizr) — Упорядочивание вложенных ответов API для облегчения дальнейшего их использования в редюсерах
+* [redux-actions](https://github.com/acdlite/redux-actions) — Уменьшение шаблонности в написании редюсеров и генераторов действий (action creators)
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer утилиты для Redux
 * [redux-immutablejs](https://github.com/indexiatech/redux-immutablejs) — Инструменты интеграции между Redux и [Immutable](https://github.com/facebook/immutable-js/)
 * [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Иммутабельные, с проверкой типов состояния и действия для Redux
@@ -57,7 +57,7 @@ Redux - это небольшая библиотека, в которой сог
 
 ## Инструменты разработчика (Developer Tools)
 
-* [Redux DevTools](http://github.com/gaearon/redux-devtools) — Логирование действий с UI для путешествий во времени, горячая перезагрузка и обработка ошибок для редьюсеров, [впервые представлено на React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
+* [Redux DevTools](http://github.com/gaearon/redux-devtools) — Логирование действий с UI для путешествий во времени, горячая перезагрузка и обработка ошибок для редюсеров, [впервые представлено на React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
 * [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) - Плагин для Chrome, по сути обертка для Redux DevTools с дополнительной функциональностью
 
 ## Туториалы и статьи (Tutorials and Articles)
@@ -75,8 +75,8 @@ Redux - это небольшая библиотека, в которой сог
 ## Общественные соглашения (Community Conventions)
 
 * [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — Дружелюбный стандарт для Flux action объектов
-* [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — Слишком самоуверенный (opinionated) стандарт для структуры вложенных редьюсеров
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — Предложение по свзяыванию редьюсеров, типов действий и действий
+* [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — Слишком самоуверенный (opinionated) стандарт для структуры вложенных редюсеров
+* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — Предложение по свзяыванию редюсеров, типов действий и действий
 
 ## Прочее (More)
 
