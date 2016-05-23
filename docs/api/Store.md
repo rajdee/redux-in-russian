@@ -59,18 +59,18 @@
 #### Пример
 
 ```js
-import { createStore } from 'redux';
-let store = createStore(todos, ['Использовать Redux']);
+import { createStore } from 'redux'
+let store = createStore(todos, [ 'Use Redux' ])
 
 function addTodo(text) {
   return {
     type: 'ADD_TODO',
     text
-  };
+  }
 }
 
-store.dispatch(addTodo('Прочитать документацию'));
-store.dispatch(addTodo('Прочитать о мидлвэрах'));
+store.dispatch(addTodo('Прочитать документацию'))
+store.dispatch(addTodo('Прочитать о мидлвэрах'))
 ```
 
 <hr>
@@ -94,21 +94,21 @@ store.dispatch(addTodo('Прочитать о мидлвэрах'));
 
 ```js
 function select(state) {
-  return state.some.deep.property;
+  return state.some.deep.property
 }
 
-let currentValue;
+let currentValue
 function handleChange() {
-  let previousValue = currentValue;
-  currentValue = select(store.getState());
+  let previousValue = currentValue
+  currentValue = select(store.getState())
   
   if (previousValue !== currentValue) {
-    console.log('Некоторое глубокое вложенное свойство измененное от ', previousValue, 'к', currentValue);
+    console.log('Некоторое глубокое вложенное свойство измененное от ', previousValue, 'к', currentValue)
   }
 }
 
-let unsubscribe = store.subscribe(handleChange);
-handleChange();
+let unsubscribe = store.subscribe(handleChange)
+handleChange()
 ```
 
 <hr>

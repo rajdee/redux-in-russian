@@ -5,7 +5,7 @@
 ## Состояние (State)
 
 ```js
-type State = any;
+type State = any
 ```
 
 *Состояние* (также *дерево состояния*) — широкое понятие, но в Redux API это, как правило, отсылка к единственному состоянию, которое управляется хранилищем (store) и возвращается [`getState()`](api/Store.md#getState). Оно представляет собой все состояние Redux приложения, которое обычно является объектом с глубокой вложенностью.
@@ -15,7 +15,7 @@ type State = any;
 ## Действие (Action)
 
 ```js
-type Action = Object;
+type Action = Object
 ```
 
 *Действие* — это простой объект, который представляет намерение изменить состояние. Действия — единственный путь получить данные в хранилище. Любые данные, будь то события UI, коллбэки сетевых запросов или любые другие ресурсы как веб-сокеты, должны быть в итоге обработаны, как действия.
@@ -29,10 +29,10 @@ type Action = Object;
 ## Редюсер (Reducer)
 
 ```js
-type Reducer<S, A> = (state: S, action: A) => S;
+type Reducer<S, A> = (state: S, action: A) => S
 ```
 
-*Редюсер* (так же называемая, как "функция-редюсер") — это функция, которая принимает аккумулятор и значение и возвращает новый аккумулятор. Они используются для редуцирования (сокращения) коллекции значений в единственное значение.
+*Редюсер* (так же называемая, как *функция-редюсер*) — это функция, которая принимает аккумулятор и значение и возвращает новый аккумулятор. Они используются для редуцирования (сокращения) коллекции значений в единственное значение.
 
 Редюсеры не уникальны для Redux — они являются фундаментальным понятием в функциональном программировании. Даже большинство нефункциональных языков, как JavaScript, имеют встроенное API для редуцирования. В JavaScript это [`Array.prototype.reduce()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce).
 
@@ -45,8 +45,8 @@ type Reducer<S, A> = (state: S, action: A) => S;
 ## Функция-диспетчер (Dispatching Function)
 
 ```js
-type BaseDispatch = (a: Action) => Action;
-type Dispatch = (a: Action | AsyncAction) => any;
+type BaseDispatch = (a: Action) => Action
+type Dispatch = (a: Action | AsyncAction) => any
 ```
 
 *Функция-диспетчер* - это функция, которая принимает действие или [асинхронное действие](#async-action) и далее может или не может отправить одно или несколько действий в хранилище.
@@ -60,26 +60,26 @@ type Dispatch = (a: Action | AsyncAction) => any;
 ## Генератор действия (Action Creator)
 
 ```js
-type ActionCreator = (...args: any) => Action | AsyncAction;
+type ActionCreator = (...args: any) => Action | AsyncAction
 ```
 *Генератор действия* - это, совершенно очевидно, функция, которая создает действие (action). Не следует путать эти два термина - еще раз, действие -  это структура данных, а генератор действия - это фабрика, которая создает действие (action).
 
-Вызов генератора действия только создает действие, но не выполняет его. Вам нужно вызвать функцию хранилища [`dispatch`](api/Store.md#dispatch) которая на самом деле вызывает изменения. Иногда мы говорим "связанные генераторы действий" имея ввиду функции, которые вызывают генератор действия и сразу же отправляют его результат соответствующей  части хранилища.
+Вызов генератора действия только создает действие, но не выполняет его. Вам нужно вызвать функцию хранилища [`dispatch`](api/Store.md#dispatch) которая на самом деле вызывает изменения. Иногда мы говорим *связанные генераторы действий* имея ввиду функции, которые вызывают генератор действия и сразу же отправляют его результат соответствующей  части хранилища.
 
 Если генератору действия надо получить текущее состояние, выполнить вызов API или вызвать побочный эффект, как переход маршрутизации, это должно быть возвращено [асихронным действием (async action)](#async-action) вместо обычного действия.
 
 ## Асинхронное действие (Async Action)
 
 ```js
-type AsyncAction = any;
+type AsyncAction = any
 ```
 *Асинхронное действие* (async action) - это значение, которое передается в вызывающую функцию (dispatching function), но пока не готово для редюсера. Это будет преобразовано при помощи [мидлвэра](#middleware) в действие или набор действий перед отправкой в базовую функцию [`dispatch()`](api/Store.md#dispatch). Асинхронные действия могут иметь различные типы в зависимости от используемых мидлвэров. Они часто являются асихронными примитивами, как промисы (Promise) или thunk, которые не передаются в редюсер немедленно, а выполняют действие, только когда операция завершена.
 
 ## Мидлвэр (Middleware)
 
 ```js
-type MiddlewareAPI = { dispatch: Dispatch, getState: () => State };
-type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch;
+type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
+type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch
 ```
 
 Мидлвэр — это функция высшего порядка, которая создает [функцию-диспетчер (dispatch function)](#dispatching-function), возвращающую новую функцию-диспетчер. Она часто возвращает [асинхронное действие](#async-action) в действия.
@@ -92,11 +92,11 @@ type Middleware = (api: MiddlewareAPI) => (next: Dispatch) => Dispatch;
 
 ```js
 type Store = {
-  dispatch: Dispatch;
-  getState: () => State;
-  subscribe: (listener: () => void) => () => void;
-  replaceReducer: (reducer: Reducer) => void;
-};
+  dispatch: Dispatch
+  getState: () => State
+  subscribe: (listener: () => void) => () => void
+  replaceReducer: (reducer: Reducer) => void
+}
 ```
 
 Хранилище — это объект, который хранит дерево состояний приложения.
@@ -112,7 +112,7 @@ type Store = {
 ## Генератор хранилища (Store creator)
 
 ```js
-type StoreCreator = (reducer: Reducer, initialState: ?State) => Store;
+type StoreCreator = (reducer: Reducer, initialState: ?State) => Store
 ```
 
 Генератор хранилища — это функция, которая создает хранилище Redux. Как и в случаи с отправляющей функцией, мы должны различать базовый генератор хранилища, [`createStore(reducer, initialState)`](api/createStore.md) экспортирумый из Redux, от генератора хранилища, возвращаемого из расширителей хранилища (store enhancers).
@@ -120,7 +120,7 @@ type StoreCreator = (reducer: Reducer, initialState: ?State) => Store;
 ## Расширитель хранилища (Store enhancer)
 
 ```js
-type StoreEnhancer = (next: StoreCreator) => StoreCreator;
+type StoreEnhancer = (next: StoreCreator) => StoreCreator
 ```
 
 Расширитель хранилища — это функция высшего порядка, которая создает генератор хранилища, возвращающий новый, расширенный генератор хранилища. Это похоже на мидлвэр тем, что позволяет вам изменять интерфейс в композиционном стиле.

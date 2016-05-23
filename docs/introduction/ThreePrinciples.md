@@ -9,17 +9,20 @@ Redux может быть описан тремя фундаментальным
 Это облегчает создание универсальных приложений. Состояние на сервере может быть сериализировано и отправлено на клиент без дополнительных усилий. Это упрощает отладку приложения, когда мы имеем дело с единственным деревом состояния. Вы также можете сохранять состояние вашего приложения для ускорения процесса разработки. И с единственным деревом состояния вы получаете функциональность типа Undo/Redo из коробки.
 
 ```js
-console.log(store.getState());
+console.log(store.getState())
 
 {
   visibilityFilter: 'SHOW_ALL',
-  todos: [{
-    text: 'Consider using Redux',
-    completed: true,
-  }, {
-    text: 'Keep all state in a single tree',
-    completed: false
-  }]
+  todos: [
+    {
+      text: 'Consider using Redux',
+      completed: true,
+    },
+    {
+      text: 'Keep all state in a single tree',
+      completed: false
+    }
+  ]
 }
 ```
 
@@ -33,12 +36,12 @@ console.log(store.getState());
 store.dispatch({
   type: 'COMPLETE_TODO',
   index: 1
-});
+})
 
 store.dispatch({
   type: 'SET_VISIBILITY_FILTER',
   filter: 'SHOW_COMPLETED'
-});
+})
 ```
 
 ### Мутации написаны, как простые функции
@@ -51,36 +54,40 @@ store.dispatch({
 ```js
 function visibilityFilter(state = 'SHOW_ALL', action) {
   switch (action.type) {
-  case 'SET_VISIBILITY_FILTER':
-    return action.filter;
-  default:
-    return state;
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter
+    default:
+      return state
   }
 }
 
 function todos(state = [], action) {
   switch (action.type) {
-  case 'ADD_TODO':
-    return [...state, {
-      text: action.text,
-      completed: false
-    }];
-  case 'COMPLETE_TODO':
-    return [
-      ...state.slice(0, action.index),
-      Object.assign({}, state[action.index], {
-        completed: true
-      }),
-      ...state.slice(action.index + 1)
-    ];
-  default:
-    return state;
+    case 'ADD_TODO':
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case 'COMPLETE_TODO':
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: true
+          })
+        }
+        return todo
+      })
+    default:
+      return state
   }
 }
 
-import { combineReducers, createStore } from 'redux';
-let reducer = combineReducers({ visibilityFilter, todos });
-let store = createStore(reducer);
+import { combineReducers, createStore } from 'redux'
+let reducer = combineReducers({ visibilityFilter, todos })
+let store = createStore(reducer)
 ```
 
 Вот и все! Теперь вы знаете все о Redux.
