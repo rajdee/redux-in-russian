@@ -53,9 +53,9 @@ Immutable и большинство похожих библиотек ортог
 function toObservable(store) {
   return {
     subscribe({ onNext }) {
-      let dispose = store.subscribe(() => onNext(store.getState()));
-      onNext(store.getState());
-      return { dispose };
+      let dispose = store.subscribe(() => onNext(store.getState()))
+      onNext(store.getState())
+      return { dispose }
     }
   }
 }

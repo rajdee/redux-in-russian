@@ -96,7 +96,7 @@ type Store = {
   getState: () => State
   subscribe: (listener: () => void) => () => void
   replaceReducer: (reducer: Reducer) => void
-};
+}
 ```
 
 Хранилище — это объект, который хранит дерево состояний приложения.

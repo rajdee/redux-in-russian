@@ -13,9 +13,9 @@
   Действие - это простой javascript объект, который описывает *что случилось*. Например:
 
     ```js
-    { type: 'LIKE_ARTICLE', articleId: 42 };
-    { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Megan' } };
-    { type: 'ADD_TODO', text: 'Read the Redux docs.'};
+    { type: 'LIKE_ARTICLE', articleId: 42 }
+    { type: 'FETCH_USER_SUCCESS', response: { id: 3, name: 'Mary' } }
+    { type: 'ADD_TODO', text: 'Read the Redux docs.' }
     ```
 
   Думайте о действии, как об очень коротком фрагменте новостей. "Мэри залайкала статью 42" или "'Прочитать документацию Redux' было добавлено в ToDo список".
@@ -30,20 +30,22 @@
     // Текущее состояние приложения (список дел и выбранный фильтр)
     let previousState = {
       visibleTodoFilter: 'SHOW_ALL',
-      todos: [{
-        text: 'Read the docs.',
-        complete: false
-      }]
-    };
+      todos: [ 
+        {
+          text: 'Read the docs.',
+          complete: false
+        }
+      ]
+    }
 
     // Выполнение действия (добавление дела)
     let action = {
       type: 'ADD_TODO',
       text: 'Understand the flow.'
-    };
+    }
 
     // Ваш редюсер возвращает следующее состояние приложения
-    let nextState = todoApp(previousState, action);
+    let nextState = todoApp(previousState, action)
     ```
 
     Обратите внимание на то, что редюсер - это чистая функция. Он только *вычисляет* следующее состояние. Он должен быть совершенно предсказуемым: тип возвращаемых данных не должен меняться, если на вход подаются данные одного типа. Он не должен совершать никаких сайд-эффектов, таких как обращение к API или маршрутизация по приложению. Все это должно происходить только после того, как действие будет совершено.
@@ -57,25 +59,25 @@
     ```js
     function todos(state = [], action) {
       // как то вычисляет nextState...
-      return nextState;
+      return nextState
     }
 
     function visibleTodoFilter(state = 'SHOW_ALL', action) {
       // как то вычисляет nextState...
-      return nextState;
+      return nextState
     }
 
     let todoApp = combineReducers({
       todos,
       visibleTodoFilter
-    });
+    })
     ```
 
   Когда вы инициируете действие, `todoApp`, которое вернул `combineReducers` вызовет оба редюсера:
 
     ```js
-    let nextTodos = todos(state.todos, action);
-    let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action);
+    let nextTodos = todos(state.todos, action)
+    let nextVisibleTodoFilter = visibleTodoFilter(state.visibleTodoFilter, action)
     ```
 
   Затем оба набора состояний будут снова собраны в единое состояние:
@@ -84,7 +86,7 @@
     return {
       todos: nextTodos,
       visibleTodoFilter: nextVisibleTodoFilter
-    };
+    }
     ```
 
   Так как [`combineReducers()`](../api/combineReducers.md) - это просто удобная утилита, Вы совершено не обязаны ее использовать. Вы можете написать главный редюсер самостоятельно!

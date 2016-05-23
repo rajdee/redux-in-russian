@@ -60,7 +60,7 @@ export function selectSubreddit(subreddit) {
   return {
     type: SELECT_SUBREDDIT,
     subreddit
-  };
+  }
 }
 ```
 
@@ -73,7 +73,7 @@ export function invalidateSubreddit(subreddit) {
   return {
     type: INVALIDATE_SUBREDDIT,
     subreddit
-  };
+  }
 }
 ```
 
@@ -82,13 +82,13 @@ export function invalidateSubreddit(subreddit) {
 Когда нужно будет фетчить посты для какого-нибудь subreddit'a мы будем посылать действие `REQUEST_POSTS`:
 
 ```js
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
 
 export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
     subreddit
-  };
+  }
 }
 ```
 
@@ -97,7 +97,7 @@ export function requestPosts(subreddit) {
 Наконец, когда сетевой запрос будет осуществлен, мы отправим действие `RECEIVE_POSTS`:
 
 ```js
-export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 
 export function receivePosts(subreddit, json) {
   return {
@@ -105,7 +105,7 @@ export function receivePosts(subreddit, json) {
     subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 ```
 
@@ -138,13 +138,16 @@ export function receivePosts(subreddit, json) {
       isFetching: false,
       didInvalidate: false,
       lastUpdated: 1439478405547,
-      items: [{
-        id: 42,
-        title: 'Confusion about Flux and Relay'
-      }, {
-        id: 500,
-        title: 'Creating a Simple Application Using React JS and Flux Architecture'
-      }]
+      items: [
+        {
+          id: 42,
+          title: 'Confusion about Flux and Relay'
+        },
+        {
+          id: 500,
+          title: 'Creating a Simple Application Using React JS and Flux Architecture'
+        }
+      ]
     }
   }
 }
@@ -164,7 +167,7 @@ export function receivePosts(subreddit, json) {
 
 >```js
 > {
->   selectedReddit: 'frontend',
+>   selectedSubreddit: 'frontend',
 >   entities: {
 >     users: {
 >       2: {
@@ -195,7 +198,7 @@ export function receivePosts(subreddit, json) {
 >       isFetching: false,
 >       didInvalidate: false,
 >       lastUpdated: 1439478405547,
->       items: [42, 100]
+>       items: [ 42, 100 ]
 >     }
 >   }
 > }
@@ -214,18 +217,18 @@ export function receivePosts(subreddit, json) {
 #### `reducers.js`
 
 ```js
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 import {
   SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
-} from '../actions';
+} from '../actions'
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
-  case SELECT_SUBREDDIT:
-    return action.subreddit;
-  default:
-    return state;
+    case SELECT_SUBREDDIT:
+      return action.subreddit
+    default:
+      return state
   }
 }
 
@@ -235,46 +238,46 @@ function posts(state = {
   items: []
 }, action) {
   switch (action.type) {
-  case INVALIDATE_SUBREDDIT:
-    return Object.assign({}, state, {
-      didInvalidate: true
-    });
-  case REQUEST_POSTS:
-    return Object.assign({}, state, {
-      isFetching: true,
-      didInvalidate: false
-    });
-  case RECEIVE_POSTS:
-    return Object.assign({}, state, {
-      isFetching: false,
-      didInvalidate: false,
-      items: action.posts,
-      lastUpdated: action.receivedAt
-    });
-  default:
-    return state;
+    case INVALIDATE_SUBREDDIT:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      })
+    case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case RECEIVE_POSTS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        items: action.posts,
+        lastUpdated: action.receivedAt
+      })
+    default:
+      return state
   }
 }
 
 function postsBySubreddit(state = {}, action) {
   switch (action.type) {
-  case INVALIDATE_SUBREDDIT:
-  case RECEIVE_POSTS:
-  case REQUEST_POSTS:
-    return Object.assign({}, state, {
-      [action.reddit]: posts(state[action.subreddit], action)
-    });
-  default:
-    return state;
+    case INVALIDATE_SUBREDDIT:
+    case RECEIVE_POSTS:
+    case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        [action.subreddit]: posts(state[action.subreddit], action)
+      })
+    default:
+      return state
   }
 }
 
 const rootReducer = combineReducers({
   postsBySubreddit,
   selectedSubreddit
-});
+})
 
-export default rootReducer;
+export default rootReducer
 ```
 
 Две части этого кода вызывают особый интерес:
@@ -284,14 +287,14 @@ export default rootReducer;
   ```js
   return Object.assign({}, state, {
     [action.subreddit]: posts(state[action.subreddit], action)
-  });
+  })
   ```
   эквивалентно этому:
 
   ```js
-  let nextState = {};
-  nextState[action.subreddit] = posts(state[action.subreddit], action);
-  return Object.assign({}, state, nextState);
+  let nextState = {}
+  nextState[action.subreddit] = posts(state[action.subreddit], action)
+  return Object.assign({}, state, nextState)
   ```
 * Мы извлекли `posts(state, action)`, который управляет состоянием конкретного списка постов. Это просто [компоновка редюсеров](../basics/Reducers.md#splitting-reducers)! Нам выбирать, как разбить/разделить редюсер на более мелкие редюсеры и в этом случае, мы доверяем обновление элементов внутри объекта функции-редюсеру `posts`. [Пример из реальной жизни](../introduction/Examples.html#real-world) идет еще дальше, показывая, как создавать фабрику редюсеров для параметризированных редюсеров постраничной навигации.
 
@@ -308,14 +311,14 @@ export default rootReducer;
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
     subreddit
-  };
+  }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -325,12 +328,12 @@ function receivePosts(subreddit, json) {
     subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 
 // Тут мы встречаемся с нашим первым thunk-генератором действий!
 // Хотя его содержимое отличается, вы должны использовать его, как и любой другой генератор действий:
-// store.dispatch(fetchPosts('reactjs'));
+// store.dispatch(fetchPosts('reactjs'))
 
 export function fetchPosts(subreddit) {
 
@@ -343,7 +346,7 @@ export function fetchPosts(subreddit) {
     // First dispatch: the app state is updated to inform
     // that the API call is starting.
 
-    dispatch(requestPosts(subreddit));
+    dispatch(requestPosts(subreddit))
 
     // The function called by the thunk middleware can return a value,
     // that is passed on as the return value of the dispatch method.
@@ -351,7 +354,7 @@ export function fetchPosts(subreddit) {
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
 
-    return fetch(`http://www.reddit.com/r/${reddit}.json`)
+    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
       .then(json =>
 
@@ -359,11 +362,11 @@ export function fetchPosts(subreddit) {
         // Here, we update the app state with the results of the API call.
 
         dispatch(receivePosts(subreddit, json))
-      );
+      )
 
       // In a real world app, you also want to
       // catch any error in the network call.
-  };
+  }
 }
 ```
 
@@ -373,7 +376,7 @@ export function fetchPosts(subreddit) {
 
 >```js
 // Добавьте это в каждый файл, где вы используете `fetch`
->import fetch from 'isomorphic-fetch';
+>import fetch from 'isomorphic-fetch'
 >```
 
 >Внутри она использует [`whatwg-fetch` полифил](https://github.com/github/fetch) на клиенте и [`node-fetch`](https://github.com/bitinn/node-fetch) на сервере, поэтому вам не понадобится менять вызовы API, если вы захотите сделать ваше приложение [универсальным](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
@@ -382,7 +385,7 @@ export function fetchPosts(subreddit) {
 
 >```js
 >// Добавьте это в самом начале вашего приложения
->import 'babel-core/polyfill';
+>import 'babel-core/polyfill'
 >```
 
 Как мы добавляем мидлвэр Redux Thunk в механизм диспетчера? Для этого мы используем метод [`applyMiddleware()`](../api/applyMiddleware.md) из Redux, как показано ниже:
@@ -390,25 +393,26 @@ export function fetchPosts(subreddit) {
 #### `index.js`
 
 ```js
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
-import { createStore, applyMiddleware } from 'redux';
-import { selectReddit, fetchPosts } from './actions';
-import rootReducer from './reducers';
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
+import { createStore, applyMiddleware } from 'redux'
+import { selectSubreddit, fetchPosts } from './actions'
+import rootReducer from './reducers'
 
-const loggerMiddleware = createLogger();
+const loggerMiddleware = createLogger()
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-  loggerMiddleware // neat middleware that logs actions
-)(createStore);
+const store = createStore(
+  rootReducer,
+  applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+    loggerMiddleware // neat middleware that logs actions
+  )
+)
 
-const store = createStoreWithMiddleware(rootReducer);
-
-store.dispatch(selectReddit('reactjs'));
+store.dispatch(selectSubreddit('reactjs'))
 store.dispatch(fetchPosts('reactjs')).then(() =>
   console.log(store.getState())
-);
+)
 ```
 
 Хорошая новость о преобразователях - они могут направлять результаты друг другу:
@@ -416,14 +420,14 @@ store.dispatch(fetchPosts('reactjs')).then(() =>
 #### `actions.js`
 
 ```js
-import fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const REQUEST_POSTS = 'REQUEST_POSTS'
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
     subreddit
-  };
+  }
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
@@ -433,26 +437,26 @@ function receivePosts(subreddit, json) {
     subreddit,
     posts: json.data.children.map(child => child.data),
     receivedAt: Date.now()
-  };
+  }
 }
 
 function fetchPosts(subreddit) {
   return dispatch => {
-    dispatch(requestPosts(subreddit));
-    return fetch(`http://www.reddit.com/r/${reddit}.json`)
+    dispatch(requestPosts(subreddit))
+    return fetch(`http://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(subreddit, json)));
-  };
+      .then(json => dispatch(receivePosts(subreddit, json)))
+  }
 }
 
 function shouldFetchPosts(state, subreddit) {
-  const posts = state.postsBySubreddit[subreddit];
+  const posts = state.postsBySubreddit[subreddit]
   if (!posts) {
-    return true;
+    return true
   } else if (posts.isFetching) {
-    return false;
+    return false
   } else {
-    return posts.didInvalidate;
+    return posts.didInvalidate
   }
 }
 
@@ -467,12 +471,12 @@ export function fetchPostsIfNeeded(subreddit) {
   return (dispatch, getState) => {
     if (shouldFetchPosts(getState(), subreddit)) {
       // Dispatch a thunk from thunk!
-      return dispatch(fetchPosts(subreddit));
+      return dispatch(fetchPosts(subreddit))
     } else {
       // Let the calling code know there's nothing to wait for.
-      return Promise.resolve();
+      return Promise.resolve()
     }
-  };
+  }
 }
 ```
 
@@ -482,8 +486,8 @@ export function fetchPostsIfNeeded(subreddit) {
 
 ```js
 store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
-  console.log(store.getState());
-);
+  console.log(store.getState())
+)
 ```
 
 >##### Примечание о серверном рендеринге

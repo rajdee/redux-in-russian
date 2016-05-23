@@ -18,40 +18,18 @@
 В этом примере показано, как использовать `compose` для расширения [хранилища](Store.md) с [`applyMiddleware`](applyMiddleware.md) и несколько инструментов для разработки из пакета [redux devtools](https://github.com/gaearon/redux-devtools).
 
 ```js
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import * as reducers from '../reducers/index';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import DevTools from './containers/DevTools'
+import reducer from '../reducers/index'
 
-let reducer = combineReducers(reducers);
-let middleware = [thunk];
-
-let finalCreateStore;
-
-// В продакшене мы хотим использовать только этот мидлвэр (middleware).
-// В разработке мы хотим использовать некоторые расширители хранилища из redux devtools.
-// UglifyJS удалит "мертвый код" в зависимости от среды сборки.
-
-if (process.env.NODE_ENV === 'production') {
-  finalCreateStore = applyMiddleware(...middleware)(createStore);
-} else {
-  finalCreateStore = compose(
-    applyMiddleware(...middleware),
-    require('redux-devtools').devTools(),
-    require('redux-devtools').persistState(
-      window.location.href.match(/[?&]debug_session=([^&]+)\b/)
-    )
-  )(createStore);
-
-  // Некоторый код без хелперов `compose`:
-  //
-  // finalCreateStore = applyMiddleware(middleware)(
-  //   require('redux-devtools').devTools()(
-  //     require('redux-devtools').persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))()
-  //   )
-  // )(createStore);
-}
-
-let store = finalCreateStore(reducer);
+const store = createStore(
+  reducer,
+  compose(
+    applyMiddleware(thunk),
+    DevTools.instrument()
+  )
+)
 ```
 
 #### Советы

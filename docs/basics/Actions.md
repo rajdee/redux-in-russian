@@ -7,8 +7,12 @@
 Например, вот действие которое представляет добавление нового пункта в список дел:
 
 ```js
+const ADD_TODO = 'ADD_TODO'
+```
+
+```js
 {
-  type: 'ADD_TODO',
+  type: ADD_TODO,
   text: 'Build my first Redux app'
 }
 ```
@@ -16,7 +20,7 @@
 Действия - это обычные JavaScript объекты. Действия должны иметь поле `type`, которое указывает на тип исполняемого действия. Типы должны, как правило, определяться как строковые константы. После того, как ваше приложение разрастется, вы можете захотеть переместить их в отдельный модуль.
 
 ```js
-import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
+import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 ```
 
 >##### Примечание к шаблону разработки
@@ -29,7 +33,7 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 
 ```js
 {
-  type: COMPLETE_TODO,
+  type: TOGGLE_TODO,
   index: 5
 }
 ```
@@ -52,31 +56,31 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
 В [традиционной реализации Flux](http://facebook.github.io/flux), генераторы действий (action creators) при выполнении часто вызывают dispatch, примерно так:
 
 ```js
-function addTodoWithDispatch(text) {
-  const action = {
+function addTodo(text) {
+  return {
     type: ADD_TODO,
     text
-  };
-  dispatch(action);
+  }
 }
 ```
 
 В противоположность этому, в Redux генераторы действий (action creators) просто возвращают action:
 
 ```js
-function addTodo(text) {
-  return {
+function addTodoWithDispatch(text) {
+  const action = {
     type: ADD_TODO,
     text
-  };
+  }
+  dispatch(action)
 }
 ```
 
 Это делает их более переносимыми (portable ориг.) и легкими для тестирования. На самом деле, чтобы запустить отправку действия - передайте результат action creator в функцию `dispatch()`:
 
 ```js
-dispatch(addTodo(text));
-dispatch(completeTodo(index));
+dispatch(addTodo(text))
+dispatch(completeTodo(index))
 ```
 
 Или создайте **связанный генератор действия (bound action creator)** который автоматически запускает отправку действия:
@@ -105,7 +109,7 @@ boundCompleteTodo(index)
  */
 
 export const ADD_TODO = 'ADD_TODO'
-export const COMPLETE_TODO = 'COMPLETE_TODO'
+export const TOGGLE_TODO = 'TOGGLE_TODO'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 
 /*
@@ -126,8 +130,8 @@ export function addTodo(text) {
   return { type: ADD_TODO, text }
 }
 
-export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index }
+export function toggleTodo(index) {
+  return { type: TOGGLE_TODO, index }
 }
 
 export function setVisibilityFilter(filter) {
