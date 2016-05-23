@@ -15,9 +15,9 @@
   * [Использование с React](/docs/basics/UsageWithReact.md)
   * [Пример: Todo List](/docs/basics/ExampleTodoList.md)
 * [Продвинутое использование](/docs/advanced/README.md)
-  * [Middleware](/docs/advanced/Middleware.md)
   * [Асинхронные действия](/docs/advanced/AsyncActions.md)
   * [Асинхронные потоки](/docs/advanced/AsyncFlow.md)
+  * [Middleware](/docs/advanced/Middleware.md)
   * Использования с React Router
   * [Пример: Reddit API](/docs/advanced/ExampleRedditAPI.md)
   * Следующие шаги
