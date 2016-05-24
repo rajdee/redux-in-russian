@@ -2,7 +2,7 @@
 
 Это полный исходный код примера выборки заголовков Reddit, который мы строили в [продвинутом руководстве](README.md).
 
-## Входная точка (Entry Points)
+## Точка Входа (Entry Points)
 
 #### `index.js`
 
@@ -19,7 +19,7 @@ render(
 )
 ```
 
-## Генераторы действий и константы (Action Creators and Constants)
+## Генераторы Действий и Константы (Action Creators and Constants)
 
 #### `actions.js`
 
@@ -182,7 +182,7 @@ export default function configureStore(initialState) {
 }
 ```
 
-## Умные компоненты (Smart Components)
+## Компоненты Контейнеры (Container Components)
 
 #### `containers/Root.js`
 
@@ -312,7 +312,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps)(AsyncApp)
 ```
 
-## Глупые компоненты (Dumb Components)
+## Компоненты Представления (Presentational Components)
 
 #### `components/Picker.js`
 
