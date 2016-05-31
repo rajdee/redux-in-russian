@@ -56,23 +56,23 @@ import { ADD_TODO, REMOVE_TODO } from '../actionTypes'
 В [традиционной реализации Flux](http://facebook.github.io/flux), генераторы действий (action creators) при выполнении часто вызывают dispatch, примерно так:
 
 ```js
-function addTodo(text) {
-  return {
-    type: ADD_TODO,
-    text
-  }
-}
-```
-
-В противоположность этому, в Redux генераторы действий (action creators) просто возвращают action:
-
-```js
 function addTodoWithDispatch(text) {
   const action = {
     type: ADD_TODO,
     text
   }
   dispatch(action)
+}
+```
+
+В противоположность этому, в Redux генераторы действий (action creators) просто возвращают action:
+
+```js
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  }
 }
 ```
 
