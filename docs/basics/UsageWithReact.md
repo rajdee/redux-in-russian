@@ -14,7 +14,7 @@
 npm install --save react-redux
 ```
 
-Если вы не используете npm, то можете взять последнюю UMD сборку из npmcdn ([development](https://npmcdn.com/react-redux@latest/dist/react-redux.js) или [production](https://npmcdn.com/react-redux@latest/dist/react-redux.min.js)). Добавив UMD сборку на страницу при помощи `<script>` тега, вы получите глобальный `window.ReactRedux`.
+Если вы не используете npm, то можете взять последнюю UMD сборку из unpkg ([development](https://unpkg.com/react-redux@latest/dist/react-redux.js) или [production](https://unpkg.com/react-redux@latest/dist/react-redux.min.js)). Добавив UMD сборку на страницу при помощи `<script>` тега, вы получите глобальный `window.ReactRedux`.
 
 ## Компоненты Представления и Компоненты Контейнеры (Presentational and Container Components)
 
