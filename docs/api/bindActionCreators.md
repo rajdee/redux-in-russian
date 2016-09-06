@@ -1,24 +1,24 @@
 # `bindActionCreators(actionCreators, dispatch)`
 
-Turns an object whose values are [action creators](../Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatch) call so they may be invoked directly.
+Преобразует объект, значениями которого являются [генераторы действий](../Glossary.md#action-creator), в объект с теми же ключами, но генераторами действий, обернутыми в вызов [`dispatch`](Store.md#dispatch, т.ч. они могут быть вызваны напрямую.
 
-Normally you should just call [`dispatch`](Store.md#dispatch) directly on your [`Store`](Store.md) instance. If you use Redux with React, [react-redux](https://github.com/gaearon/react-redux) will provide you with the [`dispatch`](Store.md#dispatch) function so you can call it directly, too.
+Как правило, вы просто должны вызвать [`dispatch`](Store.md#dispatch) прямо в вашем инстансе [`Store`](Store.md). Если вы используете Redux c React, то [react-redux](https://github.com/gaearon/react-redux) предоставит вам [`dispatch`](Store.md#dispatch) функцию, т.ч. вы также сможете вызвать его напрямую.
 
-The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn’t aware of Redux, and you don’t want to pass [`dispatch`](Store.md#dispatch) or the Redux store to it.
+Единственный случай использования для `bindActionCreators` - это когда вы хотите передать некоторые генераторы действий (action creators) вниз к компоненту, который ничего не знает о Redux и вы не хотите передавать ему [`dispatch`](Store.md#dispatch) или Redux стор.
 
-For convenience, you can also pass a single function as the first argument, and get a function in return.
+Для удобства, вы также можете передать одну функцию в качестве первого аргумента и получить функцию в ответ.
 
-#### Parameters
+#### Параметры
 
-1. `actionCreators` (*Function* or *Object*): An [action creator](../Glossary.md#action-creator), or an object whose values are action creators.
+1. `actionCreators` (*Функция* или *Объект*): [Генератор действия](../Glossary.md#action-creator) или объект, значениями которого являются генераторы действий.
 
-2. `dispatch` (*Function*): A [`dispatch`](Store.md#dispatch) function available on the [`Store`](Store.md) instance.
+2. `dispatch` (*Функция*): [`dispatch`](Store.md#dispatch) функция доступная в инстансе [`Store`](Store.md).
 
-#### Returns
+#### Возвращает
 
-(*Function* or *Object*): An object mimicking the original object, but with each function immediately dispatching the action returned by the corresponding action creator. If you passed a function as `actionCreators`, the return value will also be a single function.
+(*Функция* или *Объект*): Объект повторяющий исходный объект, но с функциями непосредственно отправляющими действие (action), возвращаемый соответствующм генератором действий. Если вы передаете единственную функцию, как `actionCreators`, возвращаемое значение также будет единственной функцией.
 
-#### Example
+#### Пример
 
 #### `TodoActionCreators.js`
 
@@ -57,13 +57,13 @@ class TodoListContainer extends Component {
     // Injected by react-redux:
     let { dispatch } = this.props
 
-    // Note: this won’t work:
+    // Примечание: так не будет работать:
     // TodoActionCreators.addTodo('Use Redux')
 
-    // You’re just calling a function that creates an action.
-    // You must dispatch the action, too!
+    // Вы просто вызываете функцию, которая создает действие.
+    // Вы также должны диспатчнуть действие (action)!
 
-    // This will work:
+    // Так будет работать:
     let action = TodoActionCreators.addTodo('Use Redux')
     dispatch(action)
   }
@@ -72,8 +72,8 @@ class TodoListContainer extends Component {
     // Injected by react-redux:
     let { todos, dispatch } = this.props
 
-    // Here’s a good use case for bindActionCreators:
-    // You want a child component to be completely unaware of Redux.
+    // Это хороший случай использования для bindActionCreators:
+    // Вы хотите, чтобы дочерний компонент, ничего не знал о Redux.
 
     let boundActionCreators = bindActionCreators(TodoActionCreators, dispatch)
     console.log(boundActionCreators)
@@ -87,9 +87,9 @@ class TodoListContainer extends Component {
                 {...boundActionCreators} />
     )
 
-    // An alternative to bindActionCreators is to pass
-    // just the dispatch function down, but then your child component
-    // needs to import action creators and know about them.
+    // Альтернативой для bindActionCreators может быть передача вниз
+    // только dispatch функции, но тогда ваш дочерний компонент
+    // должен импортировать генераторы действий и знать о них.
 
     // return <TodoList todos={todos} dispatch={dispatch} />
   }
@@ -100,8 +100,8 @@ export default connect(
 )(TodoListContainer)
 ```
 
-#### Tips
+#### Советы
 
-* You might ask: why don’t we bind the action creators to the store instance right away, like in classical Flux? The problem is that this won’t work well with universal apps that need to render on the server. Most likely you want to have a separate store instance per request so you can prepare them with different data, but binding action creators during their definition means you’re stuck with a single store instance for all requests.
+* Вы можете спросить: почему мы не привязываем генераторы действия сразу к инстансу стора, как в классическом Flux?  Проблема в том, что это не будет хорошо работать с универсальными приложениями, которые необходимо рендерить на сервере. Скорее всего, вы хотите иметь отдельный инстанс стора для каждого запроса, чтобы вы могли подготовить их с различными данными, но связывание генераторов действий во время их определения, означает, что вы привязаны к одному инстансу стора для всех запросов.
 
-* If you use ES5, instead of `import * as` syntax you can just pass `require('./TodoActionCreators')` to `bindActionCreators` as the first argument. The only thing it cares about is that the values of the `actionCreators` arguments are functions. The module system doesn’t matter.
+* Если вы используете ES5, вместо синтаксиса `import * ` вы можете просто передать `require('./TodoActionCreators')` в `bindActionCreators` в качестве первого аргумента. Единственное, что его волнует, чтобы значения аргументов `actionCreators` были функциями. Модульная система не имеет значения.
