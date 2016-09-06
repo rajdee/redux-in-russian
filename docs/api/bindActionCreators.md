@@ -1,6 +1,6 @@
 # `bindActionCreators(actionCreators, dispatch)`
 
-Преобразует объект, значениями которого являются [генераторы действий](../Glossary.md#action-creator), в объект с теми же ключами, но генераторами действий, обернутыми в вызов [`dispatch`](Store.md#dispatch, т.ч. они могут быть вызваны напрямую.
+Преобразует объект, значениями которого являются [генераторы действий](../Glossary.md#action-creator), в объект с теми же ключами, но генераторами действий, обернутыми в вызов [`dispatch`](Store.md#dispatch), т.ч. они могут быть вызваны напрямую.
 
 Как правило, вы просто должны вызвать [`dispatch`](Store.md#dispatch) прямо в вашем инстансе [`Store`](Store.md). Если вы используете Redux c React, то [react-redux](https://github.com/gaearon/react-redux) предоставит вам [`dispatch`](Store.md#dispatch) функцию, т.ч. вы также сможете вызвать его напрямую.
 
