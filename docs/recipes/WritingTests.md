@@ -4,17 +4,17 @@ Because most of the Redux code you write are functions, and many of them are pur
 
 ### Setting Up
 
-We recommend [Mocha](http://mochajs.org/) as the testing engine.
+We recommend [Jest](http://facebook.github.io/jest/) as the testing engine.
 Note that it runs in a Node environment, so you won't have access to the DOM.
 
 ```
-npm install --save-dev mocha
+npm install --save-dev jest
 ```
 
-To use it together with [Babel](http://babeljs.io), you will need to install `babel-register`:
+To use it together with [Babel](http://babeljs.io), you will need to install `babel-jest`:
 
 ```js
-npm install --save-dev babel-register
+npm install --save-dev babel-jest
 ```
 
 and configure it to use ES2015 features in `.babelrc`:
@@ -32,7 +32,7 @@ Then, add this to `scripts` in your `package.json`:
   ...
   "scripts": {
     ...
-    "test": "mocha --compilers js:babel-register --recursive",
+    "test": "jest",
     "test:watch": "npm test -- --watch"
   },
   ...
@@ -58,7 +58,6 @@ export function addTodo(text) {
 can be tested like:
 
 ```js
-import expect from 'expect'
 import * as actions from '../../actions/TodoActions'
 import * as types from '../../constants/ActionTypes'
 
@@ -188,7 +187,6 @@ export default function todos(state = initialState, action) {
 can be tested like:
 
 ```js
-import expect from 'expect'
 import reducer from '../../reducers/todos'
 import * as types from '../../constants/ActionTypes'
 
@@ -300,14 +298,13 @@ export default Header
 can be tested like:
 
 ```js
-import expect from 'expect'
 import React from 'react'
 import { shallow } from 'enzyme'
 import Header from '../../components/Header'
 
 function setup() {
   const props = {
-    addTodo: expect.createSpy()
+    addTodo: jest.fn()
   }
 
   const enzymeWrapper = shallow(<Header {...props} />)
@@ -336,9 +333,9 @@ describe('components', () => {
       const { enzymeWrapper, props } = setup()
       const input = enzymeWrapper.find('TodoTextInput')
       input.props().onSave('')
-      expect(props.addTodo.calls.length).toBe(0)
+      expect(props.addTodo.mock.calls.length).toBe(0)
       input.props().onSave('Use Redux')
-      expect(props.addTodo.calls.length).toBe(1)
+      expect(props.addTodo.mock.calls.length).toBe(1)
     })
   })
 })
@@ -411,7 +408,6 @@ Middleware functions wrap behavior of `dispatch` calls in Redux, so to test this
 #### Example
 
 ```js
-import expect from 'expect'
 import * as types from '../../constants/ActionTypes'
 import singleDispatch from '../../middleware/singleDispatch'
 
