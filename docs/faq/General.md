@@ -1,24 +1,24 @@
-# Redux FAQ: General
+# Redux FAQ: Главное
 
-## Table of Contents
+## Содержание
 
-- [When should I use Redux?](#general-when-to-use) 
-- [Can Redux only be used with React?](#general-only-react) 
-- [Do I need to have a particular build tool to use Redux?](#general-build-tools) 
+- [Когда я должен использовать Redux?](#general-when-to-use) 
+- [Должен ли Redux быть использован только с React?](#general-only-react) 
+- [Нужны ли мне дополнительные инструменты для использования Redux?](#general-build-tools) 
 
 
-## General
+## Главное
 
 <a id="general-when-to-use"></a>
-### When should I use Redux? 
+### Когда я должен использовать Redux? 
 
-Pete Hunt, one of the early contributors to React, says:
+Пит Хант(Pete Hunt), один из первых контрибьюторов React говорит:
 
-> You'll know when you need Flux. If you aren't sure if you need it, you don't need it.
+> Вы поймете, когда вам нужен Flux. Если вы не уверены, что вам это нужно, вам это не нужно.
 
-Similarly, Dan Abramov, one of the creators of Redux, says:
+Точно так же, Дэн Абрамов(Dan Abramov), один из создателей Redux, говорит:
 
-> I would like to amend this: don't use Redux until you have problems with vanilla React.
+> Я хотел бы уточнить: не используйте Redux, пока у вас есть проблемы с "ванильным" React.
 
 In general, use Redux when you have reasonable amounts of data changing over time, you need a single source of truth, and you find that approaches like keeping everything in a top-level React component's state are no longer sufficient.
 
