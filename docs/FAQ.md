@@ -1,42 +1,42 @@
 # Redux FAQ
 
-## Table of Contents
+## Содержание
 
-- **General**
-  - [When should I use Redux?](/docs/faq/General.md#general-when-to-use)
-  - [Can Redux only be used with React?](/docs/faq/General.md#general-only-react)
-  - [Do I need to have a particular build tool to use Redux?](/docs/faq/General.md#general-build-tools)
-- **Reducers**
-  - [How do I share state between two reducers? Do I have to use combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
-  - [Do I have to use the switch statement to handle actions?](/docs/faq/Reducers.md#reducers-use-switch)
-- **Organizing State**
-  - [Do I have to put all my state into Redux? Should I ever use React's setState()?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
-  - [Can I put functions, promises, or other non-serializable items in my store state?](/docs/faq/OrganizingState.md#organizing-state-non-serializable)
-  - [How do I organize nested or duplicate data in my state?](/docs/faq/OrganizingState.md#organizing-state-nested-data)
-- **Store Setup**
-  - [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](/docs/faq/StoreSetup.md#store-setup-multiple-stores)
-  - [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between next and dispatch in a middleware function?](/docs/faq/StoreSetup.md#store-setup-middleware-chains)
-  - [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
-- **Actions**
-  - [Why should type be a string, or at least serializable? Why should my action types be constants?](/docs/faq/Actions.md#actions-string-constants)
-  - [Is there always a one-to-one mapping between reducers and actions?](/docs/faq/Actions.md#actions-reducer-mappings)
-  - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](/docs/faq/Actions.md#actions-side-effects)
-  - [Should I dispatch multiple actions in a row from one action creator?](/docs/faq/Actions.md#actions-multiple-actions)
-- **Code Structure**  
-  - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](/docs/faq/CodeStructure.md#structure-file-structure)
-  - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](/docs/faq/CodeStructure.md#structure-business-logic)
-- **Performance**
-  - [How well does Redux “scale” in terms of performance and architecture?](/docs/faq/Performance.md#performance-scaling)
-  - [Won't calling “all my reducers” for each action be slow?](/docs/faq/Performance.md#performance-all-reducers)
-  - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](/docs/faq/Performance.md#performance-clone-state)
-  - [How can I reduce the number of store update events?](/docs/faq/Performance.md#performance-update-events)
-  - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](/docs/faq/Performance.md#performance-state-memory)
+- **Главное**
+  - [Когда я должен использовать Redux?](/docs/faq/General.md#general-when-to-use)
+  - [Должен ли Redux быть использован только с React?](/docs/faq/General.md#general-only-react)
+  - [Нужны ли мне дополнительные инструменты для использования Redux?](/docs/faq/General.md#general-build-tools)
+- **Редьюсеры**
+  - [Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
+  - [Должен ли я использовать оператор switch для обработки действий(actions)?](/docs/faq/Reducers.md#reducers-use-switch)
+- **Организация состояния(State)**
+  - [Могу ли я хранить все мое состояние в Redux? Должен ли я всегда использовать setState() из React?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
+  - [Могу ли я хранить функции, промисы или другие несериализируемые данные в моем хранилище состояния?](/docs/faq/OrganizingState.md#organizing-state-non-serializable)
+  - [Как мне хранить вложенные или дублирующиеся данные в моем состоянии?](/docs/faq/OrganizingState.md#organizing-state-nested-data)
+- **Настройка хранилища(Store)**
+  - [Могу ли или должен ли я создавать несколько хранилищ? Могу ли я импортировать мое хранилище напрямую и использовать его в компонентах?](/docs/faq/StoreSetup.md#store-setup-multiple-stores)
+  - [Нормально ли использовать более одного мидлвэра в моем расширителе хранилища ? В чем разница между next и dispatch в функции мидлвэра?](/docs/faq/StoreSetup.md#store-setup-middleware-chains)
+  - [Как мне подписаться на получение только части хранилища? Могу ли я получить запущенное действие как часть подписки?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
+- **Действия**
+  - [Почему тип должен быть строкой или по крайней мере сериализуемым? Почему мои типы действий должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
+  - [Всегда ли преобразование "один к одному" между редьюсерами и действиями?](/docs/faq/Actions.md#actions-reducer-mappings)
+  - [Как я могу представлять "сайд эффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов действий (action creators)”, “thunks” или “мидлвэр(middleware)” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
+  - [Должен ли я отправить несколько действий подряд от одного генератора действия?](/docs/faq/Actions.md#actions-multiple-actions)
+- **Структура кода**  
+  - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы действий и редюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [Как я должен разделять мою логику между редюсерами и генераторами действий? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
+- **Производительность**
+  - [Насколько хорошо "масштабируется" Redux “scale” с точки зрения производительности и архитектуры?](/docs/faq/Performance.md#performance-scaling)
+  - [Не будет ли вызов "всех моих редьюсеров" для каждого действия медленным?](/docs/faq/Performance.md#performance-all-reducers)
+  - [Должен ли я иметь "глубокое клонирование" моего состояния в редукторе? Не будет ли копирование моего состояния медленным?](/docs/faq/Performance.md#performance-clone-state)
+  - [Как мне уменьшить количество событий обновления хранилища?](/docs/faq/Performance.md#performance-update-events)
+  - [Будут ли проблемы с памятью из-за использования "одного дерева состояния"? Будет ли вызов большого количествая действий занимать память?](/docs/faq/Performance.md#performance-state-memory)
 - **React Redux**
-  - [Why isn't my component re-rendering, or my mapStateToProps running?](/docs/faq/ReactRedux.md#react-not-rerendering)
-  - [Why is my component re-rendering too often?](/docs/faq/ReactRedux.md#react-rendering-too-often)
-  - [How can I speed up my mapStateToProps?](/docs/faq/ReactRedux.md#react-mapstate-speed)
-  - [Why don't I have this.props.dispatch available in my connected component?](/docs/faq/ReactRedux.md#react-props-dispatch)
-  - [Should I only connect my top component, or can I connect multiple components in my tree?](/docs/faq/ReactRedux.md#react-multiple-components)
-- **Miscellaneous**
-  - [Are there any larger, “real” Redux projects?](/docs/faq/Miscellaneous.md#miscellaneous-real-projects)
-  - [How can I implement authentication in Redux?](/docs/faq/Miscellaneous.md#miscellaneous-authentication)
+  - [Почему мой компонент не перерендеривается или почему не работает mapStateToProps?](/docs/faq/ReactRedux.md#react-not-rerendering)
+  - [Почему мой компонент перерендеривается слишком часто?](/docs/faq/ReactRedux.md#react-rendering-too-often)
+  - [Как я могу ускорить mapStateToProps?](/docs/faq/ReactRedux.md#react-mapstate-speed)
+  - [Почему у меня недоступен this.props.dispatch в моем подсоединенном компоненте?](/docs/faq/ReactRedux.md#react-props-dispatch)
+  - [Должен ли я подключить(connect) только мой корневой компонент или я могу подключить несколько компонентов в моем дереве?](/docs/faq/ReactRedux.md#react-multiple-components)
+- **Разное**
+  - [Существуют ли большие, "настоящие" проекты на Redux?](/docs/faq/Miscellaneous.md#miscellaneous-real-projects)
+  - [Как мне реализовать аутентификацию в Redux?](/docs/faq/Miscellaneous.md#miscellaneous-authentication)
