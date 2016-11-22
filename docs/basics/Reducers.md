@@ -99,7 +99,7 @@ function todoApp(state = initialState, action) {
 
 Обратите внимание:
 
-1. **Мы не изменяем `state`**. Мы создаем копию с помощью [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign). 
+1. **Мы не изменяем `state`**. Мы создаем копию с помощью [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 `Object.assign(state, { visibilityFilter: action.filter })` тоже неверный вариант: в этом случае первый аргумент будет изменен.
 Вы **должны** передать первым аргументом пустой объект. Вы также можете разрешить [object spread operator proposal](../recipes/UsingObjectSpreadOperator.md), чтобы вместо этого писать `{ ...state, ...newState }` .
 

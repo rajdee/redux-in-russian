@@ -12,34 +12,37 @@
 <a id="general-when-to-use"></a>
 ### Когда я должен использовать Redux? 
 
-Пит Хант(Pete Hunt), один из первых контрибьюторов React говорит:
+Пит Хант (Pete Hunt), один из первых контрибьюторов React говорит:
 
 > Вы поймете, когда вам нужен Flux. Если вы не уверены, что вам это нужно, вам это не нужно.
 
-Точно так же, Дэн Абрамов(Dan Abramov), один из создателей Redux, говорит:
+В тоже время, Дэн Абрамов (Dan Abramov), один из создателей Redux, говорит:
 
 > Я хотел бы уточнить: не используйте Redux, пока у вас есть проблемы с "ванильным" React.
 
-In general, use Redux when you have reasonable amounts of data changing over time, you need a single source of truth, and you find that approaches like keeping everything in a top-level React component's state are no longer sufficient.
+В общем, используйте Redux, когда у вас есть обоснованные объемы данных, изменяющихся с течением времени, когда вам нужен один источник информации и когда вы обнаружите, что подходов, типа хранения всего в стейте высокоуровненого React-компонента уже недостаточно.
 
-However, it's also important to understand that using Redux comes with tradeoffs.  It's not designed to be the shortest or fastest way to write code.  It's intended to help answer the question "When did a certain slice of state change, and where did the data come from?", with predictable behavior.  It does so by asking you to follow specific constraints in your application: store your application's state as plain data, describe changes as plain objects, and handle those changes with pure functions that apply updates immutably.  This is often the source of complaints about "boilerplate".  These constraints require effort on the part of a developer, but also open up a number of additional possibilities (such as store persistence and synchronization).
+Тем не менее, также важно понимать, что использование Redux сопряжено с компромиссами. Он не создан, чтобы быть самым коротким или самым быстрым способом написания кода.
+Он предназначен, для того, чтобы помочь ответить на вопрос "Когда же изменилась определенная часть состояния или откуда эти данные" с предсказуемым поведением. Он делает это, прося вас следовать определенным требованиям в вашем приложении:
+хранить состояние вашего приложения в виде простой структуры данных, описывать изменения в виде простых объектов и обрабатывать эти изменения с помощью чистых функций, которые применяют изменения ммутабельно. Это часто является источником жалоб на "шаблонность". Эти ограничения требуют усилий со стороны разработчика, но также и предоставляют ряд дополнительных возможностей (например, сохранение стора и синхронизация).
 
-If you're just learning React, you should probably focus on thinking in React first, then look at Redux once you better understand React and how Redux might fit into your application.
+Если вы пока только изучаете React, вы вероятно должны, в первую очередь, сфокусироваться на мышлении в рамках React, а затем посмотреть на Redux, как только вы лучше поймете React и как Redux может вписаться в ваше приложение.
 
-In the end, Redux is just a tool.  It's a great tool, and there's some great reasons to use it, but there's also reasons you might not want to use it.   Make informed decisions about your tools, and understand the tradeoffs involved in each decision.
+В конце концов, Redux - это всего лишь инструмент. Это отличный инструмент и есть некоторое количество отличных причин, чтобы использовать его, но есть также причины, когды вы можете не захотеть использовать его.
+Принимайте обоснованные решения о своих инструментах и понимайте компромиссы, участвующих в каждом решении.
 
-#### Further information
+#### Дальнейшая информация
 
-**Documentation**
+**Документация**
 - [Introduction: Motivation](/docs/introduction/Motivation.md)
 
-**Articles**
+**Статьи**
 
 - [React How-To](https://github.com/petehunt/react-howto)
 - [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
 - [The Case for Flux](https://medium.com/swlh/the-case-for-flux-379b7d1982c6)
 
-**Discussions**
+**Обсуждения**
 
 - [Twitter: Don't use Redux until...](https://twitter.com/dan_abramov/status/699241546248536064)
 - [Twitter: Redux is designed to be predictable, not concise](https://twitter.com/dan_abramov/status/733742952657342464)
@@ -53,16 +56,15 @@ In the end, Redux is just a tool.  It's a great tool, and there's some great rea
 
 
 <a id="general-only-react"></a>
-### Can Redux only be used with React?
+### Должен ли Redux быть использован только с React?
 
-Redux can be used as a data store for any UI layer. The most common usage is with React and React Native, but there are bindings available for Angular, Angular 2, Vue, Mithril, and more. Redux simply provides a subscription mechanism which can be used by any other code. That said, it is most useful when combined with a declarative view implementation that can infer the UI updates from the state changes, such as React or one of the similar libraries available.
-
+Redux может быть использован в качестве хранилища данных с любым уровнем представления. Чаще всего он используется с React и React Native, но также доступны биндинги для Angular, Angular 2, Vue, Mithril и других. Redux просто предоставляет механизм подписки, который может быть использован любым другим кодом. Тем не менее, это наиболее полезно в сочетании с декларативной реализацией представления, которая могут иметь зависимость обновления пользовательского интерфейса от изменений состояния, такие как React или одна из подобных библиотек.
 
 <a id="general-build-tools"></a>
-### Do I need to have a particular build tool to use Redux?
+### Нужны ли мне дополнительные инструменты для использования Redux?
 
-Redux is originally written in ES6 and transpiled for production into ES5 with Webpack and Babel. You should be able to use it regardless of your JavaScript build process. Redux also offers a UMD build that can be used directly without any build process at all. The [counter-vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) example demonstrates basic ES5 usage with Redux included as a `<script>` tag. As the relevant pull request says:
+Redux изначально написан на ES6 и транспилирован в ES5 при помощи Webpack и Babel. Вы должны быть в состоянии использовать его независимо от процесса сборки JavaScript. Redux также предоставляет UMD сборку, которую можно использовать непосредственно без какого-либо процесса сборки вообще. Пример [counter-vanilla](https://github.com/reactjs/redux/tree/master/examples/counter-vanilla) демонстрирует основы использования ES5 с Redux,  подключенного при помощи тега `<script>`. Как соответствующий pull request говорит:
 
-> The new Counter Vanilla example is aimed to dispel the myth that Redux requires Webpack, React, hot reloading, sagas, action creators, constants, Babel, npm, CSS modules, decorators, fluent Latin, an Egghead subscription, a PhD, or an Exceeds Expectations O.W.L. level.
+> Новый пример Counter Vanilla призван развеять миф о том, что Redux`у необходим Webpack, React, hot reloading, саги, генераторы действий, константы, Babel, npm, CSS модули, декораторы, беглый латинский, подписка на Egghead, степень доктора философии или уровень "Выше Ожидаемого" СОВ.
 
->Nope, it's just HTML, some artisanal `<script>` tags, and plain old DOM manipulation. Enjoy!
+>Неа, это всего лишь HTML, несколько кустарных `<script>` тэгов и старые добрые манипуляции с DOM. Наслаждайтесь!
