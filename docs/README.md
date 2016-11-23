@@ -62,5 +62,5 @@
   * [bindActionCreators](/docs/api/bindActionCreators.md)
   * [compose](/docs/api/compose.md)
 * [История изменений](/CHANGELOG.md)
-* [Меценаты](/PATRONS.md)
+* [Спонсоры](/PATRONS.md)
 * [Обратная связь](/docs/Feedback.md)
