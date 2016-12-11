@@ -1,7 +1,7 @@
 ## Содержание
 
 * [Памятка](/README.md)
-* [Вступление](/docs/introduction/README.md)
+* [Введение](/docs/introduction/README.md)
   * [Мотивация](/docs/introduction/Motivation.md)
   * [Три принципа](/docs/introduction/ThreePrinciples.md)
   * [Предшественники](/docs/introduction/PriorArt.md)
