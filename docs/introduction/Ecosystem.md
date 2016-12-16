@@ -76,8 +76,8 @@ Redux - это небольшая библиотека, в которой сог
 
 * [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — Дружелюбный стандарт для Flux action объектов
 * [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — Слишком самоуверенный (opinionated) стандарт для структуры вложенных редюсеров
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — Предложение по свзяыванию редюсеров, типов действий и действий
+* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — Предложение по связыванию редюсеров, типов действий и действий
 
 ## Прочее (More)
 
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) обширный список репозиториев, имеющих отношение к Redux.
+[Awesome Redux](https://github.com/xgrommx/awesome-redux) — обширный список репозиториев, имеющих отношение к Redux.
