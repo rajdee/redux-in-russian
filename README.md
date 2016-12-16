@@ -148,7 +148,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 ### Документация
 
-* [Вступление](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/index.html)
+* [Введение](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/index.html)
 * [Основы](https://rajdee.gitbooks.io/redux-in-russian/content/docs/basics/index.html)
 * [Продвинутое использование](https://rajdee.gitbooks.io/redux-in-russian/content/docs/advanced/index.html)
 * [Рецепты](https://rajdee.gitbooks.io/redux-in-russian/content/docs/recipes/index.html)
