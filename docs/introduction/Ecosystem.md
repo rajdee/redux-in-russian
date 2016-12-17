@@ -80,4 +80,4 @@ Redux - это небольшая библиотека, в которой сог
 
 ## Прочее (More)
 
-[Awesome Redux](https://github.com/xgrommx/awesome-redux) - обширный список репозиториев, имеющих отношение к Redux.
+[Awesome Redux](https://github.com/xgrommx/awesome-redux) — обширный список репозиториев, имеющих отношение к Redux.
