@@ -9,7 +9,7 @@
   * [Примеры](/docs/introduction/Examples.md)
 * [Основы](/docs/basics/README.md)
   * [Действия](/docs/basics/Actions.md)
-  * [Редьюсеры](/docs/basics/Reducers.md)
+  * [Редюсеры](/docs/basics/Reducers.md)
   * [Хранилище](/docs/basics/Store.md)
   * [Поток данных](/docs/basics/DataFlow.md)
   * [Использование с React](/docs/basics/UsageWithReact.md)
