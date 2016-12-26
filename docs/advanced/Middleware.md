@@ -174,7 +174,7 @@ applyMiddlewareByMonkeypatching(store, [ logger, crashReporter ])
 ```
 
 Тем не менее это все еще monkeypatching.
-Факто того, что мы прячем его внутри библиотеки не отменяет использования monkeypatching.
+Факт того, что мы прячем его внутри библиотеки не отменяет использования monkeypatching.
 
 ### Попытка #5: Убираем Monkeypatching
 
