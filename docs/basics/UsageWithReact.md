@@ -294,7 +294,7 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-Это основы React Redux API, но там есть несколько комбинаций и мощных опций, поэтому мы рекомендуем вам подробно изучить [эту документацию](https://github.com/reactjs/react-redux). В случае если вы переживаете что `mapStateToProps` создает слишком много новых объектов, то вам будет полезно узнать о [вычислении полученных данных](../recipes/ComputingDerivedData.md) и [reselect](https://github.com/rackt/reselect).
+Это основы React Redux API, но там есть несколько комбинаций и мощных опций, поэтому мы рекомендуем вам подробно изучить [эту документацию](https://github.com/reactjs/react-redux). В случае если вы переживаете что `mapStateToProps` создает слишком много новых объектов, то вам будет полезно узнать о [вычислении полученных данных](../recipes/ComputingDerivedData.md) и [reselect](https://github.com/reactjs/reselect).
 
 Остальные компоненты контейнеры вы найдете ниже:
 
