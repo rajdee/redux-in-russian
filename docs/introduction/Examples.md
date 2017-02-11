@@ -1,6 +1,6 @@
 # Примеры
 
-Redux распространяется с несколькими примерами в своих [исходных кодах](https://github.com/rackt/redux/tree/master/examples).
+Redux распространяется с несколькими примерами в своих [исходных кодах](https://github.com/reactjs/redux/tree/master/examples).
 **Для того, чтобы запустить любой из них, достаточно склонировать репозиторий и запустить `npm install` в родительской директории и в директории примера.**
 
 >##### Особенности при копировании
@@ -24,7 +24,7 @@ Redux распространяется с несколькими примера�
 
 ## Счетчик
 
-Запуск примера [счетчика](https://github.com/rackt/redux/tree/master/examples/counter):
+Запуск примера [счетчика](https://github.com/reactjs/redux/tree/master/examples/counter):
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -46,7 +46,7 @@ open http://localhost:3000/
 
 ## TodoMVC
 
-Запуск [TodoMVC](https://github.com/rackt/redux/tree/master/examples/todomvc):
+Запуск [TodoMVC](https://github.com/reactjs/redux/tree/master/examples/todomvc):
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -69,7 +69,7 @@ open http://localhost:3000/
 
 ## Async
 
-Запуск [Async](https://github.com/rackt/redux/tree/master/examples/async):
+Запуск [Async](https://github.com/reactjs/redux/tree/master/examples/async):
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -92,7 +92,7 @@ open http://localhost:3000/
 
 ## Real World
 
-Запуск примера [Real World](https://github.com/rackt/redux/tree/master/examples/real-world):
+Запуск примера [Real World](https://github.com/reactjs/redux/tree/master/examples/real-world):
 
 ```
 git clone https://github.com/gaearon/redux.git
@@ -118,7 +118,7 @@ open http://localhost:3000/
 
 ## Shopping Cart
 
-Запуск примера [Shopping Cart](https://github.com/rackt/redux/tree/master/examples/shopping-cart):
+Запуск примера [Shopping Cart](https://github.com/reactjs/redux/tree/master/examples/shopping-cart):
 
 ```
 git clone https://github.com/gaearon/redux.git
