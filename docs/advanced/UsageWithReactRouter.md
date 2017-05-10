@@ -1,66 +1,66 @@
 # Использование с React Router
 
-So you want to do routing with your Redux app. You can use it with [React Router](https://github.com/reactjs/react-router). Redux will be the source of truth for your data and React Router will be the source of truth for your URL. In most of the cases, **it is fine** to have them separate unless you need to time travel and rewind actions that triggers the change URL.
+Итак, Вы хотите использовать маршрутизацию с Вашим Redux-приложением. Для этого Вы можете использовать [React Router](https://github.com/reactjs/react-router). Тогда Redux будет источником правдивых данных, а React Router — единственным источником URL. В большинстве случаев, ***правильно*** разделять эти понятия, но дех пор, пока Вам не понадобится путешествовать во времени (Time Travel) и перематывать действия, которые изменяют URL.
 
-## Installing React Router
-`react-router` is available on npm . This guides assumes you are using `react-router@^2.7.0`.
+## Установка React Router
+`react-router` доступно в npm . В этом руководстве преполагается использование версии `react-router@^2.7.0`.
 
 `npm install --save react-router`
 
-## Configuring the Fallback URL
+## Настройка запасного URL
 
-Before integrating React Router, we need to configure our development server. Indeed, our development server may be unaware of the declared routes in React Router configuration. For example, if you access `/todos` and refresh, your development server needs to be instructed to serve `index.html` because it is a single-page app. Here's how to enable this with popular development severs.
+Перед внедрением React Router нам требуется настроить наш сервер разработки. Конечно, наш сервер может не знать о роутах, заявленных в настройках React Router. Например, если Вы переходите по ссылке `/todos`, то Ваш сервер должен возвращать `index.html`, так как это одностраничное приложение. Далее идут примеры настройки популярных серверов.
 
->### Note on Create React App
+>### Важно при использовании Create React App
 
-> If you are using Create React App, you won't need to configure a fallback URL, it is automatically done.
+> Если Вы используете Create React App, то Вам не требуется настраивать запасной URL. Это уже сделано автоматически.
 
-### Configuring Express
-If you are serving your `index.html` from Express:
+### Настройка Express
+Если Вы получаете `index.html` из Express:
 ``` js
   app.get('/*', (req,res) => {
     res.sendfile(path.join(__dirname, 'index.html'))
   })
 ```
 
-### Configuring WebpackDevServer
-If you are serving your `index.html` from WebpackDevServer:
-You can add to your webpack.config.dev.js:
+### Настройка WebpackDevServer
+Если Вы получаете `index.html` из WebpackDevServer:
+Добавьте в webpack.config.dev.js:
 ```js
   devServer: {
     historyApiFallback: true,
   }
 ```
 
-## Connecting React Router with Redux App
+## Подключение React Router к Redux-приложению
 
-Along this chapter, we will be using the [Todos](https://github.com/reactjs/redux/tree/master/examples/todos) example. We recommend you to clone it while reading this chapter.
+В этой главе мы будем использовать наш пример [Todos](https://github.com/reactjs/redux/tree/master/examples/todos). Рекомендуем Вам склонировать его для этой главы.
 
-First we will need to import `<Router />` and `<Route />` from React Router. Here's how to do it:
+Во-первых, нам надо импортировать `<Router />` и `<Route />` из React Router. Вот как это делается:
 
 ```js
 import { Router, Route, browserHistory } from 'react-router';
 ```
 
-In a React app, usually you would wrap `<Route />` in `<Router />` so that when the URL changes, `<Router />` will match a branch of its routes, and render their configured components. `<Route />` is used to declaratively map routes to your application's component hierarchy. You would declare in `path` the path used in the URL and in `component` the single component to be rendered when the route matches the URL.
+В React-приложении обычно `<Route />` оборачивается в `<Router />`, так что, когда URL меняется, `<Router />` находит часть свои роутов и рендерит их сформированные компоненты. `<Route />` используется для (неофициального) сопоставления роутов иерархии компонентов вашего приложения. Вы можете объявить в `path` путь, используемый в URL, и в `component` — компонент, который должен быть сгенерирован при совпадении с этим URL.
 
 ```js
 const Root = () => (
   <Router>
     <Route path="/" component={App} />
-  </Router>  
+  </Router>
 );
 ```
 
-However, in our Redux App we will still need `<Provider />`. `<Provider />` is the higher-order component provided by React Redux that lets you bind Redux to React (see [Usage with React](../basics/UsageWithReact.md)).
+Однако, в нашем Redux-приложении нам все еще требуется `<Provider />` — компонент высшего порядка, поставляемый с React Redux, который позволяет привязать Redux к React (см. [Использование с React](../basics/UsageWithReact.md)).
 
-We will then import the `<Provider />` from React Redux:
+Далее мы импортируем `<Provider />` из React Redux:
 
 ```js
 import { Provider } from 'react-redux';
 ```
 
-We will wrap `<Router />` in `<Provider />` so that route handlers can get [access to the `store`](http://redux.js.org/docs/basics/UsageWithReact.html#passing-the-store).
+Обернем `<Router />` в `<Provider />`, таким образом обработчики маршрутизации смогут получить [доступ к `хранилищу`](../basics/UsageWithReact.html#передаем-хранилище).
 
 ```js
 const Root = ({ store }) => (
@@ -72,19 +72,19 @@ const Root = ({ store }) => (
 );
 ```
 
-Now `<App />` component will be rendered if the URL match '/'. Additionally, we will add the optional `(:filter)` parameter to `/`, we will need it further below when we will try to read the parameter `(:filter)` from the URL.
+Теперь `<App />` компонент будет отрендерен, если URL содержит '/'. Кроме того, мы будем добавлять необязательный `(:filter)` параметр к `/`. Нам это потребуется позже, когда мы будем читать параметр `(:filter)` из URL.
 
 ```js
 <Route path="/(:filter)" component={App} />
 ```
 
-You will probably want to remove the hash from URL (e.g: `http://localhost:3000/#/?_k=4sbb0i`). For doing this, you will need to also import `browserHistory` from React Router:
+Вероятно, Вы хотите убрать хеш из URL (например: `http://localhost:3000/#/?_k=4sbb0i`). Для этого вам потребуется импортировать `browserHistory` из React Router:
 
 ```js
 import { Router, Route, browserHistory } from 'react-router';
 ```
 
-and pass it to the `<Router />` in order to remove the hash from the URL:
+и передать её в `<Router />` для удаления хеша из URL:
 
 ```js
     <Router history={browserHistory}>
@@ -92,7 +92,7 @@ and pass it to the `<Router />` in order to remove the hash from the URL:
     </Router>
 ```
 
-Unless you are targeting old browsers like IE9, you can always use `browserHistory`.
+Если Вам нужна поддержка таких старых браузеров, как IE9, то Вы также можете использовать `browserHistory`.
 
 #### `components/Root.js`
 ``` js
@@ -116,10 +116,9 @@ Root.propTypes = {
 export default Root;
 ```
 
-## Navigating with React Router
+## Навигация при помощи React Router
 
-React Router comes with a [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link) component that let you navigate around your application. We can use it in our example and change our container `<FilterLink />` component so we can change the URL using `<FilterLink />`. The `activeStyle={}` property lets you apply a style on the active state.
-
+React Router поставляется с компонентом [`<Link />`](https://github.com/reactjs/react-router/blob/master/docs/API.md#link), который позволяет перемещаться по приложению. Мы можем использовать его в нашем компоненте-контейнере `<FilterLink />`, таким образом мы сможем изменять URL при помощи `<FilterLink />`. Параметр `activeStyle={}` позволяется применить стиль активного состояния.
 
 #### `containers/FilterLink.js`
 ```js
@@ -167,27 +166,28 @@ const Footer = () => (
 export default Footer
 ```
 
-Now if you click on `<FilterLink />` you will see that your URL will change from `'/complete'`, `'/active'`, `'/'`. Even if you are going back with your browser, it will use your browser's history and effectively go to your previous URL.
+Теперь, если Вы кликнете на `<FilterLink />`, Вы увидите, что URL изменится с `'/completed'`, `'/active'`, `'/'`. Даже если Вы захотите перейти назад, использую соответствующую кнопку браузера, приложение будет использовать для этого историю Вашего браузера и успешно перейдет к предыдущему URL.
 
-## Reading From the URL
+## Чтение из URL
 
-Currently, the todo list is not filtered even after the URL changed. This is because we are filtering from `<VisibleTodoList />`'s `mapStateToProps()` is still bound to the `state` and not to the URL. `mapStateToProps` has an optional second argument `ownProps` that is an object with every props passed to `<VisibleTodoList />`
+Сейчас todo list не фильтруется после изменения URL. Это происходит потому, что фильтрация описана в функции `mapStateToProps()` компонента `<VisibleTodoList />`, которая в свою очередь связана с `состоянием`, а не с URL. `mapStateToProps` имеет второй необязательный аргумент `ownProps` — объект, содержащий все параметры, переданные в `<VisibleTodoList />`.
+
 #### `containers/VisibleTodoList.js`
 ```js
 const mapStateToProps = (state, ownProps) => {
   return {
-    todos: getVisibleTodos(state.todos, ownProps.filter) // previously was getVisibleTodos(state.todos, state.visibilityFilter)
+    todos: getVisibleTodos(state.todos, ownProps.filter) // ранее было getVisibleTodos(state.todos, state.visibilityFilter)
   };
 };
 ```
 
-Right now we are not passing anything to `<App />` so `ownProps` is an empty object. To filter our todos according to the URL, we want to pass the URL params to `<VisibleTodoList />`.
+В данный момент мы ничего не передаем в `<App />`, поэтому `ownProps` является пустым объектом. Чтобы отфильтровать наши todos в соответствии с URL, нам надо передать параметры URL в `<VisibleTodoList />`.
 
-When previously we wrote:  `<Route path="/(:filter)" component={App} />`, it made available inside `App` a `params` property.
+Когда мы написали:  `<Route path="/(:filter)" component={App} />`, это позволило в компоненте `App` получить доступ к параметру `params`.
 
-`params` property is an object with every param specified in the url. *e.g: `params` will be equal to `{ filter: 'completed' }` if we are navigating to `localhost:3000/completed`. We can now read the URL from `<App />`.*
+Параметр `params` — это объект со всеми параметрами из URL. *например: `params` эквивалетно `{ filter: 'completed' }`, если URL `localhost:3000/completed`. Теперь мы можем считывать URL из компонента `<App />`.*
 
-Note that we are using [ES6 destructuring](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) on the properties to pass in `params` to `<VisibleTodoList />`.
+Важно помнить, что мы используем [ES6 деструкцию](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) на параметрах, чтобы передать их в `params` в `<VisibleTodoList />`.
 
 #### `components/App.js`
 ```js
@@ -204,12 +204,12 @@ const App = ({ params }) => {
 };
 ```
 
-## Next Steps
+## Следующие шаги
 
-Now that you know how to do basic routing, you can learn more about [React Router API](https://github.com/reactjs/react-router/tree/master/docs)
+Теперь, когда мы знаем основы создания простой навигации, мы можешь перейти к изучению [React Router API](https://github.com/reactjs/react-router/tree/master/docs).
 
->##### Note About Other Routing Libraries
+>##### Помните, что существуют и другие библиотеки для навигации по приложению
 
->*Redux Router* is an experimental library, it lets you keep entirely the state of your URL inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
+>*Redux Router* — экспериментальная библиотека, она позволяет Вам хранить все состояние Вашего URL в хранилище redux. У нее то же самое API, что и у React Router, но сообщество и поддержка меньше, чем у React Router.
 
->*React Router Redux* creates binding between your redux app and react-router and it keeps them in sync. Without this binding, you will not be able to rewind the actions with Time Travel. Unless you need this, React-router and Redux can operates completely apart.
+>*React Router Redux* создает связь между Вашим Redux-приложением и React Router и позволяет их синхронизировать. Без этой связи у Вас не будет возможности перемещаться по действиям при помощи Time Travel. Пока Вам это не требуется, React-router и Redux могут работать совершенно независимо.
