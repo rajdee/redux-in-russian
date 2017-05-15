@@ -10,3 +10,4 @@
 * [Вычисление полученных данных](ComputingDerivedData.md)
 * [Реализация истории отмен](ImplementingUndoHistory.md)
 * [Изолирование саб-приложений](IsolatingSubapps.md)
+* [Использования Immutable.JS с Redux](UsingImmutableJS.md)

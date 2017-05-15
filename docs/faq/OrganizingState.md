@@ -24,7 +24,7 @@
 - Важна ли Вам возможность восстанавливать это состояние в какой-то момент времени, т.е. отладка по времени (time travel debugging)?
 - Требуется ли кэшировать данные, т.е. использовать то, что уже хранится в состоянии вместо повторного запроса?
 
-Существует несколько пакетов, реализующих различные подходы к хранению данных в Redux-хранилище вместо состояния компонента, таких как: [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local) и другие. Они также позволяют применять принципы Redux и концепцию редьюсера к задачам обновления локального состояни компонента, поддерживая идею `this.setState( (previousState) => reducer(previousState, someAction))`.
+Существует несколько пакетов, реализующих различные подходы к хранению данных в Redux-хранилище вместо состояния компонента, таких как: [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local) и другие. Они также позволяют применять принципы Redux и концепцию редюсера к задачам обновления локального состояни компонента, поддерживая идею `this.setState( (previousState) => reducer(previousState, someAction))`.
 
 #### Дополнительная информация
 

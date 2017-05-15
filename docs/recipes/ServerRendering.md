@@ -34,6 +34,8 @@ npm install --save express react-redux
 
 The following is the outline for what our server side is going to look like. We are going to set up an [Express middleware](http://expressjs.com/guide/using-middleware.html) using [app.use](http://expressjs.com/api.html#app.use) to handle all requests that come in to our server. If you're unfamiliar with Express or middleware, just know that our handleRender function will be called every time the server receives a request.
 
+Additionally, as we are using ES6 and JSX syntax, we will need to compile with [Babel](https://babeljs.io/) (see [this example of a Node Server with Babel](https://github.com/babel/example-node-server)) and the [React preset](https://babeljs.io/docs/plugins/preset-react/).
+
 ##### `server.js`
 
 ```js
@@ -47,6 +49,9 @@ import App from './containers/App'
 
 const app = Express()
 const port = 3000
+
+//Serve static files
+app.use('/static', Express.static('static'));
 
 // This is fired every time the server side receives a request
 app.use(handleRender)
@@ -64,7 +69,7 @@ The first thing that we need to do on every request is create a new Redux store 
 
 When rendering, we will wrap `<App />`, our root component, inside a `<Provider>` to make the store available to all components in the component tree, as we saw in [Usage with React](../basics/UsageWithReact.md).
 
-The key step in server side rendering is to render the initial HTML of our component _**before**_ we send it to the client side. To do this, we use [ReactDOMServer.renderToString()](https://facebook.github.io/react/docs/top-level-api.html#reactdomserver.rendertostring).
+The key step in server side rendering is to render the initial HTML of our component _**before**_ we send it to the client side. To do this, we use [ReactDOMServer.renderToString()](https://facebook.github.io/react/docs/react-dom-server.html#rendertostring).
 
 We then get the initial state from our Redux store using [`store.getState()`](../api/Store.md#getState). We will see how this is passed along in our `renderFullPage` function.
 
@@ -109,7 +114,9 @@ function renderFullPage(html, preloadedState) {
       <body>
         <div id="root">${html}</div>
         <script>
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState)}
+          // WARNING: See the following for security issues around embedding JSON in HTML:
+          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
         </script>
         <script src="/static/bundle.js"></script>
       </body>
@@ -117,10 +124,6 @@ function renderFullPage(html, preloadedState) {
     `
 }
 ```
-
->##### Note on String Interpolation Syntax
-
->In the example above, we use ES6 [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/template_strings) syntax. It lets us write multiline strings and interpolate values, but it requires ES6 support. If you'd like to write your Node code using ES6, check out [Babel require hook](https://babeljs.io/docs/usage/require/) documentation. Or you can just keep writing ES5 code.
 
 ## The Client Side
 
@@ -138,9 +141,12 @@ import { Provider } from 'react-redux'
 import App from './containers/App'
 import counterApp from './reducers'
 
-// Grab the state from a global injected into server-generated HTML
+// Grab the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__
 
+// Allow the passed state to be garbage-collected
+delete window.__PRELOADED_STATE__
+ 
 // Create Redux store with initial state
 const store = createStore(counterApp, preloadedState)
 
@@ -276,7 +282,7 @@ In our example, we take a rudimentary approach to security. When we obtain the p
 
 For our simplistic example, coercing our input into a number is sufficiently secure. If you're handling more complex input, such as freeform text, then you should run that input through an appropriate sanitization function, such as [validator.js](https://www.npmjs.com/package/validator).
 
-Furthermore, you can add additional layers of security by sanitizing your state output. `JSON.stringify` can be subject to script injections. To counter this, you can scrub the JSON string of HTML tags and other dangerous characters. This can be done with either a simple text replacement on the string or via more sophisticated libraries such as [serialize-javascript](https://github.com/yahoo/serialize-javascript).
+Furthermore, you can add additional layers of security by sanitizing your state output. `JSON.stringify` can be subject to script injections. To counter this, you can scrub the JSON string of HTML tags and other dangerous characters. This can be done with either a simple text replacement on the string, e.g. `JSON.stringify(state).replace(/</g, '\\u003c')`, or via more sophisticated libraries such as [serialize-javascript](https://github.com/yahoo/serialize-javascript).
 
 ## Next Steps
 

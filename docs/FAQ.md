@@ -6,8 +6,8 @@
   - [Когда я должен использовать Redux?](/docs/faq/General.md#general-when-to-use)
   - [Должен ли Redux быть использован только с React?](/docs/faq/General.md#general-only-react)
   - [Нужны ли мне дополнительные инструменты для использования Redux?](/docs/faq/General.md#general-build-tools)
-- **Редьюсеры**
-  - [Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
+- **Редюсеры**
+  - [Как мне передавать состояние(state) между двумя редюсерами? Должен ли я использовать combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
   - [Должен ли я использовать оператор switch для обработки действий(actions)?](/docs/faq/Reducers.md#reducers-use-switch)
 - **Организация состояния(State)**
   - [Могу ли я хранить все мое состояние в Redux? Должен ли я всегда использовать setState() из React?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
@@ -19,7 +19,7 @@
   - [Как мне подписаться на получение только части хранилища? Могу ли я получить запущенное действие как часть подписки?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
 - **Действия**
   - [Почему тип действия должен быть строкой или по крайней мере сериализуемым? Почему мои типы действий должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
-  - [Всегда ли редьюсеры и действия преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
+  - [Всегда ли редюсеры и действия преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
   - [Как я могу выполнять "побочные эффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов действий”, “thunks” или “миддлвэр” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
   - [Должен ли я отправлять несколько действий подряд от одного генератора действия?](/docs/faq/Actions.md#actions-multiple-actions)
 - **Структура кода**
@@ -27,7 +27,7 @@
   - [Как я должен разделять мою логику между редюсерами и генераторами действий? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
 - **Производительность**
   - [Насколько хорошо “масштабируется” Redux с точки зрения производительности и архитектуры?](/docs/faq/Performance.md#performance-scaling)
-  - [Не будет ли вызов “всех моих редьюсеров” для каждого действия медленным?](/docs/faq/Performance.md#performance-all-reducers)
+  - [Не будет ли вызов “всех моих редюсеров” для каждого действия медленным?](/docs/faq/Performance.md#performance-all-reducers)
   - [Должен ли я иметь полноценный клон моего состояния в редюсере? Не будет ли копирование моего состояния медленным?](/docs/faq/Performance.md#performance-clone-state)
   - [Как мне уменьшить количество событий обновления хранилища?](/docs/faq/Performance.md#performance-update-events)
   - [Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества действий занимать память?](/docs/faq/Performance.md#performance-state-memory)

@@ -50,6 +50,7 @@ export default connect(mapStateToProps)(App)
 ```js
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import reducer from './reducers'
 import App from './App'
 
@@ -58,7 +59,7 @@ class SubApp extends Component {
     super(props)
     this.store = createStore(reducer)
   }
-  
+
   render() {
     return (
       <Provider store={this.store}>
