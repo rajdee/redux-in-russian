@@ -2,8 +2,8 @@
 
 ## Содержание
 
-- [Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать combineReducers?](#reducers-share-state) 
-- [Должен ли я использовать оператор switch для обработки действий(actions)?](#reducers-use-switch) 
+- [Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать combineReducers?](#reducers-share-state)
+- [Должен ли я использовать оператор switch для обработки действий(actions)?](#reducers-use-switch)
 
 
 
@@ -12,21 +12,21 @@
 <a id="reducers-share-state"></a>
 ### Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать `combineReducers`?
 
-The suggested structure for a Redux store is to split the state object into multiple “slices” or “domains” by key, and provide a separate reducer function to manage each individual data slice. This is similar to how the standard Flux pattern has multiple independent stores, and Redux provides the [`combineReducers`](/docs/api/combineReducers.md) utility function to make this pattern easier. However, it's important to note that `combineReducers` is *not* required—it is simply a utility function for the common use case of having a single reducer function per state slice, with plain JavaScript objects for the data.
+Рекомендуемая структура Redux хранилища — это разделение объекта состояния на несколько “частей” или “областей” по ключу, и предоставление отдельной функции-редьюсера для управления каждой частью данных. Это похоже на то, как стандартная Flux структура имеет несколько независимых хранилищ, а Redux предоставляет утилиту [`комбинация редьюсеров (combineReducers)`](/docs/api/combineReducers.md) для упрощения реализации этого подхода. Однако, важно заметить, что `комбинация редьюсеров` *необязательна* — это просто функция для совместного использования имеющихся редьюсеров (по одному на каждую часть состояния) с простыми JavaScript-объектами для данных.
 
-Many users later want to try to share data between two reducers, but find that `combineReducers` does not allow them to do so. There are several approaches that can be used:
+У многих пользователей возникает необходимость реализовать обмен данными между двумя редьюсерами, но `комбинация редьюсеров` не позволяет им сделать это. Существует несколько подходов для решения этой задачи:
 
-* If a reducer needs to know data from another slice of state, the state tree shape may need to be reorganized so that a single reducer is handling more of the data.
-* You may need to write some custom functions for handling some of these actions. This may require replacing `combineReducers` with your own top-level reducer function. You can also use a utility such as [reduce-reducers](https://github.com/acdlite/reduce-reducers) to run `combineReducers` to handle most actions, but also run a more specialized reducer for specific actions that cross state slices.
-* [Async action creators](advanced/AsyncActions.md) such as [redux-thunk](https://github.com/gaearon/redux-thunk) have access to the entire state through `getState()`. An action creator can retrieve additional data from the state and put it in an action, so that each reducer has enough information to update its own state slice.
+* Если редьюсеру нужны данные из другой части состояния, то дерево состояния требуется переорганизовать так, чтобы один редьюсер охватывал больше данных.
+* Вам может понадобиться написать некоторые стандартные функции для обработки некоторых из этих действий. Это требует обязательной замены `комбинации редьюсеров` на Вашу собственную функцию-редьюсер верхнего порядка. Вы также можете использовать такие утилиты, как [reduce-reducers](https://github.com/acdlite/reduce-reducers), для запуска `комбинации редьюсеров` для обработки большинства действий, но также можно запустить более специализированный редьюсер для конкретных действий, который скрещивает части состояния.
+* [Асинхронные генераторы действий](/docs/advanced/AsyncActions.md#асинхронные-генераторы-действий-async-action-creators), такие как [redux-thunk](https://github.com/gaearon/redux-thunk), имеют доступ ко всему состоянию через `getState()`. Генератор действий может извлечь дополнительные данные из состояния и передать их в действие, таким образом, каждый редьюсер имеет достаточно информации для обновления своей части состояния.
 
-In general, remember that reducers are just functions—you can organize them and subdivide them any way you want, and you are encouraged to break them down into smaller, reusable functions (“reducer composition”). While you do so, you may pass a custom third argument from a parent reducer if a child reducer needs additional data to calculate its next state. You just need to make sure that together they follow the basic rules of reducers: `(state, action) => newState`, and update state immutably rather than mutating it directly.
+В общем, помните, что редьюсеры — это всего лишь функции. Вы можете организовать их и разделить по своему усмотрению, и вам следует разбить их на более мелкие переиспользуемые функции (“композиция редьюсеров”). Пока Вы это делаете, Вы можете передавать в нестандартном третьем аргументе необходимые для вычисления следующего состояния дополнительные данные от родительского редьюсера к дочернему. Только Вам надо убедиться, что соблюдается главное правило редьюсеров: `(state, action) => newState`, и состояние не изменяется напрямую.
 
 #### Дополнительная информация
 
 **Документация**
 - [API: combineReducers](/docs/api/combineReducers.md)
-- [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
+- [Рецепты: Структурирование редюсеров](/docs/recipes/StructuringReducers.md)
 
 **Обсуждения**
 - [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reactjs/redux/issues/601)
