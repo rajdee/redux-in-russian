@@ -1,43 +1,45 @@
 # Redux FAQ: React Redux
 
-## Table of Contents
+## Содержание
 
-- [Why isn't my component re-rendering, or my mapStateToProps running?](#react-not-rerendering)
-- [Why is my component re-rendering too often?](#react-rendering-too-often)
-- [How can I speed up my mapStateToProps?](#react-mapstate-speed)
-- [Why don't I have this.props.dispatch available in my connected component?](#react-props-dispatch)
-- [Should I only connect my top component, or can I connect multiple components in my tree?](#react-multiple-components)
-
+- [Почему мой компонент не перерендеривается? Почему не работает mapStateToProps?](#react-not-rerendering)
+- [Почему мой компонент перерендеривается слишком часто?](#react-rendering-too-often)
+- [Как я могу ускорить mapStateToProps?](#react-mapstate-speed)
+- [Почему у меня недоступен this.props.dispatch в моем подсоединенном компоненте?](#react-props-dispatch)
+- [Должен ли я подключить(connect) только мой корневой компонент или я могу подключить несколько компонентов в моем дереве?](#react-multiple-components)
 
 ## React Redux
 
 <a id="react-not-rerendering"></a>
-### Why isn't my component re-rendering, or my mapStateToProps running?
+### Почему мой компонент не перерендеривается? Почему не работает mapStateToProps?
 
-Accidentally mutating or modifying your state directly is by far the most common reason why components do not re-render after an action has been dispatched. Redux expects that your reducers will update their state “immutably”, which effectively means always making copies of your data, and applying your changes to the copies. If you return the same object from a reducer, Redux assumes that nothing has been changed, even if you made changes to its contents. Similarly, React Redux tries to improve performance by doing shallow equality reference checks on incoming props in `shouldComponentUpdate`, and if all references are the same, returns `false` to skip actually updating your original component.
+Случайные мутации или изменения состояния напрямую являются наиболее частыми причинами того, что компонент не перерисоваывается после отправки действия. Redux ожидает, что Ваши редьюсеры будут обновлять свои состояни “иммутабельно”, что фактически означает, что надо делать копию данных и изменять уже копию. Если Вы возвращаете тот же самый объект в редьюсере, Redux полагает, что ничего не изменилось, даже если Вы изменили содержимое объекта. Аналогично React Redux старается улучшить производительность, делая поверхностное сравнение ссылок входных параметров в `shouldComponentUpdate`, и, если все ссылки остались такими же, возвращает `false`, пропуская обновление Вашего компонента.
 
-It's important to remember that whenever you update a nested value, you must also return new copies of anything above it in your state tree. If you have `state.a.b.c.d`, and you want to make an update to `d`, you would also need to return new copies of `c`, `b`, `a`, and `state`. This [state tree mutation diagram](http://arqex.com/wp-content/uploads/2015/02/trees.png) demonstrates how a change deep in a tree requires changes all the way up.
+Важно помнить, что всякий раз, когда вы обновляете вложенные значения, Вы должны также вернуть новые копии этих значений в Ваше дерево состояний. Если у Вас `state.a.b.c.d`, и Вы хотите обновить данные в `d`, Вам также надо будет вернуть новые копии `c`, `b`, `a`, и `state`. [state tree mutation diagram](http://arqex.com/wp-content/uploads/2015/02/trees.png) показывает, как глубокое изменение в дереве меняет весь путь.
 
-Note that “updating data immutably” does *not* mean that you must use [Immutable.js](https://facebook.github.io/immutable-js/), although that is certainly an option. You can do immutable updates to plain JS objects and arrays using several different approaches:
+Важно понимать, что “иммутабельное обновление данных” *не означает*, что Вы должны использовать [Immutable.js](https://facebook.github.io/immutable-js/), хотя это конечно вариант. Вы можете делать иммутабельные обновления простых JS-объектов и массивов, используя несколько различных подходов:
 
-- Copying objects using functions like `Object.assign()` or `_.extend()`, and array functions such as `slice()` and `concat()`
-- The array spread operator in ES6, and the similar object spread operator that is proposed for a future version of JavaScript
-- Utility libraries that wrap immutable update logic into simpler functions
+- копирование объектов с использование таких функций, как `Object.assign()` и `_.extend()`, а для массивов — `slice()` и `concat()`,
+- использование spread-оператора (...) из ES6, который предполагается использовать в следующей версии JavaScript,
+- библиотеки, которые оборачивают логику иммутабельного обновления в простые функции.
 
-#### Further information
+#### Дополнительная информация
 
-**Documentation**
-- [Troubleshooting](/docs/Troubleshooting.md)
-- [React Redux: Troubleshooting](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md)
-- [Recipes: Using the Object Spread Operator](/docs/recipes/UsingObjectSpreadOperator.md)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+**Документация**
 
-**Articles**
+- [Поиск неисправностей](/docs/Troubleshooting.md)
+- [React Redux: Поиск неисправностей](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md)
+- [Рецепты: Использование оператора расширения](/docs/recipes/UsingObjectSpreadOperator.md)
+- [Рецепты: Структурирование редюсеров - Предварительные концепциии](/docs/recipes/reducers/PrerequisiteConcepts.md)
+- [Рецепты: Структурирование редюсеров - Паттерны иммутабельного обновления](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+
+**Статьи**
+
 - [Pros and Cons of Using Immutability with React](http://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
 - [React/Redux Links: Immutable Data](https://github.com/markerikson/react-redux-links/blob/master/immutable-data.md)
 
-**Discussions**
+**Обсуждения**
+
 - [#1262: Immutable data + bad performance](https://github.com/reactjs/redux/issues/1262)
 - [React Redux #235: Predicate function for updating component](https://github.com/reactjs/react-redux/issues/235)
 - [React Redux #291: Should mapStateToProps be called every time an action is dispatched?](https://github.com/reactjs/react-redux/issues/291)
@@ -46,9 +48,9 @@ Note that “updating data immutably” does *not* mean that you must use [Immut
 
 
 <a id="react-rendering-too-often"></a>
-### Why is my component re-rendering too often?
+### Почему мой компонент перерендеривается слишком часто?
 
-React Redux implements several optimizations to ensure your actual component only re-renders when actually necessary. One of those is a shallow equality check on the combined props object generated by the `mapStateToProps` and `mapDispatchToProps` arguments passed to `connect`. Unfortunately, shallow equality does not help in cases where new array or object instances are created each time `mapStateToProps` is called. A typical example might be mapping over an array of IDs and returning the matching object references, such as:
+React Redux реализует несколько оптимизаций, чтобы обеспечить перерисовоку компонента только тогда, когда это действительно необходимо. Одна из них — поверхностное сравнение объединенных в объект параметров функции `mapStateToProps` и аргументов `mapDispatchToProps`, переданных в `connect`. К несчастью, поверхностное сравнение не помогает в случаях, когда новый массив или ссылка на объект создаются при каждом вызове . Типичным примером может быть сопоставление массива идентификаторов с соответствующими ссылками на объекты, как, например:
 
 ```js
 const mapStateToProps = (state) => {
@@ -58,63 +60,72 @@ const mapStateToProps = (state) => {
 }
 ```
 
-Even though the array might contain the exact same object references each time, the array itself is a different reference, so the shallow equality check fails and React Redux would re-render the wrapped component.
+Хотя массив может каждый раз хранить в точности те же ссылки, сам массив имеет другую ссылку, а в этом случае поверхностное сравнение возвращает `false`, и React Redux запускает перерисовку компонента-обертки.
 
-The extra re-renders could be resolved by saving the array of objects into the state using a reducer, caching the mapped array using [Reselect](https://github.com/reactjs/reselect), or implementing `shouldComponentUpdate` in the component by hand and doing a more in-depth props comparison using a function such as `_.isEqual`. Be careful to not make your custom `shouldComponentUpdate()` more expensive than the rendering itself! Always use a profiler to check your assumptions about performance.
+Излишние перерисовки могут быть решены сохранением массива объектов в состоянии с использованием редьюсера, с кэшированием сопоставляемого массива с использованием [Reselect](https://github.com/reactjs/reselect), или реализацией `shouldComponentUpdate` внутри компонента вручную и выполнением более глубокого сравнения параметров с использованием таких функций, как `_.isEqual`. Будьте осторожны, чтобы не сделать `shouldComponentUpdate()` более затратным, чем сам рендеринг! Всегда используйте порфилировщик для проверки Ваших предположений касаемо производительности.
 
-For non-connected components, you may want to check what props are being passed in. A common issue is having a parent component re-bind a callback inside its render function, like `<Child onClick={this.handleClick.bind(this)} />`. That creates a new function reference every time the parent re-renders. It's generally good practice to only bind callbacks once in the parent component's constructor.
+Для неподключенных компонентов Вы можете проверять, какие параметры передаются. Общая проблема — это наличие в родительском компоненте привязки функции к контексту внутри рендера, как, например, `<Child onClick={this.handleClick.bind(this)} />`. Это создает новую функциональную зависимость каждый раз, когда родитель перерисовывается. Считается хорошей практикой привязывать функции к контексту один раз в конструкторе компонента-родителя.
 
-#### Further information
+#### Дополнительная информация
 
-**Documentation**
-- [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
+**Документация**
 
-**Articles**
+- [FAQ: Производительность - Масштабируемость](/docs/faq/Performance.md#performance-scaling)
+
+**Статьи**
+
 - [A Deep Dive into React Perf Debugging](http://benchling.engineering/deep-dive-react-perf-debugging/)
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f)
 - [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
 - [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [React/Redux Links: React/Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md)
 
-**Discussions**
+**Обсуждения**
+
 - [Stack Overflow: Can a React Redux app scale as well as Backbone?](http://stackoverflow.com/questions/34782249/can-a-react-redux-app-really-scale-as-well-as-say-backbone-even-with-reselect)
 
-**Libraries**
+**Библиотеки**
+
 - [Redux Addons Catalog: DevTools - Component Update Monitoring](https://github.com/markerikson/redux-ecosystem-links/blob/master/devtools.md#component-update-monitoring)
 
 
 
 <a id="react-mapstate-speed"></a>
-### How can I speed up my `mapStateToProps`?
+### Как я могу ускорить мой `mapStateToProps`?
 
-While React Redux does work to minimize the number of times that your `mapStateToProps` function is called, it's still a good idea to ensure that your `mapStateToProps` runs quickly and also minimizes the amount of work it does. The common recommended approach is to create memoized “selector” functions using [Reselect](https://github.com/reactjs/reselect). These selectors can be combined and composed together, and selectors later in a pipeline will only run if their inputs have changed. This means you can create selectors that do things like filtering or sorting, and ensure that the real work only happens if needed.
+Пока React Redux делает работу по минимизации числа вызовов функции `mapStateToProps`, все еще надо быть уверенным, что Ваш `mapStateToProps` запускается быстро и также минимизирует количество выполняемой работы. Общий рекомендуемый подход — это создавать мемоизированные селекторы функций, используя [Reselect](https://github.com/reactjs/reselect). Эти селекторы могут быть объединены и составлены вместе, селекторы позже будут запущены только в том случае, если входные данные изменились. Это значит, что Вы можете создать селекторы, которые делают такие вещи, как фильтрация или сортировка, и быть уверенными, что на самом деле они будут работать только когда это нужно.
 
-#### Further information
+#### Дополнительная информация
 
-**Documentation**
-- [Recipes: Computed Derived Data](/docs/recipes/ComputingDerivedData.md)
+**Документация**
 
-**Articles**
+- [Рецепты: Оперирование полученными данными](/docs/recipes/ComputingDerivedData.md)
+
+**Статьи**
+
 - [Improving React and Redux Performance with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
 
-**Discussions**
+**Обсуждения**
+
 - [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
 - [Reselect #47: Memoizing Hierarchical Selectors](https://github.com/reactjs/reselect/issues/47)
 
 
 <a id="react-props-dispatch"></a>
-### Why don't I have `this.props.dispatch` available in my connected component?
+### Почему у меня недоступен `this.props.dispatch` в моем подсоединенном компоненте?
 
-The `connect()` function takes two primary arguments, both optional. The first, `mapStateToProps`, is a function you provide to pull data from the store when it changes, and pass those values as props to your component. The second, `mapDispatchToProps`, is a function you provide to make use of the store's `dispatch` function, usually by creating pre-bound versions of action creators that will automatically dispatch their actions as soon as they are called.
+Функция `connect()` получает 2 основных аргумента, оба необязательных. Первый — `mapStateToProps` — функция, которую Вы предоставляете для вытягивания данных из хранилища, при их изменении, и передачи этих значений в качестве агрументов в Ваш компонент. Вторая — `mapDispatchToProps` — функция, которую Вы предоставляете для возможности использовать `dispatch` функцию хранилища, обычно создавая предварительно связанные (pre-bound) версии генераторов действий, которые будут автоматически отправлять свои действия как только будут вызваны.
 
-If you do not provide your own `mapDispatchToProps` function when calling `connect()`, React Redux will provide a default version, which simply returns the `dispatch` function as a prop. That means that if you *do* provide your own function, `dispatch` is *not* automatically provided.  If you still want it available as a prop, you need to explicitly return it yourself in your `mapDispatchToProps` implementation.
+Если Вы не передаете Вашу собственную функцию `mapDispatchToProps` при вызове `connect()`, React Redux передаст версию по умолчанию, которая просто возвращает `dispatch` функцию как параметр. Это означает, что если Вы *передаете* свою функцию, то `dispatch` автоматически *не* передается. Если Вы все еще хотите получить `dispatch` как аргумент, Вам надо явно возвращать его самим в Вашей реализации `mapDispatchToProps`.
 
-#### Further information
+#### Дополнительная информация
 
-**Documentation**
+**Документация**
+
 - [React Redux API: connect()](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options)
 
-**Discussions**
+**Обсуждения**
+
 - [React Redux #89: can i wrap multi actionCreators into one props with name?](https://github.com/reactjs/react-redux/issues/89)
 - [React Redux #145: consider always passing down dispatch regardless of what mapDispatchToProps does](https://github.com/reactjs/react-redux/issues/145)
 - [React Redux #255: this.props.dispatch is undefined if using mapDispatchToProps](https://github.com/reactjs/react-redux/issues/255)
@@ -122,31 +133,34 @@ If you do not provide your own `mapDispatchToProps` function when calling `conne
 
 
 <a id="react-multiple-components"></a>
-### Should I only connect my top component, or can I connect multiple components in my tree?
+### Должен ли я подключать (connect) только мой корневой компонент или я могу подключить несколько компонентов в моем дереве?
 
-Early Redux documentation advised that you should only have a few connected components near the top of your component tree.  However, time and experience has shown that that generally requires a few components to know too much about the data requirements of all their descendants, and forces them to pass down a confusing number of props.
+Раньше документация Redux советовала Вам иметь несколько подключаемых компонентов рядом с корневым. Однако, время и опыт показали, что это, как правильно, требует от нескольких компонентов знать слишком много о требованиях к данным всех их потомков, и заставляет их передавать запутывающее количество параметров.
 
-The current suggested best practice is to categorize your components as “presentational” or “container” components, and extract a connected container component wherever it makes sense:
+Текущаяя предложенная лучшая практика — это разделять Ваши компоненты на “представления” и “контейнеры” и извлекать подключенный контейнер компонента везде, где это имеет смысл:
 
-> Emphasizing “one container component at the top” in Redux examples was a mistake. Don't take this as a maxim. Try to keep your presentation components separate. Create container components by connecting them when it's convenient. Whenever you feel like you're duplicating code in parent components to provide data for same kinds of children, time to extract a container. Generally as soon as you feel a parent knows too much about “personal” data or actions of its children, time to extract a container.
+> Акцент на том, что “один компонент-контейнер в качестве корневого”, в примерах Redux был ошибкой. Не используйте это как афоризм. Пытайтесь хранить представления ваших компонентов отдельно. Создавайте контейнеры, подключая их когда это удобно. Всякий раз, когда Вы чувствуете, что Вы дублируете код родительского компонента, чтобы передать данные нескольким потомкам, пора извлечь контейнер. Как правило, как только вы чувствуете, что родитель знает слишком много о “личных” данных или действиях своих детей, пора извлечь контейнер.
 
-In fact, benchmarks have shown that more connected components generally leads to better performance than fewer connected components.
+По факту, тесты показывают, что большее число подключенных компонентов, как правило, приводит к улучшению производительности, чем меньшее их количество.
 
-In general, try to find a balance between understandable data flow and areas of responsibility with your components.
+В целом, старайтесь найти баланс между пониманием потока данных и областями ответственности Ваших компонентов.
 
-#### Further information
+#### Дополнительная информация
 
-**Documentation**
+**Документация**
+
 - [Basics: Usage with React](/docs/basics/UsageWithReact.md)
 - [FAQ: Performance - Scaling](/docs/faq/Performance.md#performance-scaling)
 
-**Articles**
+**Статьи**
+
 - [Presentational and Container Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0)
 - [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
 - [React/Redux Links: Architecture - Redux Architecture](https://github.com/markerikson/react-redux-links/blob/master/react-redux-architecture.md#redux-architecture)
 - [React/Redux Links: Performance - Redux Performance](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
-**Discussions**
+**Обсуждения**
+
 - [Twitter: emphasizing “one container” was a mistake](https://twitter.com/dan_abramov/status/668585589609005056)
 - [#419: Recommended usage of connect](https://github.com/reactjs/redux/issues/419)
 - [#756: container vs component?](https://github.com/reactjs/redux/issues/756)
