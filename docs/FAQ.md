@@ -15,24 +15,24 @@
   - [Как мне хранить вложенные или дублирующиеся данные в моем состоянии?](/docs/faq/OrganizingState.md#organizing-state-nested-data)
 - **Настройка хранилища(Store)**
   - [Могу ли или должен ли я создавать несколько хранилищ? Могу ли я импортировать мое хранилище напрямую и использовать его в компонентах?](/docs/faq/StoreSetup.md#store-setup-multiple-stores)
-  - [Нормально ли использовать более одного мидлвэра в моем расширителе хранилища ? В чем разница между next и dispatch в функции мидлвэра?](/docs/faq/StoreSetup.md#store-setup-middleware-chains)
+  - [Нормально ли использовать более одного миддлвэра в моем расширителе хранилища ? В чем разница между next и dispatch в функции миддлвэра?](/docs/faq/StoreSetup.md#store-setup-middleware-chains)
   - [Как мне подписаться на получение только части хранилища? Могу ли я получить запущенное действие как часть подписки?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
 - **Действия**
-  - [Почему тип должен быть строкой или по крайней мере сериализуемым? Почему мои типы действий должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
-  - [Всегда ли преобразование "один к одному" между редьюсерами и действиями?](/docs/faq/Actions.md#actions-reducer-mappings)
-  - [Как я могу представлять "сайд эффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов действий (action creators)”, “thunks” или “мидлвэр(middleware)” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
-  - [Должен ли я отправить несколько действий подряд от одного генератора действия?](/docs/faq/Actions.md#actions-multiple-actions)
-- **Структура кода**  
+  - [Почему тип действия должен быть строкой или по крайней мере сериализуемым? Почему мои типы действий должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
+  - [Всегда ли редьюсеры и действия преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
+  - [Как я могу выполнять "побочные эффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов действий”, “thunks” или “миддлвэр” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
+  - [Должен ли я отправлять несколько действий подряд от одного генератора действия?](/docs/faq/Actions.md#actions-multiple-actions)
+- **Структура кода**
   - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы действий и редюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [Как я должен разделять мою логику между редюсерами и генераторами действий? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
 - **Производительность**
-  - [Насколько хорошо "масштабируется" Redux с точки зрения производительности и архитектуры?](/docs/faq/Performance.md#performance-scaling)
-  - [Не будет ли вызов "всех моих редьюсеров" для каждого действия медленным?](/docs/faq/Performance.md#performance-all-reducers)
-  - [Должен ли я иметь "глубокое клонирование" моего состояния в редюсере? Не будет ли копирование моего состояния медленным?](/docs/faq/Performance.md#performance-clone-state)
+  - [Насколько хорошо “масштабируется” Redux с точки зрения производительности и архитектуры?](/docs/faq/Performance.md#performance-scaling)
+  - [Не будет ли вызов “всех моих редьюсеров” для каждого действия медленным?](/docs/faq/Performance.md#performance-all-reducers)
+  - [Должен ли я иметь полноценный клон моего состояния в редюсере? Не будет ли копирование моего состояния медленным?](/docs/faq/Performance.md#performance-clone-state)
   - [Как мне уменьшить количество событий обновления хранилища?](/docs/faq/Performance.md#performance-update-events)
-  - [Будут ли проблемы с памятью из-за использования "одного дерева состояния"? Будет ли вызов большого количествая действий занимать память?](/docs/faq/Performance.md#performance-state-memory)
+  - [Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества действий занимать память?](/docs/faq/Performance.md#performance-state-memory)
 - **React Redux**
-  - [Почему мой компонент не перерендеривается или почему не работает mapStateToProps?](/docs/faq/ReactRedux.md#react-not-rerendering)
+  - [Почему мой компонент не перерендеривается? Почему не работает mapStateToProps?](/docs/faq/ReactRedux.md#react-not-rerendering)
   - [Почему мой компонент перерендеривается слишком часто?](/docs/faq/ReactRedux.md#react-rendering-too-often)
   - [Как я могу ускорить mapStateToProps?](/docs/faq/ReactRedux.md#react-mapstate-speed)
   - [Почему у меня недоступен this.props.dispatch в моем подсоединенном компоненте?](/docs/faq/ReactRedux.md#react-props-dispatch)
