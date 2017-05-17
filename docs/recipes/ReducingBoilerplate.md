@@ -1,14 +1,14 @@
-# Reducing Boilerplate
+# Упрощение шаблона
 
-Redux is in part [inspired by Flux](../introduction/PriorArt.md), and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider how Redux lets us choose how verbose we'd like our code to be, depending on personal style, team preferences, longer term maintainability, and so on.
+Redux частично [вдохновлен Flux](../introduction/PriorArt.md#flux), а самая большая жалоба на Flux — это то, что он заставляет Вас писать много лишнего. В этом рецепте мы рассмотрим, как Redux дает нам выбор, насколько подробно мы хотели бы писать наш код, в зависимости от личного стиля, предпочтений команды, долгосрочном плане ремонтопригодности и так далее.
 
-## Actions
+## Действия
 
-Actions are plain objects describing what happened in the app, and serve as the sole way to describe an intention to mutate the data. It's important that **actions being objects you have to dispatch is not boilerplate, but one of the [fundamental design choices](../introduction/ThreePrinciples.md) of Redux**.
+Действия — это простые объекты, описывающее, что происходит в приложении. Они являются единственным способом описать намерение изменить данные. Важно, что **действия, будучи объектами, которые Вы должны отправлять, являются не шаблоном, а одним из [фундаментальных принципов](../introduction/ThreePrinciples.md) Redux**.
 
-There are frameworks claiming to be similar to Flux, but without a concept of action objects. In terms of being predictable, this is a step backwards from Flux or Redux. If there are no serializable plain object actions, it is impossible to record and replay user sessions, or to implement [hot reloading with time travel](https://www.youtube.com/watch?v=xsSnOQynTHs). If you'd rather modify data directly, you don't need Redux.
+Существуют фреймворки, утверждающие, что они подобны Flux, но без концепции объектов действий. С точки зрения предсказуемости, это шаг назад от Flux или Redux. Если в них нет сериализируемых простых объектов действий, невозможно записать и воспроизвести сеансы пользователя, или реализовать [hot reloading with time travel](https://www.youtube.com/watch?v=xsSnOQynTHs). Если Вы предпочитаете изменять данные напрямую, Вам не нужен Redux.
 
-Actions look like this:
+Действия выглядят следующим образом:
 
 ```js
 { type: 'ADD_TODO', text: 'Use Redux' }
@@ -16,9 +16,9 @@ Actions look like this:
 { type: 'LOAD_ARTICLE', response: { ... } }
 ```
 
-It is a common convention that actions have a constant type that helps reducers (or Stores in Flux) identify them. We recommend that you use strings and not [Symbols](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) for action types, because strings are serializable, and by using Symbols you make recording and replaying harder than it needs to be.
+Общепринято, что действия имеют поле `type`, которое помогает редьюсерам (или хранилищам в Flux) опознавать их. Мы [рекомендуем](/docs/faq/Actions.html#почему-тип-действия-должен-быть-строкой-или-по-крайней-мере-сериализуемым-почему-мои-типы-действий-должны-быть-константами) Вам использовать строки (String) вместо [символов (Symbol)](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Symbol) для обозначения типа, т.к. строки — сериализуемы, а использование символов может усложнить запись и воспроизведение, когда это потребуется.
 
-In Flux, it is traditionally thought that you would define every action type as a string constant:
+Во Flux традиционно считается, что Вы должны определять каждый тип действи строковой константой:
 
 ```js
 const ADD_TODO = 'ADD_TODO'
@@ -26,20 +26,20 @@ const REMOVE_TODO = 'REMOVE_TODO'
 const LOAD_ARTICLE = 'LOAD_ARTICLE'
 ```
 
-Why is this beneficial? **It is often claimed that constants are unnecessary, and for small projects, this might be correct.** For larger projects, there are some benefits to defining action types as constants:
+Чем это выгодно? **Часто утверждают, что константы не нужны, и для маленьких проектов это может быть правильно.** Для больших проектов, существует несколько преимуществ определение типов действий через константы:
 
-* It helps keep the naming consistent because all action types are gathered in a single place.
-* Sometimes you want to see all existing actions before working on a new feature. It may be that the action you need was already added by somebody on the team, but you didn't know.
-* The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
-* If you make a typo when importing an action constant, you will get `undefined`. Redux will immediately throw when dispatching such an action, and you'll find the mistake sooner.
+* Это помогает держать наименование последовательным, потому что все типы действий собраны в одном месте.
+* Иногда лучше видеть все существующие действия перед началом работы над следующим функционалом. Может такое случиться, что нужное Вам действие уже добавлено кем-то из членов команды, но Вы не знали.
+* Список типов действий, которые уже были добавлены, удалены и изменены в Pull Request поможет каждому члену команды отслеживать объем и реализацию нового функционала.
+* Если Вы допустили опечатку при импорте константы, Вы получите  `undefined`. Redux немедленно пробросит это, когда будет отправлять такое действие, и Вы найдете ошибку быстрее.
 
-It is up to you to choose the conventions for your project. You may start by using inline strings, and later transition to constants, and maybe later group them into a single file. Redux does not have any opinion here, so use your best judgment.
+Выбор солашений для Вашего приложения остается на Ваше усмотрение. Вы можете начать использовать строки, а позже перейти к константам, а, возможно, еще позже — вынести их в отдельный файл. Redux не имеет ограничений по этому поводу, так что это остается на Ваше усмотрение.
 
-## Action Creators
+## Генераторы действий
 
-It is another common convention that, instead of creating action objects inline in the places where you dispatch the actions, you would create functions generating them.
+Другое общепринятое соглашение — это вместо создания объектов действий в той же части приложения, где эти действия вызываются, создавать функции, генерирующие их.
 
-For example, instead of calling `dispatch` with an object literal:
+Например, вместо вызова `dispatch` с агрументом-объектом:
 
 ```js
 // somewhere in an event handler
@@ -49,7 +49,7 @@ dispatch({
 })
 ```
 
-You might write an action creator in a separate file, and import it from your component:
+Вы можете написать генератор действий в отдельном файле и импортировать его в Ваш компонент:
 
 #### `actionCreators.js`
 
@@ -71,9 +71,9 @@ import { addTodo } from './actionCreators'
 dispatch(addTodo('Use Redux'))
 ```
 
-Action creators have often been criticized as boilerplate. Well, you don't have to write them! **You can use object literals if you feel this better suits your project.** There are, however, some benefits for writing action creators you should know about.
+Генераторы действий часто подвергались критике за свою шаблонность. Что ж, Вы можете их не писать! **Вы можете использовать объекты, если чувствуете, что это лучше подходит для Вашего проекта.** Однако, некоторые рекомендации по написанию генераторов действий Вы должны знать.
 
-Let's say a designer comes back to us after reviewing our prototype, and tells that we need to allow three todos maximum. We can enforce this by rewriting our action creator to a callback form with [redux-thunk](https://github.com/gaearon/redux-thunk) middleware and adding an early exit:
+Допустим, дизайнер приходит к нам после просмотра нашего прототипа и говорит, что надо ограничить число задач тремя максимум. Мы можем реализовать это, переписав наш генератор действий на коллбэк, используя [redux-thunk](https://github.com/gaearon/redux-thunk) миддлвэр и добавив преждевременный выход из функции:
 
 ```js
 function addTodoWithoutCheck(text) {
@@ -97,13 +97,13 @@ export function addTodo(text) {
 }
 ```
 
-We just modified how the `addTodo` action creator behaves, completely invisible to the calling code. **We don't have to worry about looking at each place where todos are being added, to make sure they have this check.** Action creators let you decouple additional logic around dispatching an action, from the actual components emitting those actions. It's very handy when the application is under heavy development, and the requirements change often.
+Мы всего лишь изменили поведение генератора действия `addTodo`, совершенно незаметно для кода, использующего этот генератор кода. **Нам не пришлось заботиться о поиске каждого кусочка кода, где происходит добавление, чтобы убедиться, что они работают правильно.** Генераторы действий позволяют Вам отделять дополнительную логику отправки действий от реального выбрасывания этих действий компонентами.
 
-### Generating Action Creators
+### Создание генераторов действий
 
-Some frameworks like [Flummox](https://github.com/acdlite/flummox) generate action type constants automatically from the action creator function definitions. The idea is that you don't need to both define `ADD_TODO` constant and `addTodo()` action creator. Under the hood, such solutions still generate action type constants, but they're created implicitly so it's a level of indirection and can cause confusion. We recommend creating your action type constants explicitly.
+Некоторые фреймворки, такие как [Flummox](https://github.com/acdlite/flummox), создают константы типов действий автоматически из описаний функций-генераторов действий. Идея состоит в том, что Вам не надо описывать и `ADD_TODO` константу, и `addTodo()` генератор действий. Под капотом такие решения все еще создают константы типов действий, но они созданы неявно, так что это новый уровень абстракции, что может привести к путанице. Мы рекомендуем Вам создавать константы типов действий самостоятельно.
 
-Writing simple action creators can be tiresome and often ends up generating redundant boilerplate code:
+Написание простого генератора действий может быть утомительно и часто заканчивается созданием избыточно шаблонного кода:
 
 ```js
 export function addTodo(text) {
@@ -129,7 +129,7 @@ export function removeTodo(id) {
 }
 ```
 
-You can always write a function that generates an action creator:
+Вы также можете написать функцию, которая создает генератор действий:
 
 ```js
 function makeActionCreator(type, ...argNames) {
@@ -150,13 +150,14 @@ export const addTodo = makeActionCreator(ADD_TODO, 'todo')
 export const editTodo = makeActionCreator(EDIT_TODO, 'id', 'todo')
 export const removeTodo = makeActionCreator(REMOVE_TODO, 'id')
 ```
-There are also utility libraries to aid in generating action creators, such as [redux-act](https://github.com/pauldijou/redux-act) and [redux-actions](https://github.com/acdlite/redux-actions). These can help reduce boilerplate code and enforce adherence to standards such as [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
-## Async Action Creators
+Также существуют служебные библиотеки для помощи в создании генераторов действий, такие как [redux-act](https://github.com/pauldijou/redux-act) и [redux-actions](https://github.com/acdlite/redux-actions). Они могут помочь уменьшить шаблонный код и обеспечить соблюдение стандартов, таких как [Flux Standard Action (FSA)](https://github.com/acdlite/flux-standard-action).
 
-[Middleware](../Glossary.md#middleware) lets you inject custom logic that interprets every action object before it is dispatched. Async actions are the most common use case for middleware.
+## Асинхронные генераторы действий
 
-Without any middleware, [`dispatch`](../api/Store.md#dispatch) only accepts a plain object, so we have to perform AJAX calls inside our components:
+[Миддлвэры (middleware)](../Glossary.md#middleware) позволяют Вам внедрять обычную логику, которая обрабатывает каждое действие перед тем как отправить. Асинхронные действия — наиболее распространенные вариант применения миддлвэров.
+
+Без миддлвэра, [`dispatch`](../api/Store.md#dispatch) принимает только простой объект, поэтому нам приходится выполнять AJAX-запросы внутри компонентов:
 
 #### `actionCreators.js`
 
@@ -241,17 +242,17 @@ export default connect(state => ({
 }))(Posts)
 ```
 
-However, this quickly gets repetitive because different components request data from the same API endpoints. Moreover, we want to reuse some of this logic (e.g., early exit when there is cached data available) from many components.
+Однако, код быстро становится повторяющимся, потому что разные компоненты запрашивать данные из одной и той же точки входа в API. Более того, мы хотим переиспользовать некоторые части этой логики (например, ранний выход, когда доступны кэшированные данные) из многих компонентов.
 
-**Middleware lets us write more expressive, potentially async action creators.** It lets us dispatch something other than plain objects, and interprets the values. For example, middleware can “catch” dispatched Promises and turn them into a pair of request and success/failure actions.
+**Миддлвэр позволяет нам писать более выразительные, потенциально асинхронные генераторые действий.** Это позволяет нам отправлять в качестве действий что-то помимо простых объектов и интерпретировать значения. Например, миддлвэр может “отлавливать” отправленные промисы (Promises) и обращать их в пару из запроса и успешных/провальных действий.
 
-The simplest example of middleware is [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” middleware lets you write action creators as “thunks”, that is, functions returning functions.** This inverts the control: you will get `dispatch` as an argument, so you can write an action creator that dispatches many times.
+Простейший пример миддлвэра — [redux-thunk](https://github.com/gaearon/redux-thunk). **“Thunk” миддлвэр позволяет нам писать генераторы действий как “thunks” — функции, возвращающие функции.** Это переворачивает управление: Вы будете получать `dispatch` в качестве аргумента, так Вы сможете писать генератор действия, который отправляется несколько раз.
 
->##### Note
+>##### Запомните
 
->Thunk middleware is just one example of middleware. Middleware is not about “letting you dispatch functions”. It's about letting you dispatch anything that the particular middleware you use knows how to handle. Thunk middleware adds a specific behavior when you dispatch functions, but it really depends on the middleware you use.
+>Thunk миддлвэр — всего лишь один пример миддлвэров. Миддлвэр не несет в себе смысл “предоставлять отправку функций”. Он предоставляет Вам возможность отправлять что угодно, что Вы сможете обработать. Thunk миддлвэр добавляет специфическое поведение, когда Вы отправляете функции, но это зависит от используемого миддлвэра.
 
-Consider the code above rewritten with [redux-thunk](https://github.com/gaearon/redux-thunk):
+Рассмотрим приведенный выше код, переписанный с использованием [redux-thunk](https://github.com/gaearon/redux-thunk):
 
 #### `actionCreators.js`
 
@@ -323,9 +324,9 @@ export default connect(state => ({
 }))(Posts)
 ```
 
-This is much less typing! If you'd like, you can still have “vanilla” action creators like `loadPostsSuccess` which you'd use from a container `loadPosts` action creator.
+Так гораздо меньше кода! Если хотите, Вы можете все еще использовать “голые” генераторы действий, такие как `loadPostsSuccess`, которые Вы бы использовали в контейнере `loadPosts` генератора действий.
 
-**Finally, you can write your own middleware.** Let's say you want to generalize the pattern above and describe your async action creators like this instead:
+**В конце концов, Вы можете написать свой собственный миддлвэр.** Допустим, Вы хотите обощить шаблон выше и описывать Ваши асинхронные генераторы действий следующим образом:
 
 ```js
 export function loadPosts(userId) {
@@ -342,7 +343,7 @@ export function loadPosts(userId) {
 }
 ```
 
-The middleware that interprets such actions could look like this:
+Миддлвэр, который обрабатывает такие действия, может выглядить так:
 
 ```js
 function callAPIMiddleware({ dispatch, getState }) {
@@ -395,7 +396,7 @@ function callAPIMiddleware({ dispatch, getState }) {
 }
 ```
 
-After passing it once to [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md), you can write all your API-calling action creators the same way:
+Один раз вызвав [`applyMiddleware(...middlewares)`](../api/applyMiddleware.md), Вы можете писать все Ваши генераторы действий с API вызовами следующим образом:
 
 ```js
 export function loadPosts(userId) {
@@ -432,11 +433,11 @@ export function addComment(postId, message) {
 }
 ```
 
-## Reducers
+## Редьюсеры
 
-Redux reduces the boilerplate of Flux stores considerably by describing the update logic as a function. A function is simpler than an object, and much simpler than a class.
+Redux значительно упрощает шаблон Flux-хранилища описанием логики обновления в виде функции. Функция проще, чем объект, и гораздо проще, чем класс.
 
-Consider this Flux store:
+Вглянем на это Flux-хранилище:
 
 ```js
 let _todos = []
@@ -459,7 +460,7 @@ AppDispatcher.register(function (action) {
 export default TodoStore
 ```
 
-With Redux, the same update logic can be described as a reducing function:
+С Redux та же логика обновления может быть описана как упрощенная функция:
 
 ```js
 export function todos(state = [], action) {
@@ -473,13 +474,13 @@ export function todos(state = [], action) {
 }
 ```
 
-The `switch` statement is *not* the real boilerplate. The real boilerplate of Flux is conceptual: the need to emit an update, the need to register the Store with a Dispatcher, the need for the Store to be an object (and the complications that arise when you want a universal app).
+`Switch` оператор — это *не* шаблон. Реальный шаблон Flux абстрактен: необходимо выдавать обновления данных, необходимо зарегистрировать Хранилище в Диспетчере, необходимо представлять Хранилище в виде объекта (и другие затруднения, которые возникают, когда Вы хотите получить универсальное приложение).
 
-It's unfortunate that many still choose Flux framework based on whether it uses `switch` statements in the documentation. If you don't like `switch`, you can solve this with a single function, as we show below.
+Печально, что многие все еще выбирают Flux-фреймворк на основе того, диктует ли он в документации использовать `switch` оператор. Если Вы не любите `switch`, Вы можете использовать функцию, которую мы показывали прежде.
 
-### Generating Reducers
+### Создание редьюсеров
 
-Let's write a function that lets us express reducers as an object mapping from action types to handlers. For example, if we want our `todos` reducers to be defined like this:
+Давайте напишем функцию, которая позволит нам выражать редьюсеры как объект, сопоставляющий типы действий обработчикам. Например, если мы хотим описывать наши редьюсеры для `todos` так:
 
 ```js
 export const todos = createReducer([], {
@@ -490,7 +491,7 @@ export const todos = createReducer([], {
 })
 ```
 
-We can write the following helper to accomplish this:
+То мы можем написать следующий хелпер для достижения этого:
 
 ```js
 function createReducer(initialState, handlers) {
@@ -504,6 +505,6 @@ function createReducer(initialState, handlers) {
 }
 ```
 
-This wasn't difficult, was it? Redux doesn't provide such a helper function by default because there are many ways to write it. Maybe you want it to automatically convert plain JS objects to Immutable objects to hydrate the server state. Maybe you want to merge the returned state with the current state. There may be different approaches to a “catch all” handler. All of this depends on the conventions you choose for your team on a specific project.
+Это было нетрудно, не правда ли? Redux не обеспечивает такие функции-хелперы по умолчанию, потому что существует слишком много способов написать их. Возможно, Вам захочется автоматически конвертировать простые JS-объекты в иммутабельные для «упразднения» состояния сервера. Возможно, Вы захотите объединять возвращаемое состояние с текущим. Может быть много подходов для “отлова всех” обработчиков. Все они зависят от соглашений, которые Вы выберите для Вашей команды и проекта.
 
-The Redux reducer API is `(state, action) => state`, but how you create those reducers is up to you.
+API редьюсеров Redux заключается в том, что `(state, action) => state`, но то, как Вы это реализуете, решать Вам.
