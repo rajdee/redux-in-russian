@@ -2,10 +2,10 @@
 
 ## Table of Contents
 
-- [Why should type be a string, or at least serializable? Why should my action types be constants?](#actions-string-constants) 
+- [Why should type be a string, or at least serializable? Why should my action types be constants?](#actions-string-constants)
 - [Is there always a one-to-one mapping between reducers and actions?](#actions-reducer-mappings)
-- [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#actions-side-effects) 
-- [Should I dispatch multiple actions in a row from one action creator?](#actions-multiple-actions) 
+- [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#actions-side-effects)
+- [Should I dispatch multiple actions in a row from one action creator?](#actions-multiple-actions)
 
 
 ## Actions
@@ -22,7 +22,7 @@ Encapsulating and centralizing commonly used pieces of code is a key concept in 
 #### Further information
 
 **Documentation**
-- [Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md#actions)
+- [Упрощение шаблона](/docs/recipes/ReducingBoilerplate.md#actions)
 
 **Discussion**
 - [#384: Recommend that Action constants be named in the past tense](https://github.com/reactjs/redux/issues/384)

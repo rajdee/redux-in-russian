@@ -2,8 +2,8 @@
 
 ## Содержание
 
-- [Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать combineReducers?](#reducers-share-state) 
-- [Должен ли я использовать оператор switch для обработки действий(actions)?](#reducers-use-switch) 
+- [Как мне передавать состояние(state) между двумя редьюсерами? Должен ли я использовать combineReducers?](#reducers-share-state)
+- [Должен ли я использовать оператор switch для обработки действий(actions)?](#reducers-use-switch)
 
 
 
@@ -26,7 +26,7 @@ In general, remember that reducers are just functions—you can organize them an
 
 **Документация**
 - [API: combineReducers](/docs/api/combineReducers.md)
-- [Recipes: Structuring Reducers](/docs/recipes/StructuringReducers.md)
+- [Рецепты: Структурирование редюсеров](/docs/recipes/StructuringReducers.md)
 
 **Обсуждения**
 - [#601: A concern on combineReducers, when an action is related to multiple reducers](https://github.com/reactjs/redux/issues/601)
@@ -46,8 +46,8 @@ In general, remember that reducers are just functions—you can organize them an
 #### Дополнительная информация
 
 **Документация**
-- [Recipes: Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
-- [Recipes: Structuring Reducers - Splitting Reducer Logic](/docs/recipes/reducers/SplittingReducerLogic.md)
+- [Рецепты: Упрощение шаблона](/docs/recipes/ReducingBoilerplate.md)
+- [Рецепты: Структурирование редюсеров - Разделение логики редюсера](/docs/recipes/reducers/SplittingReducerLogic.md)
 
 **Обсуждения**
 - [#883: take away the huge switch block](https://github.com/reactjs/redux/issues/883)
