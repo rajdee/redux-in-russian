@@ -24,7 +24,7 @@
 * [Рецепты](/docs/recipes/README.md)
   * [Мигрирование на Redux](/docs/recipes/MigratingToRedux.md)
   * [Использование оператора расширения](/docs/recipes/UsingObjectSpreadOperator.md)
-  * [Упрощенный шаблон](/docs/recipes/ReducingBoilerplate.md)
+  * [Упрощение шаблона](/docs/recipes/ReducingBoilerplate.md)
   * [Серверный рендеринг](/docs/recipes/ServerRendering.md)
   * [Написание тестов](/docs/recipes/WritingTests.md)
   * [Оперирование полученными данными](/docs/recipes/ComputingDerivedData.md)

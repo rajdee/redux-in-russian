@@ -4,7 +4,7 @@
 
 * [Переход на Redux](MigratingToRedux.md)
 * [Использование оператора расширения](UsingObjectSpreadOperator.md)
-* [Шаблон редуцирования](ReducingBoilerplate.md)
+* [Упрощение шаблона](ReducingBoilerplate.md)
 * [Серверный рендеринг](ServerRendering.md)
 * [Написание тестов](WritingTests.md)
 * [Вычисление полученных данных](ComputingDerivedData.md)

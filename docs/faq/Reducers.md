@@ -46,8 +46,8 @@
 #### Дополнительная информация
 
 **Документация**
-- [Recipes: Reducing Boilerplate](/docs/recipes/ReducingBoilerplate.md)
-- [Recipes: Structuring Reducers - Splitting Reducer Logic](/docs/recipes/reducers/SplittingReducerLogic.md)
+- [Рецепты: Упрощение шаблона](/docs/recipes/ReducingBoilerplate.md)
+- [Рецепты: Структурирование редюсеров - Разделение логики редюсера](/docs/recipes/reducers/SplittingReducerLogic.md)
 
 **Обсуждения**
 - [#883: take away the huge switch block](https://github.com/reactjs/redux/issues/883)

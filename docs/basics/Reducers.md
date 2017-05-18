@@ -114,7 +114,7 @@ function todoApp(state = initialState, action) {
 
 > Конструкция `switch` *не является* реальным шаблоном. Реальный шаблон Flux является абстракцией: необходимость инициировать обновление, необходимость зарегистрировать хранилище (`Store`) в `Dispatcher'е`, необходимость, чтобы `Store` был объектом (возникают осложнения, если вы хотите универсальное приложение (universal app)). Redux решает эти проблемы благодаря использованию чистых редюсеров вместо генераторов событий (event emitters)
 
->Если Вам не нравится конструкция `switch`, вы можете использовать собственную функцию `createReducer`, которая принимает объект обработчиков, как показано в [“сокращении шаблонности (reducing boilerplate)”](../recipes/ReducingBoilerplate.md#reducers).
+>Если Вам не нравится конструкция `switch`, вы можете использовать собственную функцию `createReducer`, которая принимает объект обработчиков, как показано в [“упрощении шаблона (reducing boilerplate)”](../recipes/ReducingBoilerplate.md#reducers).
 
 ## Обрабатываем больше действий
 
@@ -136,7 +136,7 @@ function todoApp(state = initialState, action) {
             completed: false
           }
         ]
-      })    
+      })
     default:
       return state
   }

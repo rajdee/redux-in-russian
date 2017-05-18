@@ -1,8 +1,6 @@
-# Using Object Spread Operator
+# Использование оператора расширения
 
-Since one of the core tenets of Redux is to never mutate state, you'll often find yourself using [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) to create
-copies of objects with new or updated values. For example, in the `todoApp` below `Object.assign()` is used to return a new
-`state` object with an updated `visibilityFilter` property:
+Поскольку одним из основных постулатов Redux является "никогда не изменять состояние напрямую", вам часто придется использовать [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) для создания копий объектов с новыми или измененными значениями. Например, в примере `todoApp` ниже используется `Object.assign()` для возвращения нового `состояния` объекта с обновленным `visibilityFilter` полем:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -17,10 +15,9 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-While effective, using `Object.assign()` can quickly make simple reducers difficult to read given its rather verbose syntax.
+Несмотря на эффективность, `Object.assign()` может довольно быстро сделать простые редьюсеры трудно читаемыми.
 
-An alternative approach is to use the [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread) proposed for the next versions of JavaScript which lets you use the spread (`...`) operator to copy enumerable properties from one object to another in a more succinct way. The object spread operator is conceptually similar to the ES6 [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator). We
-can simplify the `todoApp` example above by using the object spread syntax:
+Альтернативный вариант — использовать [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread), предложенный для следующих версий JavaScript, который позволяет вам использовать spread-оператор (`...`) для копирования перечисляемых свойств одного объекта в другой в более сжатой форме записи. Оператор расширения концептуально похож на [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) ES6. Мы можем упростить пример `todoApp`, используя object spread syntax:
 
 ```js
 function todoApp(state = initialState, action) {
@@ -33,7 +30,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-The advantage of using the object spread syntax becomes more apparent when you're composing complex objects. Below `getAddedIds` maps an array of `id` values to an array of objects with values returned from `getProduct` and `getQuantity`.
+Преимущество использования оператора расширения становится более очевидно при составлении сложных объектов. В примере ниже `getAddedIds` сопоставляет массив с `ids` массиву объектов со значениями, которые возвращает `getProduct` и `getQuantity`.
 
 ```js
 return getAddedIds(state.cart).map(id => Object.assign(
@@ -45,7 +42,7 @@ return getAddedIds(state.cart).map(id => Object.assign(
 ))
 ```
 
-Object spread lets us simplify the above `map` call to:
+Оператор расширения позволяет нам упрощать вызов `map`:
 
 ```js
 return getAddedIds(state.cart).map(id => ({
@@ -54,7 +51,7 @@ return getAddedIds(state.cart).map(id => ({
 }))
 ```
 
-Since the object spread syntax is still a Stage 3 proposal for ECMAScript you'll need to use a transpiler such as [Babel](http://babeljs.io/) to use it in production. You can use your existing `es2015` preset, install [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) and add it individually to the `plugins` array in your `.babelrc`.
+Пока оператор расширения все еще на стадии предложения в ECMAScript, вам требуется использовать транспилер, такой как [Babel](http://babeljs.io/), для использования оператора в продакшн-версии. Вы можете использовать существующий пресет `es2015`, установить [`babel-plugin-transform-object-rest-spread`](http://babeljs.io/docs/plugins/transform-object-rest-spread/) и добавить его отдельно в массив `plugins` в вашем файле `.babelrc`.
 
 ```js
 {
@@ -63,4 +60,4 @@ Since the object spread syntax is still a Stage 3 proposal for ECMAScript you'll
 }
 ```
 
-Note that this is still an experimental language feature proposal so it may change in the future. Nevertheless some large projects such as [React Native](https://github.com/facebook/react-native) already use it extensively so it is safe to say that there will be a good automated migration path if it changes.
+Помните, что это все еще экспериментальная функция языка и она может измениться в будущем. Однако, некоторые большие проекты, такие как [React Native](https://github.com/facebook/react-native), уже широко используют это, так что с уверенностью можно сказать, что будет хорошая автоматическая миграция, если функция изменится.
