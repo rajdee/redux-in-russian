@@ -1,44 +1,49 @@
-# Redux FAQ: Performance
+# Redux FAQ: Производительность
 
-## Table of Contents
+## Содержание
 
-- [How well does Redux “scale” in terms of performance and architecture?](#performance-scaling)
-- [Won't calling “all my reducers” for each action be slow?](#performance-all-reducers)
-- [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#performance-clone-state)
-- [How can I reduce the number of store update events?](#performance-update-events)
-- [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#performance-state-memory)
+- [Насколько хорошо “масштабируется” Redux с точки зрения производительности и архитектуры?](#performance-scaling)
+- [Не будет ли вызов “всех моих редьюсеров” для каждого действия медленным?](#performance-all-reducers)
+- [Должен ли я иметь полноценный клон моего состояния в редюсере? Не будет ли копирование моего состояния медленным?](#performance-clone-state)
+- [Как мне уменьшить количество событий обновления хранилища?](#performance-update-events)
+- [Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества действий занимать память?](#performance-state-memory)
 
-
-
-## Performance
+## Производительность
 
 <a id="performance-scaling"></a>
-### How well does Redux “scale” in terms of performance and architecture? 
+### Насколько хорошо “масштабируется” Redux с точки зрения производительности и архитектуры?
 
-While there's no single definitive answer to this, most of the time this should not be a concern in either case.
+Пока еще нет окончательного ответа на этот вопрос, в большинстве случаев это не должно быть проблемой.
 
-The work done by Redux generally falls into a few areas: processing actions in middleware and reducers (including object duplication for immutable updates), notifying subscribers after actions are dispatched, and updating UI components based on the state changes. While it's certainly *possible* for each of these to become a performance concern in sufficiently complex situations, there's nothing inherently slow or inefficient about how Redux is implemented. In fact, React Redux in particular is heavily optimized to cut down on unnecessary re-renders, and React-Redux v5 shows noticeable improvements over earlier versions.
+Работа Redux как правило, делится на несколько частей:
+* обработка действие в миддлвэрах и редьюсерах (включая дублирование объекта для постоянных обновлений),
+* уведомление подписчиков после отправки действий,
+* обновление UI-компонентов на основе изменения состояния.
 
-Redux may not be as efficient out of the box when compared to other libraries.  For maximum rendering performance in a React application, state should be stored in a normalized shape, many individual components should be connected to the store instead of just a few, and connected list components should pass item IDs to their connected child list items (allowing the list items to look up their own data by ID).  This minimizes the overall amount of rendering to be done.  Use of memoized selector functions is also an important performance consideration.
+Хотя, конечно, каждый из этих пунктов *может* ухудшить производительность в достаточно сложных ситуациях, но в реализации нет Redux изначально нет ничего медлительного или неэффективного. По факту, React Redux сильно оптимизирован в части избавлениях от ненужных перерисовок, а React-Redux v5 показывает заметные улучшение по сравнению с более поздними версиями.
 
-As for architecture, anecdotal evidence is that Redux works well for varying project and team sizes. Redux is currently used by hundreds of companies and thousands of developers, with several hundred thousand monthly installations from NPM. One developer reported:
+Redux может быть не так эффективен из коробки, по сравнению с другими библиотеками. Для максимальной производительности отрисовки в React-приложении, состояние должно храниться в нормализованной форме, множество компонентов должны подключаться к одному хранилищу, а не к нескольким, и подключенный список компонентов должен передавать идентификатор каждого элемента своим подключенным потомкам (позволяя тем самым элементам списка искать их собственные данные по ID). Это минимализирует общее количество перерисовок. Использование [мемоизированных](https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%BC%D0%BE%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F) функций также является важным фактором эффективности.
 
-> for scale, we have ~500 action types, ~400 reducer cases, ~150 components, 5 middlewares, ~200 actions, ~2300 tests
+С точки зрения архитектуры, неофициальные данные показывают, что Redux хорошо работает с различными проектами и размерами команды. В настоящее время Redux используется сотнями компаний и тысячами разработчиков, имеет несколько сотен тысяч ежемесячных установок из NPM. Один разработчик сообщил:
 
-#### Further information
+> для сравнения, у нас есть ~500 типов действий, ~400 редьюсеров, ~150 компонентов, 5 миддлвэров, ~200 действий, ~2300 тестов
 
-**Documentation**
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
+#### Дополнительная информация
 
+**Документация**
 
-**Articles**
+- [Рецепты: Структурирование редюсеров — Нормализация состояния](/docs/recipes/reducers/NormalizingStateShape.md)
+
+**Статьи**
+
 - [How to Scale React Applications](https://www.smashingmagazine.com/2016/09/how-to-scale-react-applications/) (accompanying talk: [Scaling React Applications](https://vimeo.com/168648012))
 - [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
 - [Improving React and Redux Perf with Reselect](http://blog.rangle.io/react-and-redux-performance-with-reselect/)
 - [Encapsulating the Redux State Tree](http://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
 - [React/Redux Links: Performance - Redux](https://github.com/markerikson/react-redux-links/blob/master/react-performance.md#redux-performance)
 
-**Discussions**
+**Обсуждения**
+
 - [#310: Who uses Redux?](https://github.com/reactjs/redux/issues/310)
 - [#1751: Performance issues with large collections](https://github.com/reactjs/redux/issues/1751)
 - [React Redux #269: Connect could be used with a custom subscribe method](https://github.com/reactjs/react-redux/issues/269)
@@ -57,19 +62,20 @@ As for architecture, anecdotal evidence is that Redux works well for varying pro
 
 
 <a id="performance-all-reducers"></a>
-### Won't calling “all my reducers” for each action be slow?
+### Не будет ли вызов “всех моих редьюсеров” для каждого действия медленным?
 
-It's important to note that a Redux store really only has a single reducer function. The store passes the current state and dispatched action to that one reducer function, and lets the reducer handle things appropriately.
+Важно иметь ввиду, что Redux-хранилище на самом деле имеет всего одну функцию-редьюсер. Хранилище передает текующее состояние и отправленное действие этому единственному редьюсеру и позволяет ему обрабатывать это все как надо.
 
-Obviously, trying to handle every possible action in a single function does not scale well, simply in terms of function size and readability, so it makes sense to split the actual work into separate functions that can be called by the top-level reducer. In particular, the common suggested pattern is to have a separate sub-reducer function that is responsible for managing updates to a particular slice of state at a specific key. The `combineReducers()` that comes with Redux is one of the many possible ways to achieve this. It's also highly suggested to keep your store state as flat and as normalized as possible. Ultimately, though, you are in charge of organizing your reducer logic any way you want.
+Очевидно, попытка обрабатывать каждое возможное действие в одной функции плохо масштабируется, хотя бы с точки зрения размера функции и читабельности. Таким образом, есть смысл разделить реальную работу на отдельные функции, которые могут быть вызваны редьюсером верхнего порядка. В частности, общий рекомендуемый подход — это иметь отдельную функцию (под-редьюсер), которая ответственна за управление обновлениями на определенном участке состояния в определенном ключе. Функция `combineReducers()`, поставляемая с Redux, — 1 из множества способов реализации этого подхода. Также настоятельно рекомендуется держать состояние хранилища единообразным и нормализированным на столько, на сколько это возможно. В конечном счете, только Вы отвечаете за организацию логики Вашего редьюсера любыми способами, какими только пожелаете.
 
-However, even if you happen to have many different reducer functions composed together, and even with deeply nested state, reducer speed is unlikely to be a problem. JavaScript engines are capable of running a very large number of function calls per second, and most of your reducers are probably just using a `switch` statement and returning the existing state by default in response to most actions.
+Однако, даже если у Вас много различных редьюсеров, объединенных вместе, даже с глубоко вложенным состоянием, скорость редьюсера вряд ли будет проблемой. Движки JavaScript способны запускать очень большое количество вызовов функций в секунду, а большинство Ваших редьюсеров вероятнее всего используют конструкцию `switch` и возвращают существующее состояние по умолчанию в ответ на большинство действий.
 
-If you actually are concerned about reducer performance, you can use a utility such as [redux-ignore](https://github.com/omnidan/redux-ignore) or [reduxr-scoped-reducer](https://github.com/chrisdavies/reduxr-scoped-reducer) to ensure that only certain reducers listen to specific actions. You can also use [redux-log-slow-reducers](https://github.com/michaelcontento/redux-log-slow-reducers) to do some performance benchmarking.
+Если вы действительно обеспокоены производительностью редьюсера, вы можете использовать такие утилиты, как [redux-ignore](https://github.com/omnidan/redux-ignore) или [reduxr-scoped-reducer](https://github.com/chrisdavies/reduxr-scoped-reducer), чтоб гарантировать, что только определенные редьюсеры прослушивают конкретные действия. Также Вы можете использовать [redux-log-slow-reducers](https://github.com/michaelcontento/redux-log-slow-reducers), чтобы провести сравнительный анализ эффективности.
 
-#### Further information
+#### Дополнительная информация
 
-**Discussions**
+**Обсуждения**
+
 - [#912: Proposal: action filter utility](https://github.com/reactjs/redux/issues/912)
 - [#1303: Redux Performance with Large Store and frequent updates](https://github.com/reactjs/redux/issues/1303)
 - [Stack Overflow: State in Redux app has the name of the reducer](http://stackoverflow.com/questions/35667775/state-in-redux-react-app-has-a-property-with-the-name-of-the-reducer/35674297)
@@ -77,21 +83,23 @@ If you actually are concerned about reducer performance, you can use a utility s
 
 
 <a id="performance-clone-state"></a>
-### Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?
+### Должен ли я иметь полноценный клон моего состояния в редюсере? Не будет ли копирование моего состояния медленным?
 
-Immutably updating state generally means making shallow copies, not deep copies. Shallow copies are much faster than deep copies, because fewer objects and fields have to be copied, and it effectively comes down to moving some pointers around.
+Иммутабельное обновление состояния в большинстве случаев подразумевает создание поверхностных, неглубоких копий. Поверхностные копии более быстрые, чем полноценные, потому что предполагают копирование небольших объектов и полей, и это эффективно снижает перемещение нескольких указателей.
 
-However, you *do* need to create a copied and updated object for each level of nesting that is affected. Although that shouldn't be particularly expensive, it's another good reason why you should keep your state normalized and shallow if possible.
+Однако, Вам *надо* создавать скопированные и обновленные объекты для каждого затронутого уровня вложенности. Хотя это не должно быть особенно затратно, но это еще одна причина, почему Вам следует держать Ваше состояние нормализованным и поверхностным на сколько возможно.
 
-> Common Redux misconception: you need to deeply clone the state. Reality: if something inside doesn't change, keep its reference the same!
+> Распростораненное заблуждение Redux: Вам надо полноценно клонировать состояние. На самом деле: если внутри ничего не меняется, достаточно хранить ссылку!
 
-#### Further information
+#### Дополнительная информация
 
-**Documentation**
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts)
-- [Recipes: Structuring Reducers - Immutable Update Patterns](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+**Документация**
 
-**Discussions**
+- [Рецепты: Структурирование редюсеров - Предварительные концепциии](/docs/recipes/reducers/PrerequisiteConcepts)
+- [Рецепты: Структурирование редюсеров - Паттерны иммутабельного обновления](/docs/recipes/reducers/ImmutableUpdatePatterns.md)
+
+**Обсуждения**
+
 - [#454: Handling big states in reducer](https://github.com/reactjs/redux/issues/454)
 - [#758: Why can't state be mutated?](https://github.com/reactjs/redux/issues/758)
 - [#994: How to cut the boilerplate when updating nested entities?](https://github.com/reactjs/redux/issues/994)
@@ -100,15 +108,19 @@ However, you *do* need to create a copied and updated object for each level of n
 
 
 <a id="performance-update-events"></a>
-### How can I reduce the number of store update events?
+### Как мне уменьшить количество событий обновления хранилища?
 
-Redux notifies subscribers after each successfully dispatched action (i.e. an action reached the store and was handled by reducers). In some cases, it may be useful to cut down on the number of times subscribers are called, particularly if an action creator dispatches multiple distinct actions in a row.
+Redux уведомляет подписчиков после каждой успешной отправки действия (т.е. действие достигнуло хранилища и было обработано редьюсерами). В некоторых случаях, может быть полезно урезать количество вызовов подписчиков, особенно если генератор действий отправляет несколько отдельных действий за раз.
 
-If you use React, note that you can improve performance of multiple synchronous dispatches by wrapping them in `ReactDOM.unstable_batchedUpdates()`, but this API is experimental and may be removed in any React release so don't rely on it too heavily. Take a look at [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) (a higher-order reducer that lets you dispatch several actions as if it was one and “unpack” them in the reducer), [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) (a store enhancer that lets you debounce subscriber calls for multiple dispatches), or [redux-batch](https://github.com/manaflair/redux-batch) (a store enhancer that handles dispatching an array of actions with a single subscriber notification).
+Если Вы используете React, помните, что Вы можете улучшить производительность нескольких синхронных отправок обертыванием их в  `ReactDOM.unstable_batchedUpdates()`, но этот API экспериментален и может быть удален в любом выпуске React, поэтому не полагайтесь на это слишком сильно. Взгляните на аналоги:
+* [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — редьюсер высокого порядка, который позволяет Вам отправлять несколько действий так, будто это одно действие, и “распаковывать” их в редьюсере,
+* [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — расширитель хранилища, который позволяет Вам вызывать подписчиков для множественных отправок не чаще, чем раз в определенное время (debounce),
+* [redux-batch](https://github.com/manaflair/redux-batch) — расширитель хранилища, которых обрабатывает отправку набора действий с уведомлением одного подписчика.
 
-#### Further information
+#### Дополнительная информация
 
-**Discussions**
+**Обсуждения**
+
 - [#125: Strategy for avoiding cascading renders](https://github.com/reactjs/redux/issues/125)
 - [#542: Idea: batching actions](https://github.com/reactjs/redux/issues/542)
 - [#911: Batching actions](https://github.com/reactjs/redux/issues/911)
@@ -116,21 +128,28 @@ If you use React, note that you can improve performance of multiple synchronous 
 - [React Redux #263: Huge performance issue when dispatching hundreds of actions](https://github.com/reactjs/react-redux/issues/263)
 
 **Libraries**
+
 - [Redux Addons Catalog: Store - Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
 
 
 <a id="performance-state-memory"></a>
-### Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?
+### Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества действий занимать память?
 
-First, in terms of raw memory usage, Redux is no different than any other JavaScript library. The only difference is that all the various object references are nested together into one tree, instead of maybe saved in various independent model instances such as in Backbone. Second, a typical Redux app would probably have somewhat *less* memory usage than an equivalent Backbone app because Redux encourages use of plain JavaScript objects and arrays rather than creating instances of Models and Collections. Finally, Redux only holds onto a single state tree reference at a time. Objects that are no longer referenced in that tree will be garbage collected, as usual.
+Во первых, с точки зрения использования ресурсов памяти, Redux не сильно отличается от других JavaScript-библиотек. Единственно отличие — все возможные ссылки на объекты вместе вложены в одно дерево, а не хранятся в различных независимах экземплярах модели, как например в Backbone.
 
-Redux does not store a history of actions itself. However, the Redux DevTools do store actions so they can be replayed, but those are generally only enabled during development, and not used in production.
+Во-вторых, типичное Redux-приложение, вероятно, отчасти *меньше* использует память, чем такое же Backbone-приложение, из-за того, что Redux поощряет использование простых JavaScript-объектов и массивов вместо создания экземпляров моделей и коллекций.
 
-#### Further information
+Наконец, Redux держит в памяти в один момент времени только одно дерево состояния со ссылками. Объекты, которые больше не имеют ссылок в этом дереве, обычно будут собраны сборщиком мусора.
 
-**Documentation**
-- [Docs: Async Actions](/docs/advanced/AsyncActions.md)
+Redux сам не хранит историю действий. Однако, Redux DevTools — хранит, таким образом действия могут быть проиграны заново, но это возможно только в процессе разработки и не используется в продакшн-версии.
 
-**Discussions**
+#### Дополнительная информация
+
+**Документация**
+
+- [Продвинутое использование: Асинхронные действия](/docs/advanced/AsyncActions.md)
+
+**Обсуждения**
+
 - [Stack Overflow: Is there any way to "commit" the state in Redux to free memory?](http://stackoverflow.com/questions/35627553/is-there-any-way-to-commit-the-state-in-redux-to-free-memory/35634004)
 - [Reddit: What's the best place to keep initial state?](https://www.reddit.com/r/reactjs/comments/47m9h5/whats_the_best_place_to_keep_the_initial_state/)

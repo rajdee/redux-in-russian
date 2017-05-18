@@ -1,34 +1,34 @@
-# Redux FAQ: Organizing State
+# Redux FAQ: Организация состояния
 
-## Table of Contents
+## Содержание
 
-- [Do I have to put all my state into Redux? Should I ever use React's setState()?](#organizing-state-only-redux-state) 
-- [Can I put functions, promises, or other non-serializable items in my store state?](#organizing-state-non-serializable) 
-- [How do I organize nested or duplicate data in my state?](#organizing-state-nested-data) 
+- [Могу ли я хранить все мое состояние в Redux? Должен ли я всегда использовать setState() из React?](#organizing-state-only-redux-state)
+- [Могу ли я хранить функции, промисы или другие несериализируемые данные в моем хранилище состояния?](#organizing-state-non-serializable)
+- [Как мне хранить вложенные или дублирующиеся данные в моем состоянии?](#organizing-state-nested-data)
 
 
-## Organizing State
+## Организация состояния
 
 <a id="organizing-state-only-redux-state"></a>
-### Do I have to put all my state into Redux? Should I ever use React's `setState()`?
+### Могу ли я хранить все мое состояние в Redux? Должен ли я всегда использовать setState() из React?
 
-There is no “right” answer for this. Some users prefer to keep every single piece of data in Redux, to maintain a fully serializable and controlled version of their application at all times. Others prefer to keep non-critical or UI state, such as “is this dropdown currently open”, inside a component's internal state. 
+Не существует “правильного” ответа на этот вопрос. Некоторые пользователи предпочитают хранить все данные в Redux, чтобы поддерживать полностью сериализуемую и контролируемую версию своего приложения на протяжении всего времени. Другие предпочитают выносить некритичные данные (UI состояние), как, например “is this dropdown currently open”, в состояние компонента.
 
-***Using local component state is fine***.  As a developer, it is _your_ job to determine what kinds of state make up your application, and where each piece of state should live.  Find a balance that works for you, and go with it.
+***Лучше использовать состояние компонента***. Это _Ваша_ работа, как разработчика, решать, какие части состояния составляют ваше приложение и где каждая из них хранится. Найдите баланс, который подходит Вам, и реализуйте его.
 
-Some common rules of thumb for determing what kind of data should be put into Redux:
+Ниже описаны некоторые негласные правила для определения тех частей данных, которые должны хранится в Redux-хранилище:
 
-- Do other parts of the application care about this data?
-- Do you need to be able to create further derived data based on this original data?
-- Is the same data being used to drive multiple components?
-- Is there value to you in being able to restore this state to a given point in time (ie, time travel debugging)?
-- Do you want to cache the data (ie, use what's in state if it's already there instead of re-requesting it)?
+- Остальные части приложения используют эти данные?
+- Потребуется ли в дальнейшем возможность создавать данные, основанные на этих данных?
+- Эти данные используются для управления несколькими компонентами?
+- Важна ли Вам возможность восстанавливать это состояние в какой-то момент времени, т.е. отладка по времени (time travel debugging)?
+- Требуется ли кэшировать данные, т.е. использовать то, что уже хранится в состоянии вместо повторного запроса?
 
-There are a number of community packages that implement various approaches for storing per-component state in a Redux store instead, such as [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local), and more.  It's also possible to apply Redux's principles and concept of reducers to the task of updating local component state as well, along the lines of `this.setState( (previousState) => reducer(previousState, someAction))`.
+Существует несколько пакетов, реализующих различные подходы к хранению данных в Redux-хранилище вместо состояния компонента, таких как: [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local) и другие. Они также позволяют применять принципы Redux и концепцию редьюсера к задачам обновления локального состояни компонента, поддерживая идею `this.setState( (previousState) => reducer(previousState, someAction))`.
 
-#### Further information
+#### Дополнительная информация
 
-**Articles**
+**Статьи**
 
 - [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)
 - [Finding `state`'s place with React and Redux](https://medium.com/@adamrackis/finding-state-s-place-with-react-and-redux-e9a586630172)
@@ -37,7 +37,7 @@ There are a number of community packages that implement various approaches for s
 - [Where to Hold React Component Data: state, store, static, and this](https://medium.freecodecamp.com/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00)
 - [The 5 Types of React Application State](http://jamesknelson.com/5-types-react-application-state/)
 
-**Discussions**
+**Обсуждения**
 
 - [#159: Investigate using Redux for pseudo-local component state](https://github.com/reactjs/redux/issues/159)
 - [#1098: Using Redux in reusable React component](https://github.com/reactjs/redux/issues/1098)
@@ -50,21 +50,20 @@ There are a number of community packages that implement various approaches for s
 - [Stack Overflow: Why is state all in one place, even state that isn't global?](http://stackoverflow.com/questions/35664594/redux-why-is-state-all-in-one-place-even-state-that-isnt-global)
 - [Stack Overflow: Should all component state be kept in Redux store?](http://stackoverflow.com/questions/35328056/react-redux-should-all-component-states-be-kept-in-redux-store)
 
-**Libraries**
+**Библиотеки**
 
 - [Redux Addons Catalog: Component State](https://github.com/markerikson/redux-ecosystem-links/blob/master/component-state.md)
 
-
 <a id="organizing-state-non-serializable"></a>
-### Can I put functions, promises, or other non-serializable items in my store state?
+### Могу ли я хранить функции, промисы или другие несериализируемые данные в моем хранилище состояния?
 
-It is highly recommended that you only put plain serializable objects, arrays, and primitives into your store. It's *technically* possible to insert non-serializable items into the store, but doing so can break the ability to persist and rehydrate the contents of a store, as well as interfere with time-travel debugging.
+Настоятельно рекомендуется класть в хранилище только простые сериализуемые объекты, массивы и примитивы. *Технически* возможно добавить несериализуемые данные в хранилище, но это может сломать способность сохранять и восстанавливать содержимое хранилища, что сделает невозможным отладку по временной шкале (time-travel debugging).
 
-If you are okay with things like persistence and time-travel debugging potentially not working as intended, then you are totally welcome to put non-serializable items into your Redux store.  Ultimately, it's _your_ application, and how you implement it is up to you.  As with many other things about Redux, just be sure you understand what tradeoffs are involved.
+Если Вы смиритесь с тем, что эти функции возможно не будут работать как положено, то Вы можете спокойно использовать несериализуемые данные в Redux-хранилище. В конечном счете, это _Ваше_ приложение, и как оно будет реализовано — решать Вам. Как и со многими другими вещами в Redux, Вы должны четко понимать, на какие компромиссы идете.
 
-#### Further information
+#### Дополнительная информация
 
-**Discussions**
+**Обсуждения**
 - [#1248: Is it ok and possible to store a react component in a reducer?](https://github.com/reactjs/redux/issues/1248)
 - [#1279: Have any suggestions for where to put a Map Component in Flux?](https://github.com/reactjs/redux/issues/1279)
 - [#1390: Component Loading](https://github.com/reactjs/redux/issues/1390)
@@ -73,24 +72,26 @@ If you are okay with things like persistence and time-travel debugging potential
 
 
 <a id="organizing-state-nested-data"></a>
-### How do I organize nested or duplicate data in my state?
+### Как мне хранить вложенные или дублирующиеся данные в моем состоянии?
 
-Data with IDs, nesting, or relationships should generally be stored in a “normalized” fashion: each object should be stored once, keyed by ID, and other objects that reference it should only store the ID rather than a copy of the entire object. It may help to think of parts of your store as a database, with individual “tables” per item type. Libraries such as [normalizr](https://github.com/gaearon/normalizr) and [redux-orm](https://github.com/tommikaikkonen/redux-orm) can provide help and abstractions in managing normalized data.
+Данные с идентификаторами, вложенностью или отношениями, как правило, следует хранить в “нормализированном” стиле: каждый объект должен быть сохранен однажды, идентифицирован, и другие ссылающиеся на него объекты должны хранить только идентификатор, а не копировать весь объект.
 
-#### Further information
+Это помогает думать о частях приложения как о базе данных с отдельными “таблицами” на каждый элемент. Такие библиотеки, как [normalizr](https://github.com/gaearon/normalizr) и [redux-orm](https://github.com/tommikaikkonen/redux-orm) могут помочь и облегчить управление нормализированными данными.
 
-**Documentation**
-- [Advanced: Async Actions](/docs/advanced/AsyncActions.md)
-- [Examples: Real World example](/docs/introduction/Examples.html#real-world)
-- [Recipes: Structuring Reducers - Prerequisite Concepts](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
-- [Recipes: Structuring Reducers - Normalizing State Shape](/docs/recipes/reducers/NormalizingStateShape.md)
-- [Examples: Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view)
+#### Дополнительная информация
 
-**Articles**
+**Документация**
+- [Продвинутое использование: Асинхронные действия](/docs/advanced/AsyncActions.md)
+- [Примеры: Real World](/docs/introduction/Examples.html#real-world)
+- [Рецепты: Структурирование редюсеров — Предварительные концепциии](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
+- [Рецепты: Структурирование редюсеров — Нормализация состояния](/docs/recipes/reducers/NormalizingStateShape.md)
+- [Примеры: Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view)
+
+**Статьи**
 - [High-Performance Redux](http://somebody32.github.io/high-performance-redux/)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 
-**Discussions**
+**Обсуждения**
 - [#316: How to create nested reducers?](https://github.com/reactjs/redux/issues/316)
 - [#815: Working with Data Structures](https://github.com/reactjs/redux/issues/815)
 - [#946: Best way to update related state fields with split reducers?](https://github.com/reactjs/redux/issues/946)
