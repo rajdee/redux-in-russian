@@ -4,19 +4,19 @@
 
 Наиболее распространенным случаем использования мидлвэров является поддержка асинхронных действий без необходимости в большом количестве шаблонного кода или зависимости от библиотек типа [Rx](https://github.com/Reactive-Extensions/RxJS). Это позволяет вам вызывать [асинхронные действия](../Glossary.md#async-action) помимо обычных действий.
 
-Например, [redux-thunk](https://github.com/gaearon/redux-thunk) позволяет генераторам действий инвертировать управление вызывая функции. Они будут получать [`dispatch`](Store.md#dispatch), как аргумент и могут вызывать его асинхронно. Такие функции называются *преобразователями (thunks)*. Другим примером мидлвэра является [redux-promise](https://github.com/acdlite/redux-promise). Он позволяет вам вызывать асинхронное действие c [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) и вызывать обычные действия, когда промис вернет resolve.
+Например, [redux-thunk](https://github.com/gaearon/redux-thunk) позволяет генераторам действий инвертировать управление вызывая функции. Они будут получать [`dispatch`](Store.md#dispatch) как аргумент и могут вызывать его асинхронно. Такие функции называются *преобразователями (thunks)*. Другим примером мидлвэра является [redux-promise](https://github.com/acdlite/redux-promise). Он позволяет вам вызывать асинхронное действие c [Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) и вызывать обычные действия, когда промис вернет resolve.
 
-Мидлвэры нельзя сравнивать с [`createStore`](createStore.md) и это не фундаментальная часть архитектуры Redux, но, мы считаем, что достаточно полезно поддерживать их прямо в ядре. Таким образом, существует единственный стандартный способ расширить [`dispatch`](Store.md#dispatch) в экосистеме и разные мидлвэры могут конкурировать в выразительности и полезности.
+Мидлвэры нельзя сравнивать с [`createStore`](createStore.md) и это не фундаментальная часть архитектуры Redux, но мы считаем, что достаточно полезно поддерживать их прямо в ядре. Таким образом, существует единственный стандартный способ расширить [`dispatch`](Store.md#dispatch) в экосистеме и разные мидлвэры могут конкурировать в выразительности и полезности.
 
 #### Параметры
 
-* `...middlewares` (*arguments*): Функции, которые соответствуют Redux *middleware API*. Каждый мидлвэр получает [`dispatch`](Store.md#dispatch) и [`getState`](Store.md#getState) функции в качестве именованных аргументов и возвращает функцию. Эта функция будет передана `next` dispatch-методу мидлвэра и, как ожидается, вернет функцию `действия`, вызывающую `next(action)` с возможно другим аргументом или позже или, возможно, не вызывая его вообще. Последний мидлвэр в цепочке получит реальный [`dispatch`](Store.md#dispatch) метод хранилища, в качестве `next` параметра, таким образом завершая цепочку. Следовательно сигнатурой мидлвэра является `({ getState, dispatch }) => next => action`.
+* `...middlewares` (*arguments*): Функции, которые соответствуют Redux *middleware API*. Каждый мидлвэр получает [`dispatch`](Store.md#dispatch) и [`getState`](Store.md#getState) функции в качестве именованных аргументов и возвращает функцию. Эта функция будет передана `next` dispatch-методу мидлвэра и, как ожидается, вернет функцию `действия`, вызывающую `next(action)` с возможно другим аргументом или позже или, возможно, не вызывая его вообще. Последний мидлвэр в цепочке получит реальный [`dispatch`](Store.md#dispatch) метод хранилища в качестве `next` параметра, таким образом завершая цепочку. Следовательно, сигнатурой мидлвэра является `({ getState, dispatch }) => next => action`.
 
 #### Возвращает
 
-(*Function*) Расширитель хранилища, который применяет полученный мидлвэр. The store enhancer signature is `createStore => createStore'` but the easiest way to apply it is to pass it to [`createStore()`](./createStore.md) as the last `enhancer` argument.
+(*Function*) Расширитель хранилища, который применяет полученный мидлвэр. Сигнатурой расширителя хранилища является `createStore => createStore'`, но самый простой способ его применить - это передать его в [`createStore()`](./createStore.md) как последний аргумент `enhancer`.
 
-#### Пример: Custom Logger Middleware
+#### Пример: Мидлвэр для кастомного логирования
 
 ```js
 import { createStore, applyMiddleware } from 'redux'
@@ -26,13 +26,13 @@ function logger({ getState }) {
   return (next) => (action) => {
     console.log('will dispatch', action)
 
-    // Call the next dispatch method in the middleware chain.
+    // Вызовем следующий метод dispatch в цепочке мидлвэров.
     let returnValue = next(action)
 
     console.log('state after dispatch', getState())
 
-    // This will likely be the action itself, unless
-    // a middleware further in chain changed it.
+    // Это наверняка будет `действие`, если только
+    // какой-нибудь `мидлвэр` дальше в цепочке не изменит его.
     return returnValue
   }
 }
@@ -47,12 +47,12 @@ store.dispatch({
   type: 'ADD_TODO',
   text: 'Understand the middleware'
 })
-// (These lines will be logged by the middleware:)
+// (Эти строки будут залогированы милдвэром:)
 // will dispatch: { type: 'ADD_TODO', text: 'Understand the middleware' }
 // state after dispatch: [ 'Use Redux', 'Understand the middleware' ]
 ```
 
-#### Example: Using Thunk Middleware for Async Actions
+#### Пример: Использование Thunk мидлвэра для асинхронных действий
 
 ```js
 import { createStore, combineReducers, applyMiddleware } from 'redux'
@@ -60,16 +60,16 @@ import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 
 let reducer = combineReducers(reducers)
-// applyMiddleware supercharges createStore with middleware:
+// applyMiddleware улучшает createStore переданным мидлвэром:
 let store = createStore(reducer, applyMiddleware(thunk))
 
 function fetchSecretSauce() {
   return fetch('https://www.google.com/search?q=secret+sauce')
 }
 
-// These are the normal action creators you have seen so far.
-// The actions they return can be dispatched without any middleware.
-// However, they only express “facts” and not the “async flow”.
+//Это такие же обычные генераторы действий, которые вы видели ранее.
+//Действия, которые они возвращают, могут быть переданы в `dispatch` без каких-либо мидлвэров.
+//Тем не менее, они отражают только "факты", но не "асинхронный flow"
 
 function makeASandwich(forPerson, secretSauce) {
   return {
@@ -95,21 +95,21 @@ function withdrawMoney(amount) {
   }
 }
 
-// Even without middleware, you can dispatch an action:
+// Мы можем диспатчить событие даже без мидлвера
 store.dispatch(withdrawMoney(100))
 
-// But what do you do when you need to start an asynchronous action,
-// such as an API call, or a router transition?
+// Но что, если вам нужно запустить асинхронную операцию,
+// такую, как вызов API или переход в роутере?
 
-// Meet thunks.
-// A thunk is a function that returns a function.
-// This is a thunk.
+// Встречайте `преобразователи` (thunks).
+// Преобразователь - это всего лишь функция, возвращающая функцию.
+// Вот пример преобразователя:
 
 function makeASandwichWithSecretSauce(forPerson) {
 
-  // Invert control!
-  // Return a function that accepts `dispatch` so we can dispatch later.
-  // Thunk middleware knows how to turn thunk async actions into actions.
+  // Инвертируем управление!
+  // Возвращаем функцию, которая принимает `dispatch` как аргумент, чтобы мы могли её вызвать позже.
+  // Мидлвэр-преобразователь знает, как нужно конвертировать такие асинхронные действия в стандартные.
 
   return function (dispatch) {
     return fetchSecretSauce().then(
@@ -119,15 +119,14 @@ function makeASandwichWithSecretSauce(forPerson) {
   }
 }
 
-// Thunk middleware lets me dispatch thunk async actions
-// as if they were actions!
+// Мидлвэр-преобразователь позволяет диспатчить асинхронные функции так,
+// как будто это обычные события!
 
 store.dispatch(
   makeASandwichWithSecretSauce('Me')
 )
 
-// It even takes care to return the thunk's return value
-// from the dispatch, so I can chain Promises as long as I return them.
+// Мидлвэр даже возвращает результат вашей функции из dispatch, поэтому можно создавать цепочки Promise, если вы их возвращаете.
 
 store.dispatch(
   makeASandwichWithSecretSauce('My wife')
@@ -135,22 +134,20 @@ store.dispatch(
   console.log('Done!')
 })
 
-// In fact I can write action creators that dispatch
-// actions and async actions from other action creators,
-// and I can build my control flow with Promises.
+// Фактически, можно даже писать генераторы событий, которые диспатчат обычные и асинхронные события из других генераторов событий, 
+// и, таким образом, создавать полноценные потоки управления событиями с использованием Promise
 
 function makeSandwichesForEverybody() {
   return function (dispatch, getState) {
     if (!getState().sandwiches.isShopOpen) {
 
-      // You don't have to return Promises, but it's a handy convention
-      // so the caller can always call .then() on async dispatch result.
-
+      // Вы не обязаны возвращать Promise, но это хорошее соглашение, чтобы вызывающий мог всегда вызвать .then() на результате вашего `dispatch`
+      
       return Promise.resolve()
     }
 
-    // We can dispatch both plain object actions and other thunks,
-    // which lets us compose the asynchronous actions in a single flow.
+    // Мы можем диспатчить как обычные объекты событий, так и асинхронные функции-преобразователи одновременно,
+    // что позволяем нам встраивать асинхронные события в единый поток событий.
 
     return dispatch(
       makeASandwichWithSecretSauce('My Grandma')
@@ -170,8 +167,7 @@ function makeSandwichesForEverybody() {
   }
 }
 
-// This is very useful for server side rendering, because I can wait
-// until data is available, then synchronously render the app.
+// Это очень полезно для server-side рендеринда, т.к. мы можем дождаться получения данных, а после синхронно отрендерить приложение.
 
 import { renderToString } from 'react-dom/server'
 
@@ -181,8 +177,8 @@ store.dispatch(
   response.send(renderToString(<MyApp store={store} />))
 )
 
-// I can also dispatch a thunk async action from a component
-// any time its props change to load the missing data.
+// Можно также диспатчить асинхронный генератор действий прямо из компонента при изменении его `props`
+// для получения недостающих данных.
 
 import { connect } from 'react-redux'
 import { Component } from 'react'
@@ -216,11 +212,11 @@ export default connect(
 
 #### Советы
 
-* Middleware only wraps the store's [`dispatch`](Store.md#dispatch) function. Technically, anything a middleware can do, you can do manually by wrapping every `dispatch` call, but it's easier to manage this in a single place and define action transformations on the scale of the whole project.
+* Мидлвэры всего лишь оборачивают метод хранилища [`dispatch`](Store.md#dispatch). Технически, вы можете воспроизвести это поведение, оборачивая каждый вызов `dispatch` вручную, но гораздо проще управлять этим из единого места и устанавливать трансформации действий во всём приложении одновременно.
 
-* If you use other store enhancers in addition to `applyMiddleware`, make sure to put `applyMiddleware` before them in the composition chain because the middleware is potentially asynchronous. For example, it should go before [redux-devtools](https://github.com/gaearon/redux-devtools) because otherwise the DevTools won't see the raw actions emitted by the Promise middleware and such.
+* Если вы используете другие расширители хранилища, помимо `applyMiddleware`, убедитесь, что вы расположили `applyMiddleware` перед ними в цепочке преобразований, поскольку мидлвэры потенциально могут быть асинхронными. Например, он должен быть установлен перед [redux-devtools](https://github.com/gaearon/redux-devtools) иначе DevTools не увидит _сырые_ события, сгенерированные мидлвэром Promise middleware и ему подобными.
 
-* If you want to conditionally apply a middleware, make sure to only import it when it's needed:
+* Если вы ходите применять мидлвэр по условию, убедитесь, что он импортируется только тогда, когда он необходим:
 
   ```js
   let middleware = [ a, b ]
@@ -237,10 +233,10 @@ export default connect(
   )
   ```
 
-  This makes it easier for bundling tools to cut out unneeded modules and reduces the size of your builds.
+  Это позволяет инструментам сборки эффективно удалять неиспользуемый код из сборки и уменьшать их размер.
 
-* Ever wondered what `applyMiddleware` itself is? It ought to be an extension mechanism more powerful than the middleware itself. Indeed, `applyMiddleware` is an example of the most powerful Redux extension mechanism called [store enhancers](../Glossary.md#store-enhancer). It is highly unlikely you'll ever want to write a store enhancer yourself. Another example of a store enhancer is [redux-devtools](https://github.com/gaearon/redux-devtools). Middleware is less powerful than a store enhancer, but it is easier to write.
+* Никогда не задумывались, что из себя представляет `applyMiddleware`? Он должен быть более мощным механизмом расширения, чем сами мидлвэры. И действительно, `applyMiddleware` является примером наиболее мощного механизма расширения Redux, который называется [расширители хранилища (store enhancers)](../Glossary.md#store-enhancer). Достаточно маловероятно, что вам когда-либо придётся самостоятельно писать расширитель хранилища. Примером такого расширителя является [redux-devtools](https://github.com/gaearon/redux-devtools). Мидлвэр менее мощный, чем расширитель хранилища, но его проще написать.
 
-* Middleware sounds much more complicated than it really is. The only way to really understand middleware is to see how the existing middleware works, and try to write your own. The function nesting can be intimidating, but most of the middleware you'll find are, in fact, 10-liners, and the nesting and composability is what makes the middleware system powerful.
+* Мидлвэры представляются гораздо сложнее, чем они есть на самом деле. Единственный способ действительно понять мидлвэр - это увидеть, как работают уже существующие, и попробовать написать собственный. Множественная вложенность функций может выглядеть пугающем, но большинство написанных мидлвэров, фактически, содержат не больше 10 строк кода, а вложенность и компонуемость - это как раз то, что делает систему мидлвэров такой мощной.
 
-* To apply multiple store enhancers, you may use [`compose()`](./compose.md).
+* Вы можете использовать [`compose()`](./compose.md) для применения нескольких расширителей хранилища одновременно.
