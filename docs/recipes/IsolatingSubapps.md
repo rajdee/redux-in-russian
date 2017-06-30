@@ -1,7 +1,7 @@
-# Isolating Redux Sub-Apps
+# Изолирование субприложений Redux
 
-Consider the case of a “big” app (contained in a `<BigApp>` component)
-that embeds smaller “sub-apps” (contained in `<SubApp>` components):
+Предcтавьте себе "большое" приложение (содержащееся в компоненте `<BigApp>`), 
+которое включает в себя меньшие субприложения (содержащиеся в компонентах `<SubApp>`)
 
 ```js
 import React, { Component } from 'react'
@@ -20,35 +20,32 @@ class BigApp extends Component {
 }
 ```
 
-These `<SubApp>`s will be completely independent. They won't share data or
-actions, and won't see or communicate with each other.
+Эти компоненты `<SubApp>` будут полностью независимы. Они не будут разделять `состояние` или `действия`, 
+не будут видеть друг друга или взаимодействовать между собой.
 
-It's best not to mix this approach with standard Redux reducer composition.
-For typical web apps, stick with reducer composition. For
-“product hubs”, “dashboards”, or enterprise software that groups disparate
-tools into a unified package, give the sub-app approach a try.
+Не стоит смешивать такой подход со стандартной композицией `редюсеров` в Redux.
+Для обычных веб-приложений лучше всего придерживаться композиции редюсеров.
+Попробуйте использовать подход субприложений для "концентраторов продуктов", дашбордов или enterprise-приложений, которые группируют несоизмеримые вещи в единый пакет приложения. 
 
-The sub-app approach is also useful for large teams that are divided by product
-or feature verticals. These teams can ship sub-apps independently or in combination
-with an enclosing “app shell”.
+Он также может быть полезен для больших команд, которые делят отвественность по продуктам или фичам.
+Такие команды могут поставлять отдельные субприложения по отдельности или в рамках общей оболочки продукта.
 
-Below is a sub-app's root connected component.
-As usual, it can render more components, connected or not, as children.
-Usually we'd render it in `<Provider>` and be done with it.
+Ниже представлен корневой компонент субприложения, соединённый с Redux. 
+Как и любой другой компонент, он может рендерить другие компоненты, как соединённые с Redux, так и нет.
+Обычно мы хотим отрендерить корневой компонент внутри `<Provider>`.
 
 ```js
 class App extends Component { ... }
 export default connect(mapStateToProps)(App)
 ```
 
-However, we don't have to call `ReactDOM.render(<Provider><App /></Provider>)`
-if we're interested in hiding the fact that the sub-app component is a Redux app.
+При этом, нам не нужно вызывать `ReactDOM.render(<Provider><App /></Provider>)`,
+если мы заинтересованы в сокрытии того, что наш компонент-субприложение использует Redux.
+Возможно, мы хотим запустить множество таких субприложений внутри "большого" приложения,
+и чтобы каждый из них был "чёрным ящиком", а Redux был бы всего лишь деталью их реализации.
 
-Maybe we want to be able to run multiple instances of it in the same “bigger” app
-and keep it as a complete black box, with Redux being an implementation detail.
-
-To hide Redux behind a React API, we can wrap it in a special component that
-initializes the store in the constructor:
+Для того, чтобы спрятать Redux за React API, мы можем обернуть его в специальный компонент,
+который инициализирует `хранилище` в конструкторе:
 
 ```js
 import React, { Component } from 'react'
@@ -72,10 +69,10 @@ class SubApp extends Component {
 }
 ```
 
-This way every instance will be independent.
+Таким образом, каждый экземпляр субприложения будет полностью независимым.
 
-This pattern is *not* recommended for parts of the same app that share data.
-However, it can be useful when the bigger app has zero access to the smaller apps' internals,
-and we'd like to keep the fact that they are implemented with Redux as an implementation detail.
-Each component instance will have its own store, so they won't “know” about each other.
+Этот паттерн *не* рекомендуется для частей одного и того же приложения, которые имеют общие данные.
+Тем не менее, он может быть полезен в случае, когда "большое" приложение не имеет доступа к внутренностям субприложений,
+а мы бы хотели оставить факт использования ими Redux  деталью реализации.
+В этом случае, каждый экземпляр компонента-субприложения будет иметь собственное `хранилище`, и они не будут "знать" друг о друге.
 
