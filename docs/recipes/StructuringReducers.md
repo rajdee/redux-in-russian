@@ -1,33 +1,32 @@
-# Structuring Reducers
+# Структурирование редюсеров
 
-At its core, Redux is really a fairly simple design pattern: all your "write" logic goes into a single function, and the only way to run that logic is to give Redux a plain object that describes something that has happened.  The Redux store calls that write logic function and passes in the current state tree and the descriptive object, the write logic function returns some new state tree, and the Redux store notifies any subscribers that the state tree has changed.  
+В основе своей, Redux следует достаточно простой концепции: вся ваша логика "записи" находится в одной функции, а единственный способ её вызвать - это дать Redux простой объект, объясняющий, что что-то произошло. Хранилище Redux запускает функцию с логикой записи, передавая её текущее дерево состояния и объект описания; на основании этого функция возвращает новое состояние, а Redux информирует подписчиков, что оно изменилось.
 
-Redux puts some basic constraints on how that write logic function should work.  As described in [Reducers](../basics/Reducers.md), it has to have a signature of `(previousState, action) => newState`, is known as a ***reducer function***, and must be *pure* and predictable.
+Redux накладывает некоторые базовые ограничения на то, как именно должна работать функция записи. Как описано в разделе [Редюсеры](../basics/Reducers.md), она обязана иметь сигнатуру `(previousState, action) => newState` (**сигнатура редюсера**), должна быть *чистой* и предсказуемой.
 
-Beyond that, Redux does not really care how you actually structure your logic inside that reducer function, as long as it obeys those basic rules.  This is both a source of freedom and a source of confusion.  However, there are a number of common patterns that are widely used when writing reducers, as well as a number of related topics and concepts to be aware of.  As an application grows, these patterns play a crucial role in managing reducer code complexity, handling real-world data, and optimizing UI performance.  
+Для Redux совершенно не важно, как именно реализована ваша редюсер-функция, если она следует правилам, описанным выше. Это даёт нам свободу действий, но, в то же время, может стать источником беспорядка. В связи с этим, существует несколько широко используемых паттернов написания редюсеров, а также множество связанных с ними тем и вещей, которых стоит опасаться. С ростом приложения, эти паттерны сыграют ключевую роль в управлении сложностью кода редюсеров, обработке реальных данных и оптимизации производительности UI.
 
 
-### Prerequisite Concepts for Writing Reducers
+### Базовые концепции написания редюсеров
 
-Some of these concepts are already described elsewhere in the Redux documentation.  Others are generic and applicable outside of Redux itself, and there are numerous existing articles that cover these concepts in detail.  These concepts and techniques form the foundation of writing solid Redux reducer logic.
+Некоторые из этих концепций уже были описаны в других частях документации Redux, другие же являются общеупотребимыми, и могут быть применены не только в Redux. Написано множество статей, которые в деталях рассказывают об их использовании. Эти техники и концепции формируют базу для написания качественной логики редюсеров Redux.
 
-It is vital that these Prerequisite Concepts are **thoroughly understood** before moving on to more advanced and Redux-specific techniques. A recommended reading list is available at:
-
-#### [Prerequisite Concepts](./reducers/PrerequisiteConcepts.md)  
+Важно, чтобы вы **действительно поняли** эти базовые концепции перед тем, как двигаться к более сложным и Redux-специфичным. Рекомендуемый их список их находится здесь:
+#### [Базовые концепции](./reducers/PrerequisiteConcepts.md)  
   
-It's also important to note that some of these suggestions may or may not be directly applicable based on architectural decisions in a specific application.  For example, an application using Immutable.js Maps to store data would likely have its reducer logic structured at least somewhat differently than an application using plain Javascript objects.  This documentation primarily assumes use of plain Javascript objects, but many of the principles would still apply if using other tools.
-  
+Также важно отметить, что некоторые из этих концепций могут быть неприменимы в связи с архитектурными особенностями приложения. Например, приложение, использующее Maps из Immutable.js для хранения данных, почти наверняка будет иметь отличающуюся логику редюсеров от случая, когда используются нативные объекты JavaScript. Эта документация, в основном, предполагает использование объектов JavaScript, но многие принципы будут применимы и с другими инструментами.
   
   
-### Reducer Concepts and Techniques
+  
+### Концепции и техники написания редюсеров
 
-- [Basic Reducer Structure](./reducers/BasicReducerStructure.md)
-- [Splitting Reducer Logic](./reducers/SplittingReducerLogic.md)
-- [Refactoring Reducers Example](./reducers/RefactoringReducersExample.md)
-- [Using `combineReducers`](./reducers/UsingCombineReducers.md)
-- [Beyond `combineReducers`](./reducers/BeyondCombineReducers.md)
-- [Normalizing State Shape](./reducers/NormalizingStateShape.md)
-- [Updating Normalized Data](./reducers/UpdatingNormalizedData.md)
-- [Reusing Reducer Logic](./reducers/ReusingReducerLogic.md)
-- [Immutable Update Patterns](./reducers/ImmutableUpdatePatterns.md)
-- [Initializing State](./reducers/InitializingState.md)
+- [Базовая структура редюсера](./reducers/BasicReducerStructure.md)
+- [Разделение логики редюсеров](./reducers/SplittingReducerLogic.md)
+- [Пример рефакторинга логики редюсеров](./reducers/RefactoringReducersExample.md)
+- [Использование `combineReducers`](./reducers/UsingCombineReducers.md)
+- [Редюсеры без `combineReducers`](./reducers/BeyondCombineReducers.md)
+- [Нормализация состояния](./reducers/NormalizingStateShape.md)
+- [Обновление нормализованных данных](./reducers/UpdatingNormalizedData.md)
+- [Переиспользование логики редюсеров](./reducers/ReusingReducerLogic.md)
+- [Паттерны иммутабельного обновления](./reducers/ImmutableUpdatePatterns.md)
+- [Инициализация состояния](./reducers/InitializingState.md)
