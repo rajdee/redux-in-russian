@@ -58,12 +58,12 @@
 
     ```js
     function todos(state = [], action) {
-      // как то вычисляет nextState...
+      // как-то вычисляет nextState...
       return nextState
     }
 
     function visibleTodoFilter(state = 'SHOW_ALL', action) {
-      // как то вычисляет nextState...
+      // как-то вычисляет nextState...
       return nextState
     }
 
@@ -73,7 +73,7 @@
     })
     ```
 
-  Когда вы инициируете действие, `todoApp`, которое вернул `combineReducers` вызовет оба редюсера:
+  Когда вы инициируете действие, `todoApp`, которое вернул `combineReducers`, вызовет оба редюсера:
 
     ```js
     let nextTodos = todos(state.todos, action)
@@ -99,7 +99,7 @@
 
 ## Следующие шаги
 
-Теперь, когда Вы знаете как работает Redux, давайте [свяжем его с React приложением](UsageWithReact.md).
+Теперь, когда Вы знаете, как работает Redux, давайте [свяжем его с React приложением](UsageWithReact.md).
 
 >##### Заметка для опытных пользователей
 
