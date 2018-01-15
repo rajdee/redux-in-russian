@@ -185,7 +185,7 @@ const getVisibleTodos = createSelector(
 export default getVisibleTodos
 ```
 
-`props` can be passed to `getVisibleTodos` from `mapStateToProps`:
+`props` может быть передан `getVisibleTodos` из `mapStateToProps`:
 
 ```js
 const mapStateToProps = (state, props) => {
@@ -199,7 +199,7 @@ const mapStateToProps = (state, props) => {
 
 **Но есть проблема!**
 
-Использование селектора `getVisibleTodos` с множественными вхождениями контейнера `visibleTodoList` не будет правильно мемоизирован:
+Использование селектора `getVisibleTodos` с множественными вхождениями контейнера `visibleTodoList` не будет правильно мемоизировано:
 
 #### `containers/VisibleTodoList.js`
 
