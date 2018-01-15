@@ -52,7 +52,7 @@ export default VisibleTodoList
 
 Мы хотели бы заменить `getVisibleTodos` на мемоизированный селектор, который пересчитывает `todos` когда значение `state.todos` или `state.visibilityFilter` изменяется, но не тогда когда изменения происходят в других (независимых) частях дерева состояний.
 
-Reselect представляет функцию `createSelector` для создания мемоизированных селекторов. В качестве аргументов `createSelector`принимает массив входных селекторов и функцию преобразования. Если дерево состояний Redux мутируется таким образом, что послужит причиной изменения значения входного селектора, селектор вызовет свою функцию преобразования со значениями входных селекторов в качестве аргументов и вернёт результат. Если значения входных селекторов такие же как и в предыдущем вызове селектора, он вернёт ранее вычисленное значение вместо вызова функции преобразования.
+Reselect представляет функцию `createSelector` для создания мемоизированных селекторов. В качестве аргументов `createSelector`принимает массив входных селекторов и функцию преобразования. Если дерево состояний Redux мутируется таким образом, что послужит причиной изменения значения входного селектора, селектор вызовет свою функцию преобразования со значениями входных селекторов в качестве аргументов и вернёт результат. Если значения входных селекторов такие же как и в предыдущем вызове селектора, он вернёт ранее вычисленное значение, вместо того чтобы вызывать функцию преобразования.
 
 Давайте определим мемоизированный селектор с именем `getVisibleTodos` на замену не мемоизированной версии выше:
 
@@ -81,9 +81,9 @@ export const getVisibleTodos = createSelector(
 
 В примере выше, `getVisibilityFilter` и `getTodos` входные селекторы. Они создаются как обычные не мемоизированные селекторные функции потому что они не преобразуют данные, которые они выбирают. Что же касается `getVisibleTodos`- это мемоизированный селектор. Он принимает `getVisibilityFilter` и `getTodos` в качестве входных селекторов, и функцию преобразования, которая вычисляет отфильтрованный список задач (todos list).
 
-### Composing Selectors
+### Композиция Селекторов
 
-A memoized selector can itself be an input-selector to another memoized selector. Here is `getVisibleTodos` being used as an input-selector to a selector that further filters the todos by keyword:
+Мемоизированный селектор сам по себе может быть входным селектором для другого мемоизированного селектора. Здесь `getVisibleTodos` используется в качестве входного селектора для селектора, который затем фильтрует todos по ключевому слову:
 
 ```js
 const getKeyword = (state) => state.keyword
@@ -96,9 +96,9 @@ const getVisibleTodosFilteredByKeyword = createSelector(
 )
 ```
 
-### Connecting a Selector to the Redux Store
+### Подключение Селектора к Redux Store
 
-If you are using [React Redux](https://github.com/reactjs/react-redux), you can call selectors as regular functions inside `mapStateToProps()`:
+Если Вы используете [React Redux](https://github.com/reactjs/react-redux), Вы можете вызывать селекторы в качестве регулярных функций внутри `mapStateToProps()`:
 
 #### `containers/VisibleTodoList.js`
 
@@ -130,13 +130,13 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-### Accessing React Props in Selectors
+### Доступ к React Props в Селекторах
 
-> This section introduces a hypothetical extension to our app that allows it to support multiple Todo Lists. Please note that a full implementation of this extension requires changes to the reducers, components, actions etc. that aren't directly relevant to the topics discussed and have been omitted for brevity.
+> В этом разделе предоставлено гипотетическое расширение нашего приложения, которое позволяет ему поддерживать любое количество списков задач (Todo Lists). Пожалуйста, обратите внимание, полная реализация этого расширения требует изменений в редюсерах (reducers), компонентах (components), действиях (actions) и т.д., которые не имеют прямого отношения к обсуждаемым темам и для краткости были опущены.
 
-So far we have only seen selectors receive the Redux store state as an argument, but a selector can receive props too.
+До сих пор мы видели что селекторы получают состояние хранилища (store state) Redux в качестве аргумента, но селектор также может получать props.
 
-Here is an `App` component that renders three `VisibleTodoList` components, each of which has a `listId` prop:
+Вот компонент `App` который отображает три `VisibleTodoList` компонента, каждый из которых имеет `listId` prop:
 
 #### `components/App.js`
 
@@ -155,7 +155,7 @@ const App = () => (
 )
 ```
 
-Each `VisibleTodoList` container should select a different slice of the state depending on the value of the `listId` prop, so let's modify `getVisibilityFilter` and `getTodos` to accept a props argument:
+Каждый `VisibleTodoList` контейнер должен выбирать различный срез состояния (state) в зависимости от значения `listId` prop, поэтому давайте модифицируем `getVisibilityFilter` и `getTodos` для приёма аргумента props:
 
 #### `selectors/todoSelectors.js`
 
@@ -195,11 +195,11 @@ const mapStateToProps = (state, props) => {
 }
 ```
 
-So now `getVisibleTodos` has access to `props`, and everything seems to be working fine.
+Итак, теперь `getVisibleTodos` имеет доступ к `props`, и всё кажется работает нормально.
 
-**But there is a problem!**
+**Но есть проблема!**
 
-Using the `getVisibleTodos` selector with multiple instances of the `visibleTodoList` container will not correctly memoize:
+Использование селектора `getVisibleTodos` с множественными вхождениями контейнера `visibleTodoList` не будет правильно мемоизирован:
 
 #### `containers/VisibleTodoList.js`
 
@@ -232,15 +232,15 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-A selector created with `createSelector` only returns the cached value when its set of arguments is the same as its previous set of arguments. If we alternate between rendering `<VisibleTodoList listId="1" />` and `<VisibleTodoList listId="2" />`, the shared selector will alternate between receiving `{listId: 1}` and `{listId: 2}` as its `props` argument. This will cause the arguments to be different on each call, so the selector will always recompute instead of returning the cached value. We'll see how to overcome this limitation in the next section.
+Селектор созданный с помощью `createSelector` возвращает только кэшированное значение, когда его набор аргументов совпадает с его предыдущим набором аргументов. Если мы рендерим поочерёдно `<VisibleTodoList listId="1" />` и `<VisibleTodoList listId="2" />`, общий селектор будет поочерёдно принимать `{listId: 1}` и `{listId: 2}` как аргумент `props`. Это приведёт к тому что аргументы будут разными для каждого вызова, поэтому селектор всегда будет пересчитывать, вместо того чтобы возвращать кэшированное значениеe. Мы увидим как преодолеть это ограничение в следующем разделе.
 
-### Sharing Selectors Across Multiple Components
+### Совместное использование селекторов с несколькими компонентами
 
-> The examples in this section require React Redux v4.3.0 or greater
+> Примеры в этом разделе требуют React Redux v4.3.0 или выше
 
-In order to share a selector across multiple `VisibleTodoList` components **and** retain memoization, each instance of the component needs its own private copy of the selector.
+Чтобы совместно использовать селектор для нескольких компонентов `VisibleTodoList` **и** сохранять мемоизацию, каждому экземпляру компонента нужна собственная личная копия селектора.
 
-Let's create a function named `makeGetVisibleTodos` that returns a new copy of the `getVisibleTodos` selector each time it is called:
+Давайте создадим функцию `makeGetVisibleTodos`, которая возвращает новую копию селектора `getVisibleTodos` при каждом вызове:
 
 #### `selectors/todoSelectors.js`
 
@@ -272,11 +272,11 @@ const makeGetVisibleTodos = () => {
 export default makeGetVisibleTodos
 ```
 
-We also need a way to give each instance of a container access to its own private selector. The `mapStateToProps` argument of `connect` can help with this.
+Нам также нужен способ предоставить каждому экземпляру контейнера доступ к его собственному селектору. Аргумент `mapStateToProps` от `connect` может помочь в этом.
 
-**If the `mapStateToProps` argument supplied to `connect` returns a function instead of an object, it will be used to create an individual `mapStateToProps` function for each instance of the container.**
+**Если аргумент `mapStateToProps` предоставленный `connect` возвращает функцию вместо объекта, он будет использоваться для создания отдельной функуции `mapStateToProps` для каждого экземпляра контейнера.**
 
-In the example below `makeMapStateToProps` creates a new `getVisibleTodos` selector, and returns a `mapStateToProps` function that has exclusive access to the new selector:
+В приведённом ниже примере `makeMapStateToProps` создаёт новый `getVisibleTodos` селектор, и возвращает функцию `mapStateToProps`, которая имеет эксклюзивный доступ к новому селектору:
 
 ```js
 const makeMapStateToProps = () => {
@@ -290,7 +290,7 @@ const makeMapStateToProps = () => {
 }
 ```
 
-If we pass `makeMapStateToProps` to `connect`, each instance of the `VisibleTodosList` container will get its own `mapStateToProps` function with a private `getVisibleTodos` selector. Memoization will now work correctly regardless of the render order of the `VisibleTodoList` containers.
+Если мы передадим `makeMapStateToProps`  `connect`, каждый экземпляр контейнера `VisibleTodosList` получит свою собственную функцию `mapStateToProps` с собственным селектором `getVisibleTodos`. Мемоизация теперь будет работать правильно, независимо от порядка отрисовки (рендера) контейнеров `VisibleTodoList`.
 
 #### `containers/VisibleTodoList.js`
 
@@ -326,6 +326,6 @@ const VisibleTodoList = connect(
 export default VisibleTodoList
 ```
 
-## Next Steps
+## Следующие шаги
 
-Check out the [official documentation](https://github.com/reactjs/reselect) of Reselect as well as its [FAQ](https://github.com/reactjs/reselect#faq). Most Redux projects start using Reselect when they have performance problems because of too many derived computations and wasted re-renders, so make sure you are familiar with it before you build something big. It can also be useful to study [its source code](https://github.com/reactjs/reselect/blob/master/src/index.js) so you don't think it's magic.
+Ознакомьтесь с [официальной документацией](https://github.com/reactjs/reselect) Reselect а также [FAQ](https://github.com/reactjs/reselect#faq). Большинство проектов Redux начинают использовать Reselect когда у них возникают проблемы с производительностью из-за слишком большого количества вторичных вычислений и потерь в ре-рендеринге, поэтому убедитесь, что вы знакомы с ним, прежде чем создавать что-то большое. Также может быть полезно изучить [его исходный код](https://github.com/reactjs/reselect/blob/master/src/index.js) so you don't think it's magic.
