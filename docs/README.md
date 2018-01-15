@@ -27,7 +27,7 @@
   * [Упрощение шаблона](/docs/recipes/ReducingBoilerplate.md)
   * [Серверный рендеринг](/docs/recipes/ServerRendering.md)
   * [Написание тестов](/docs/recipes/WritingTests.md)
-  * [Оперирование полученными данными](/docs/recipes/ComputingDerivedData.md)
+  * [Вычисление производных данных](/docs/recipes/ComputingDerivedData.md)
   * [Реализация истории отмен](/docs/recipes/ImplementingUndoHistory.md)
   * [Изолирование саб-приложений](/docs/recipes/IsolatingSubapps.md)
   * [Структурирование редюсеров](/docs/recipes/StructuringReducers.md)
