@@ -61,7 +61,7 @@ class TodoListContainer extends Component {
     // Это хороший случай использования для bindActionCreators:
     // Вы хотите, чтобы дочерний компонент, ничего не знал о Redux.
     // Теперь мы создаем связанные версии этих функций, чтобы мы могли
-    // позже передадим их нашему потомку.
+    // позже передать их нашему потомку.
 
     this.boundActionCreators = bindActionCreators(TodoActionCreators, dispatch)
     console.log(this.boundActionCreators)
