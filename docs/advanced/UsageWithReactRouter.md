@@ -94,7 +94,7 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <BrowserRouter>
       <div>
-        <Route path="/" component={App} />
+        <Route exact path="/" component={App} />
       </div>
     </BrowserRouter>
   </Provider>
@@ -120,6 +120,7 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <BrowserRouter>
       <div>
+        <Route exact path="/" component={App} />
         <Route path="/:filter" component={App} />
       </div>
     </BrowserRouter>
