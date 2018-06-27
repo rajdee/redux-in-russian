@@ -1,11 +1,34 @@
 # Использование с React Router
 
-Итак, вы хотите использовать маршрутизацию с Вашим Redux-приложением. Для этого вы можете использовать [React Router](https://github.com/reactjs/react-router). Тогда Redux будет источником правдивых данных, а React Router — единственным источником URL. В большинстве случаев, ***правильно*** разделять эти понятия, но до тех пор, пока вам не понадобится путешествовать во времени (Time Travel) и перематывать действия, которые изменяют URL.
+Итак, вы хотите использовать маршрутизацию с
+Вашим Redux-приложением. Для этого вы можете использовать
+[React Router](https://github.com/reactjs/react-router).
+Тогда Redux будет источником правдивых данных, а React
+Router — единственным источником URL. В большинстве случаев,
+***правильно*** разделять эти понятия, но до тех пор, пока
+вам не понадобится путешествовать во времени (Time Travel)
+и перематывать действия, которые изменяют URL.
 
-## Установка React Router
-`react-router` доступно в npm . В этом руководстве преполагается использование версии `react-router@^2.7.0`.
+> Стоит также отметить различия в версиях react-route 2/3 и 4.
+> Для более полного понимания различий не лишним 
+> будет ознакомиться с руководством по миграции:
+> [Migrating from v2/v3 to v4](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/guides/migrating.md)
 
-`npm install --save react-router`
+## React Router, React Router DOM и React Router Native
+
+На текущий момент экосистема `react-router@^4.3` представлена пятью пакетами:
+1) `react-router` инкапсулирует общие части для `react-router-dom` и `react-router-native`;
+2) `react-router-dom` предатавляет собой DOM-обвязки для `react-router`;
+3) `react-router-native` - привязка к React Native;
+4) `react-router-redux` - deprecated, вместо него рекомендуется к использованию [Connected React Router](https://github.com/supasate/connected-react-router);
+5) `react-router-config` - статическая конфигурация React Routes (и не только).
+
+Для текущего примера достаточно установить `react-router-dom`, пакет также экспортирует `react-router`.
+
+## Установка React Router DOM
+`react-router-dom` доступно в npm . В этом руководстве преполагается использование версии `react-router@^4.3`.
+
+`npm install --save react-router-dom`
 
 ## Настройка запасного URL
 
@@ -36,21 +59,25 @@
 
 В этой главе мы будем использовать наш пример [Todos](https://github.com/reactjs/redux/tree/master/examples/todos). Рекомендуем вам склонировать его для этой главы.
 
-Во-первых, нам надо импортировать `<Router />` и `<Route />` из React Router. Вот как это делается:
+Во-первых, нам надо импортировать `<BrowserRouter />` и `<Route />` из React Router. Вот как это делается:
 
 ```js
-import { Router, Route, browserHistory } from 'react-router';
+import { BrowserRouter, Route } from 'react-router-dom';
 ```
 
-В React-приложении обычно `<Route />` оборачивается в `<Router />`, так что когда URL меняется, `<Router />` находит часть своих роутов и рендерит их сформированные компоненты. `<Route />` используется для (неофициального) сопоставления роутов иерархии компонентов вашего приложения. Вы можете объявить в `path` путь, используемый в URL, и в `component` — компонент, который должен быть сгенерирован при совпадении с этим URL.
+В React-приложении обычно `<Route />` оборачивается в `<BrowserRouter />`, так что когда URL меняется, `<BrowserRouter />` находит часть своих роутов и рендерит их сформированные компоненты. `<Route />` используется для (неофициального) сопоставления роутов иерархии компонентов вашего приложения. Вы можете объявить в `path` путь, используемый в URL, и в `component` — компонент, который должен быть сгенерирован при совпадении с этим URL.
 
 ```js
 const Root = () => (
-  <Router>
-    <Route path="/" component={App} />
-  </Router>
+  <BrowserRouter>
+    <div>
+      <Route path="/" component={App} />
+    </div>
+  </BrowserRouter>
 );
 ```
+
+> Учтите, что **BrowserRouter должен иметь только один дочерний элемент**
 
 Однако, в нашем Redux-приложении нам все еще требуется `<Provider />` — компонент высшего порядка, поставляемый с React Redux, который позволяет привязать Redux к React (см. [Использование с React](../basics/UsageWithReact.md)).
 
@@ -60,52 +87,42 @@ const Root = () => (
 import { Provider } from 'react-redux';
 ```
 
-Обернем `<Router />` в `<Provider />`, таким образом обработчики маршрутизации смогут получить [доступ к `хранилищу`](../basics/UsageWithReact.html#передаем-хранилище).
+Обернем `<BrowserRouter />` в `<Provider />`, таким образом обработчики маршрутизации смогут получить [доступ к `хранилищу`](../basics/UsageWithReact.html#передаем-хранилище).
 
 ```js
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router>
-      <Route path="/" component={App} />
-    </Router>
+    <BrowserRouter>
+      <div>
+        <Route path="/" component={App} />
+      </div>
+    </BrowserRouter>
   </Provider>
 );
 ```
 
-Теперь компонент `<App />` будет отрендерен, если URL содержит '/'. Кроме того, мы будем добавлять необязательный `(:filter)` параметр к `/`. Нам это потребуется позже, когда мы будем читать параметр `(:filter)` из URL.
+Теперь компонент `<App />` будет отрендерен, если URL содержит '/'. Кроме того, мы будем добавлять необязательный `:filter` параметр к `/`. Нам это потребуется позже, когда мы будем читать параметр `:filter` из URL.
 
 ```js
-<Route path="/(:filter)" component={App} />
+<Route path="/:filter" component={App} />
 ```
 
-Вероятно, Вы хотите убрать хеш из URL (например: `http://localhost:3000/#/?_k=4sbb0i`). Для этого вам потребуется импортировать `browserHistory` из React Router:
-
-```js
-import { Router, Route, browserHistory } from 'react-router';
-```
-
-и передать её в `<Router />` для удаления хеша из URL:
-
-```js
-    <Router history={browserHistory}>
-      <Route path="/(:filter)" component={App} />
-    </Router>
-```
-
-Если Вам нужна поддержка таких старых браузеров, как IE9, то Вы также можете использовать `browserHistory`.
+Полный код компонента
 
 #### `components/Root.js`
 ``` js
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
+import { BrowserRouter, Route } from 'react-router-dom';
 import App from './App';
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route path="/(:filter)" component={App} />
-    </Router>
+    <BrowserRouter>
+      <div>
+        <Route path="/:filter" component={App} />
+      </div>
+    </BrowserRouter>
   </Provider>
 );
 
@@ -123,7 +140,7 @@ React Router поставляется с компонентом [`<Link />`](htt
 #### `containers/FilterLink.js`
 ```js
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const FilterLink = ({ filter, children }) => (
   <Link
@@ -192,12 +209,12 @@ const mapStateToProps = (state, ownProps) => {
 
 #### `components/App.js`
 ```js
-const App = ({ params }) => {
+const App = (props) => {
   return (
     <div>
       <AddTodo />
       <VisibleTodoList
-        filter={params.filter || 'all'}
+        filter={props.match.params.filter || 'all'}
       />
       <Footer />
     </div>
