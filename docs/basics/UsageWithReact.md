@@ -114,7 +114,8 @@ React-биндинги для Redux руководствуются идеей **
 #### `components/Todo.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Todo = ({ onClick, completed, text }) => (
   <li
@@ -139,7 +140,8 @@ export default Todo
 #### `components/TodoList.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Todo from './Todo'
 
 const TodoList = ({ todos, onTodoClick }) => (
@@ -169,7 +171,8 @@ export default TodoList
 #### `components/Link.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Link = ({ active, children, onClick }) => {
   if (active) {
