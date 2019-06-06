@@ -18,7 +18,7 @@ Router — единственным источником URL. В большин�
 
 На текущий момент экосистема `react-router@^4.3` представлена пятью пакетами:
 1) `react-router` инкапсулирует общие части для `react-router-dom` и `react-router-native`;
-2) `react-router-dom` предатавляет собой DOM-обвязки для `react-router`;
+2) `react-router-dom` предcтавляет собой DOM-обвязки для `react-router`;
 3) `react-router-native` - привязка к React Native;
 4) `react-router-redux` - deprecated, вместо него рекомендуется к использованию [Connected React Router](https://github.com/supasate/connected-react-router);
 5) `react-router-config` - статическая конфигурация React Routes (и не только).
