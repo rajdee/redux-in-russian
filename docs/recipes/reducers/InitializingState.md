@@ -1,20 +1,42 @@
-# Initializing State
+# Инициализация состояния
 
-There are two main ways to initialize state for your application.  The `createStore` method can accept an optional `preloadedState` value as its second argument.  Reducers can also specify an initial value by looking for an incoming state argument that is `undefined`, and returning the value they'd like to use as a default.  This can either be done with an explicit check inside the reducer, or by using the ES6 default argument value syntax: `function myReducer(state = someDefaultValue, action)`.  
+Существует два основных способа для задания начального состояния  приложения. 
+Метод `createStore` может принимать необязательное значение `preloadedState` в качестве второго аргумента.
+Редьюссеры также могут задавать начальное состояние, ища входящий аргумент `state`, 
+который равен `undefined`, и возвращая значение, которое они хотели бы использовать по умолчанию. 
+Это можно сделать либо с явной проверкой внутри редьюссера:
+ ```js
+function  myReducer(state , action){
+    state = (state !== undefined) sate : someDefaultValue;
+    }
+}
+```
+либо с помощью синтаксиса значения аргумента по умолчанию ES6: 
+```js
+function myReducer(state = someDefaultValue, action)
+```  
 
-It's not always immediately clear how these two approaches interact.  Fortunately, the process does follow some predictable rules.  Here's how the pieces fit together.
+Не всегда сразу понятно, как эти два подхода взаимодействуют.  
+К счастью, этот процесс следует некоторым предсказуемым правилам. 
+Вот как происходит определение начального состояния.
 
+## Итоги
 
-## Summary
+Без `combineReducers()` или анологичного дополнительного кода,
+`preloadedState` имеет более высокий приоретет, чем `state = ...` в редьюссера,
+потому что `state`, переданное в редьюссер *это* `preloadedState` и *оно не равно* `undefined`,
+поэтому значение аргумента по умолчанию, определенное в синтаксисе ES6, не будет применено.
 
-Without `combineReducers()` or similar manual code, `preloadedState` always wins over `state = ...` in the reducer because the `state` passed to the reducer *is* `preloadedState` and *is not* `undefined`, so the ES6 argument syntax doesn't apply.
+С `combineReducers()` поведение более сложное. 
+Те редьюссеры, чьё состояние описано в  `preloadedState` получат это состояние. 
+Дргуие будут `undefined` и получат значение по умолчанию, указанное в  `state = ...`.
 
-With `combineReducers()` the behavior is more nuanced. Those reducers whose state is specified in `preloadedState` will receive that state. Other reducers will receive `undefined` *and because of that* will fall back to the `state = ...` default argument they specify.
+**В итоге, `preloadedState` имеет более высокий приоретет, чем значение `state` по умолчанию, описанное в редьюссере.
+Это дает возможность указывать в редьюссере значения `state` по умолчанию, 
+а также загружать существующие данные  (полностью или частично) 
+при гидратации хранилища из некоторого постоянного хранилища или сервера.**
 
-**In general, `preloadedState` wins over the state specified by the reducer. This lets reducers specify initial data that makes sense *to them* as default arguments, but also allows loading existing data (fully or partially) when you're hydrating the store from some persistent storage or the server.**
-
-
-## In Depth
+## Подробности
 
 
 ### Single Simple Reducer
