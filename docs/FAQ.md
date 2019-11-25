@@ -3,34 +3,58 @@
 ## Содержание
 
 - **Главное**
+  - [Когда я должен учить Redux?](/docs/faq/General.md#when-should-i-learn-redux)
   - [Когда я должен использовать Redux?](/docs/faq/General.md#general-when-to-use)
   - [Должен ли Redux быть использован только с React?](/docs/faq/General.md#general-only-react)
   - [Нужны ли мне дополнительные инструменты для использования Redux?](/docs/faq/General.md#general-build-tools)
 - **Редюсеры**
   - [Как мне передавать состояние(state) между двумя редюсерами? Должен ли я использовать combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
-  - [Должен ли я использовать оператор switch для обработки действий(actions)?](/docs/faq/Reducers.md#reducers-use-switch)
+  - [Должен ли я использовать оператор switch для обработки экшенов(actions)?](/docs/faq/Reducers.md#reducers-use-switch)
 - **Организация состояния(State)**
-  - [Могу ли я хранить все мое состояние в Redux? Должен ли я всегда использовать setState() из React?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
-  - [Могу ли я хранить функции, промисы или другие несериализируемые данные в моем хранилище состояния?](/docs/faq/OrganizingState.md#organizing-state-non-serializable)
-  - [Как мне хранить вложенные или дублирующиеся данные в моем состоянии?](/docs/faq/OrganizingState.md#organizing-state-nested-data)
-- **Настройка хранилища(Store)**
-  - [Могу ли или должен ли я создавать несколько хранилищ? Могу ли я импортировать мое хранилище напрямую и использовать его в компонентах?](/docs/faq/StoreSetup.md#store-setup-multiple-stores)
-  - [Нормально ли использовать более одного миддлвэра в моем расширителе хранилища ? В чем разница между next и dispatch в функции миддлвэра?](/docs/faq/StoreSetup.md#store-setup-middleware-chains)
-  - [Как мне подписаться на получение только части хранилища? Могу ли я получить запущенное действие как часть подписки?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
+  - [Могу ли я хранить всё мое состояние в Redux? Должен ли я всегда использовать setState() из React?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
+  - [Могу ли я хранить функции, промисы или другие несериализируемые данные в моем стейте?](/docs/faq/OrganizingState.md#organizing-state-non-serializable)
+  - [Как мне хранить вложенные или дублирующиеся данные в моем стейте?](/docs/faq/OrganizingState.md#organizing-state-nested-data)
+- **Настройка стора(Store)**
+  - [Могу ли или должен ли я создавать несколько сторов? Могу ли я импортировать мой стор напрямую и использовать его в компонентах?](/docs/faq/StoreSetup.md#store-setup-multiple-stores)
+  - [Нормально ли использовать более одного миддлвэра в моем расширителе стора ? В чем разница между next и dispatch в функции миддлвэра?](/docs/faq/StoreSetup.md#store-setup-middleware-chains)
+  - [Как мне подписаться на получение только части стора? Могу ли я получить запущенное действие как часть подписки?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
 - **Действия**
-  - [Почему тип действия должен быть строкой или по крайней мере сериализуемым? Почему мои типы действий должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
-  - [Всегда ли редюсеры и действия преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
-  - [Как я могу выполнять "побочные эффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов действий”, “thunks” или “миддлвэр” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
-  - [Должен ли я отправлять несколько действий подряд от одного генератора действия?](/docs/faq/Actions.md#actions-multiple-actions)
+  - [Почему тип экшена должен быть строкой или по крайней мере сериализуемым? Почему мои типы экшенов должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
+  - [Всегда ли редюсеры и экшены преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
+  - [Как я могу выполнять "сайдэффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов экшенов, “thunks” или “миддлвэр” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
+  - [Должен ли я отправлять несколько экшенов подряд от одного генератора экшена?](/docs/faq/Actions.md#actions-multiple-actions)
+  - **Иммутабельные данные**
+  - [В чем преимущество иммутабельности?](/docs/faq/ImmutableData.md#what-are-the-benefits-of-immutability)
+  - [Почему иммутабельность требуется Redux?](/docs/faq/ImmutableData.md#why-is-immutability-required-by-redux)
+  - [Какие подходы существуют для управления иммутабельностью данных? Должен ли я использовать Immutable.JS?](/docs/faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immutable-js)
+  - [Каковы проблемы с использованием JavaScript для иммутабельных операций?](/docs/faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
+- **Использование Immutable.JS с Redux**
+
+  - [Почему я должен использовать иммутабельно-ориентированные библиотеки, такие как Immutable.JS?](/docs/recipes/UsingImmutableJS.md#why-should-i-use-an-immutable-focused-library-such-as-immutable-js)
+  - [Почему я должен выбрать Immutable.JS в качестве иммутабельной библиотеки?](/docs/recipes/UsingImmutableJS.md#why-should-i-choose-immutable-js-as-an-immutable-library)
+  - [Какие проблемы с использованием Immutable.JS?](/docs/recipes/UsingImmutableJS.md#what-are-the-issues-with-using-immutable-js)
+  - [Стоит ли Immutable.JS этих усилий?](/docs/recipes/UsingImmutableJS.md#is-using-immutable-js-worth-the-effort)
+  - [Каковы некоторые устоявшиеся рекомендации по использованию Immutable.JS с Redux?](/docs/recipes/UsingImmutableJS.md#what-are-some-opinionated-best-practices-for-using-immutable-js-with-redux)
+
 - **Структура кода**
-  - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы действий и редюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
-  - [Как я должен разделять мою логику между редюсерами и генераторами действий? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
+  - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы экшенов и редюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [Как я должен разделять мою логику между редюсерами и генераторами экшенов? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
+  - [Для чего я должен использовать генераторы экшенов?](/docs/faq/CodeStructure.md#why-should-i-use-action-creators)
+  - [Где должны находится веб-сокеты и другие постоянные соединения?](/docs/faq/CodeStructure.md#where-should-websockets-and-other-persistent-connections-live)
 - **Производительность**
   - [Насколько хорошо “масштабируется” Redux с точки зрения производительности и архитектуры?](/docs/faq/Performance.md#performance-scaling)
-  - [Не будет ли вызов “всех моих редюсеров” для каждого действия медленным?](/docs/faq/Performance.md#performance-all-reducers)
-  - [Должен ли я иметь полноценный клон моего состояния в редюсере? Не будет ли копирование моего состояния медленным?](/docs/faq/Performance.md#performance-clone-state)
-  - [Как мне уменьшить количество событий обновления хранилища?](/docs/faq/Performance.md#performance-update-events)
-  - [Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества действий занимать память?](/docs/faq/Performance.md#performance-state-memory)
+  - [Не будет ли вызов “всех моих редюсеров” для каждого экшена медленным?](/docs/faq/Performance.md#performance-all-reducers)
+  - [Должен ли я иметь полноценный клон моего стейта в редюсере? Не будет ли копирование моего стейта медленным?](/docs/faq/Performance.md#performance-clone-state)
+  - [Как мне уменьшить количество событий обновления стора?](/docs/faq/Performance.md#performance-update-events)
+  - [Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества экшенов занимать память?](/docs/faq/Performance.md#performance-state-memory)
+  - [Будет ли кеширование удаленных данных вызывать проблемы с памятью?](/docs/faq/Performance.md#will-caching-remote-data-cause-memory-problems)
+- **Проектные решения**
+  - [Почему Redux не передает стейт и экшены подписчикам?](/docs/faq/DesignDecisions.md#why-doesnt-redux-pass-the-state-and-action-to-subscribers)
+  - [Почему Redux не поддерживает использование классов для экшенов и редюсеров](/docs/faq/DesignDecisions.md#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
+  - [Почему сигнатура мидлварей использует каррирование?](/docs/faq/DesignDecisions.md#why-does-the-middleware-signature-use-currying)
+  - [Почему applyMiddleware использует замыкание для диспатчинга?](/docs/faq/DesignDecisions.md#why-does-applymiddleware-use-a-closure-for-dispatch)
+  - [Почему «combReducers» не включает третий аргумент со всем стейтом, когда он вызывает каждый редюсер?](/docs/faq/DesignDecisions.md#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
+  - [Почему mapDispatchToProps не позволяет использовать возвращаемые значения из `getState ()` или `mapStateToProps ()`?](/docs/faq/DesignDecisions.md#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
 - **React Redux**
   - [Почему мой компонент не перерендеривается? Почему не работает mapStateToProps?](/docs/faq/ReactRedux.md#react-not-rerendering)
   - [Почему мой компонент перерендеривается слишком часто?](/docs/faq/ReactRedux.md#react-rendering-too-often)
