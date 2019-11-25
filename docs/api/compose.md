@@ -3,7 +3,7 @@
 Объединяет функции справ налево.
 
 Это утилита функционального программирования, которая включена в Redux для удобства.   
-Вы можете использовать ее, чтобы применить несколько [расширителей хранилища](../Glossary.md#store-enhancer) последовательно.
+Вы можете использовать ее, чтобы применить несколько [расширителей стора](../Glossary.md#store-enhancer) последовательно.
 
 #### Параметры
 
@@ -15,7 +15,7 @@
 
 #### Пример
 
-В этом примере показано, как использовать `compose` для расширения [хранилища](Store.md) с [`applyMiddleware`](applyMiddleware.md) и несколькоми инструментами для разработки из пакета [redux devtools](https://github.com/gaearon/redux-devtools).
+В этом примере показано, как использовать `compose` для расширения [стора](Store.md) с [`applyMiddleware`](applyMiddleware.md) и несколькоми инструментами для разработки из пакета [redux devtools](https://github.com/gaearon/redux-devtools).
 
 ```js
 import { createStore, applyMiddleware, compose } from 'redux'

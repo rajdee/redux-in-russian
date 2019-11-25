@@ -12,7 +12,7 @@ Redux имеет скромный API. Он определяет лишь наб
 * [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
 * [compose(...functions)](compose.md)
 
-### API хранилища
+### API стора
 
 * [Store](Store.md)
   * [getState()](Store.md#getState)
