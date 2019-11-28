@@ -3,7 +3,7 @@
 * [Памятка](../README.md)
 * [Введение](introduction/README.md)
   * [Мотивация](introduction/Motivation.md)
-  * [Базовые концепции ](introduction/CoreConcepts.md)
+  * [Основные понятия ](introduction/CoreConcepts.md)
   * [Три принципа](introduction/ThreePrinciples.md)
   * [Предшественники](introduction/PriorArt.md)
   * [Образовательные ресурсы](introduction/LearningResources.md)

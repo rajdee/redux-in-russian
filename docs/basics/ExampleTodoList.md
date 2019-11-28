@@ -24,7 +24,7 @@ render(
 )
 ```
 
-## Генераторы действий (Action Creators)
+## Генераторы экшенов (Action Creators)
 
 #### `actions/index.js`
 
