@@ -63,12 +63,12 @@ Redux — это небольшая библиотека, в которой со
 
 ### Промежуточное ПО (Middleware)
 
-* [redux-thunk](http://github.com/gaearon/redux-thunk) — Самый легкий способ создавать асинхронные генераторы действий (action creators) 
+* [redux-thunk](http://github.com/gaearon/redux-thunk) — Самый легкий способ создавать асинхронные генераторы экшенов (action creators) 
 * [redux-promise](https://github.com/acdlite/redux-promise) — [FSA](https://github.com/acdlite/flux-standard-action)-совместимый promise middleware
 * [redux-axios-middleware](https://github.com/svrcekmichal/redux-axios-middleware) — Redux middleware for fetching data with axios HTTP client
 * [redux-observable](https://github.com/redux-observable/redux-observable/) — RxJS middleware for action side effects using "Epics"
 * [redux-cycles](https://github.com/cyclejs-community/redux-cycles) — Handle Redux async actions using Cycle.js
-* [redux-logger](https://github.com/fcomb/redux-logger) — Логирование каждого Redux действия (action) и следующего состояния (state)
+* [redux-logger](https://github.com/fcomb/redux-logger) — Логирование каждого Redux экшена (action) и следующего состояния (state)
 * [redux-immutable-state-invariant](https://github.com/leoasis/redux-immutable-state-invariant) — Предупреждения об изменениях состояния во время разработки
 * [redux-unhandled-action](https://github.com/socialtables/redux-unhandled-action) — Warns about actions that produced no state changes in development
 * [redux-analytics](https://github.com/markdalgleish/redux-analytics) — Аналитика для Redux
@@ -90,14 +90,14 @@ Redux — это небольшая библиотека, в которой со
 ## Улучшения Reducer
 
 * [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) — Настройка групповых и отложенных вызовов для подписавшихся на store
-* [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — переходы по History основанные на произвольных действиях (actions).
-* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Оптимистичное использование действий (action) с возможностью их совершения или отмены в дальнейшем. 
+* [redux-history-transitions](https://github.com/johanneslumpe/redux-history-transitions) — переходы по History основанные на произвольных экшенах (actions).
+* [redux-optimist](https://github.com/ForbesLindesay/redux-optimist) — Оптимистичное использование экшенов (action) с возможностью их совершения или отмены в дальнейшем. 
 > От переводчика: например, можно инициировать `ADD_TODO` action, state изменится, UI обновится мгновенно, а затем отправится запрос на сохранение на сервер. Если на сервере все прошло успешно, то все ок и больше ничего не произойдет. Но если же что-то пошло не так, то state будет "отмотан" до состояния когда `ADD_TODO` action еще не был применен, state изменится, UI снова обновится мгновенно. Т.е. UI будет выглядеть так, словно ничего и не произошло.
 * [redux-optimistic-ui](https://github.com/mattkrick/redux-optimistic-ui) — A reducer enhancer to enable type-agnostic optimistic updates
-* [redux-undo](https://github.com/omnidan/redux-undo) — Позволяет без усилий получить undo/redo-функциональность и историю действий для редюсеров
+* [redux-undo](https://github.com/omnidan/redux-undo) — Позволяет без усилий получить undo/redo-функциональность и историю экшенов для редюсеров
 * [redux-ignore](https://github.com/omnidan/redux-ignore) — Ignore redux actions by array or filter function
-* [redux-recycle](https://github.com/omnidan/redux-recycle) — Сброс состояния Redux для определенных действий
-* [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Отправка нескольких действий с уведомлением одного абонента
+* [redux-recycle](https://github.com/omnidan/redux-recycle) — Сброс состояния Redux для определенных экшенов
+* [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) — Отправка нескольких экшенов с уведомлением одного абонента
 * [redux-search](https://github.com/treasure-data/redux-search) — Automatically index resources in a web worker and search them without blocking
 * [redux-electron-store](https://github.com/samiskin/redux-electron-store) — Store enhancers that synchronize Redux stores across Electron processes
 * [redux-loop](https://github.com/raisemarketplace/redux-loop) — Sequence effects purely and naturally by returning them from your reducers
@@ -107,18 +107,18 @@ Redux — это небольшая библиотека, в которой со
 
 * [reselect](https://github.com/faassen/reselect) — Простая библиотека "селекторов", нашедшая вдохновение в геттерах NuclearJS
 * [normalizr](https://github.com/gaearon/normalizr) — Упорядочивание вложенных ответов API для облегчения дальнейшего их использования в редюсерах
-* [redux-actions](https://github.com/acdlite/redux-actions) — Уменьшение шаблонности в написании редюсеров и генераторов действий (action creators)
+* [redux-actions](https://github.com/acdlite/redux-actions) — Уменьшение шаблонности в написании редюсеров и генераторов экшенов (action creators)
 * [redux-act](https://github.com/pauldijou/redux-act) — An opinionated library for making reducers and action creators
 * [redux-transducers](https://github.com/acdlite/redux-transducers) — Transducer-утилиты для Redux
 * [redux-immutable](https://github.com/gajus/redux-immutable) — Used to create an equivalent function of Redux `combineReducers` that works with [Immutable.js](https://facebook.github.io/immutable-js/) state.
-* [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Иммутабельные, с проверкой типов состояния и действия для Redux
+* [redux-tcomb](https://github.com/gcanti/redux-tcomb) — Иммутабельные, с проверкой типов состояния и экшены для Redux
 * [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store) — Mock redux store for testing your app
 * [redux-actions-assertions](https://github.com/dmitry-zaets/redux-actions-assertions) — Assertions for Redux actions testing
 * [redux-bootstrap](https://github.com/remojansen/redux-bootstrap) — Bootstrapping function for Redux applications
 
 ### Инструменты разработчика (Developer Tools)
 
-* [Redux DevTools](http://github.com/gaearon/redux-devtools) — Логирование действий с UI для путешествий во времени, горячая перезагрузка и обработка ошибок для редюсеров, [впервые представлено на React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
+* [Redux DevTools](http://github.com/gaearon/redux-devtools) — Логирование экшенов с UI для путешествий во времени, горячая перезагрузка и обработка ошибок для редюсеров, [впервые представлено на React Europe](https://www.youtube.com/watch?v=xsSnOQynTHs)
 * [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension) — Плагин для Chrome, по сути обертка для Redux DevTools с дополнительной функциональностью
 
 ### DevTools Monitors
@@ -136,7 +136,7 @@ Redux — это небольшая библиотека, в которой со
 
 * [Flux Standard Action](https://github.com/acdlite/flux-standard-action) — Дружелюбный стандарт для Flux action объектов
 * [Canonical Reducer Composition](https://github.com/gajus/canonical-reducer-composition) — Слишком самоуверенный (opinionated) стандарт для структуры вложенных редюсеров
-* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — Предложение по связыванию редюсеров, типов действий и действий
+* [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux) — Предложение по связыванию редюсеров, типов экшенов и экшенов
 
 ### Переводы
 

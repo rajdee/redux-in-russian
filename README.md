@@ -28,7 +28,7 @@ Redux является предсказуемым контейнером сос�
 
 Если вы новичок в Redux и хотите понять основные понятия, см:
 
-- **[Мотивация](https://github.com/rajdee/redux-in-russian/blob/master/docs/introduction/Motivation.md)** о написании Redux, **[Основные концепции](https://github.com/rajdee/redux-in-russian/blob/master/docs/introduction/coreconcepts)** и **[Три принципа](https://github.com/rajdee/redux-in-russian/blob/master/docs/introduction/threeprinciples)**.
+- **[Мотивация](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/Motivation.html)** написания Redux, **[Основные понятия](https://github.com/rajdee/redux-in-russian/blob/master/docs/introduction/coreconcepts)** и **[Три принципа](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/ThreePrinciples.html)**.
 - **[Базовое руководство в документации Redux](https://github.com/rajdee/redux-in-russian/tree/master/docs/basics)**
 - **Бесплатная видео-серия ["Getting Started with Redux"](https://egghead.io/series/getting-started-with-redux)** на Egghead.io от создателя Redux Дэна Абрамова
 - Слайдшоу **["Redux Fundamentals"](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** а также **[список полезных ресурсов для изучения Redux](http://blog.isquaredsoftware.com/2017/12/blogged-answers-learn-redux/)** от одного из разработчиков Redux - Марка Эриксона
@@ -232,7 +232,7 @@ store.dispatch({ type: 'DECREMENT' })
 
 - Добавление Redux к новому проекту Create-React-App и настройка Hot Module Replacement для более быстрой разработки
 - Управление вашим пользовательским интерфейсом с помощью Redux
-- Использование библиотеки Redux-ORM для управления связанными данными в вашем хранилище Redux
+- Использование библиотеки Redux-ORM для управления связанными данными в вашем Redux-сторе
 - Создание главного/детального представления для отображения и редактирования данных
 - Написание специальной усовершенствованной логики редюсера Redux для решения конкретных задач
 - Оптимизация производительности подключенных к Redux полей формы
@@ -249,7 +249,7 @@ store.dispatch({ type: 'DECREMENT' })
 Первый семинар [**Redux Fundamentals** состоится в Нью-Йорке, 19-20 апреля](https://workshop.me/2018-04-react-redux?a=mark) и будет знакомить со следующими темами:
 
 - История и цель Redux
-- Редюсеры, действия и работа с хранилищем Redux
+- Редюсеры, экшены и работа с Redux-стором
 - Использование Redux с React
 - Использование и написание мидлвар для Redux
 - Работа с вызовами AJAX и другими побочными эффектами
@@ -310,7 +310,7 @@ store.dispatch({ type: 'DECREMENT' })
 * [Developing ClojureScript with Figwheel](https://www.youtube.com/watch?v=j-kj2qwJa_E) за убеждение меня в том, что переоценка должна "просто работать";
 * [Webpack](https://github.com/webpack/docs/wiki/hot-module-replacement-with-webpack) за Hot Module Replacement;
 * [Flummox](https://github.com/acdlite/flummox) за обучение меня подходу Flux без шаблонов или синглетонов;
-* [disto](https://github.com/threepointone/disto) за доказательство концепции "hot reloadable" хранилищ;
+* [disto](https://github.com/threepointone/disto) за доказательство концепции "hot reloadable" сторов;
 * [NuclearJS](https://github.com/optimizely/nuclear-js) за доказательство того, что такая архитектура может быть производительной;
 * [Om](https://github.com/omcljs/om) за популяризацию идеи одного атома состояния;
 * [Cycle](https://github.com/cyclejs/cycle-core) за демонстрацию того, как часто функция является лучшим инструментом;
