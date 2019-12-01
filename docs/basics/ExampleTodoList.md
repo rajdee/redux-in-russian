@@ -1,6 +1,6 @@
 # Пример: Список дел (Todo List)
 
-Это полный исходный код простенького приложения - списка дел, которое мы создали, изучая [базовое руководство](./README.md).
+Это полный исходный код простенького приложения - списка дел, которое мы создали, изучая [базовое руководство](./README.md). Этот код так же представлен в [нашем репозитории примеров](https://github.com/reduxjs/redux/tree/master/examples/todos/src) и может быть [запущен в вашем браузере в CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos).
 
 ## Точка входа (Entry Point)
 
@@ -11,10 +11,10 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import todoApp from './reducers'
+import rootReducer from './reducers'
 import App from './components/App'
 
-let store = createStore(todoApp)
+const store = createStore(rootReducer)
 
 render(
   <Provider store={store}>
@@ -30,26 +30,26 @@ render(
 
 ```js
 let nextTodoId = 0
-export const addTodo = (text) => {
-  return {
-    type: 'ADD_TODO',
-    id: nextTodoId++,
-    text
-  }
-}
+export const addTodo = text => ({
+  type: 'ADD_TODO',
+  id: nextTodoId++,
+  text
+})
 
-export const setVisibilityFilter = (filter) => {
-  return {
-    type: 'SET_VISIBILITY_FILTER',
-    filter
-  }
-}
+export const setVisibilityFilter = filter => ({
+  type: 'SET_VISIBILITY_FILTER',
+  filter
+})
 
-export const toggleTodo = (id) => {
-  return {
-    type: 'TOGGLE_TODO',
-    id
-  }
+export const toggleTodo = id => ({
+  type: 'TOGGLE_TODO',
+  id
+})
+
+export const VisibilityFilters = {
+  SHOW_ALL: 'SHOW_ALL',
+  SHOW_COMPLETED: 'SHOW_COMPLETED',
+  SHOW_ACTIVE: 'SHOW_ACTIVE'
 }
 ```
 
@@ -58,38 +58,20 @@ export const toggleTodo = (id) => {
 #### `reducers/todos.js`
 
 ```js
-const todo = (state, action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return {
-        id: action.id,
-        text: action.text,
-        completed: false
-      }
-    case 'TOGGLE_TODO':
-      if (state.id !== action.id) {
-        return state
-      }
-
-      return Object.assign({}, state, {
-        completed: !state.completed
-      })
-      
-    default:
-      return state
-  }
-}
-
 const todos = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [
         ...state,
-        todo(undefined, action)
+        {
+          id: action.id,
+          text: action.text,
+          completed: false
+        }
       ]
     case 'TOGGLE_TODO':
-      return state.map(t =>
-        todo(t, action)
+      return state.map(todo =>
+        todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
       )
     default:
       return state
@@ -102,7 +84,9 @@ export default todos
 #### `reducers/visibilityFilter.js`
 
 ```js
-const visibilityFilter = (state = 'SHOW_ALL', action) => {
+import { VisibilityFilters } from '../actions'
+
+const visibilityFilter = (state = VisibilityFilters.SHOW_ALL, action) => {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER':
       return action.filter
@@ -121,12 +105,10 @@ import { combineReducers } from 'redux'
 import todos from './todos'
 import visibilityFilter from './visibilityFilter'
 
-const todoApp = combineReducers({
+export default combineReducers({
   todos,
   visibilityFilter
 })
-
-export default todoApp
 ```
 
 ## Презентационные компоненты (Presentational Components)
@@ -134,7 +116,8 @@ export default todoApp
 #### `components/Todo.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Todo = ({ onClick, completed, text }) => (
   <li
@@ -159,28 +142,27 @@ export default Todo
 #### `components/TodoList.js`
 
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import Todo from './Todo'
 
-const TodoList = ({ todos, onTodoClick }) => (
+const TodoList = ({ todos, toggleTodo }) => (
   <ul>
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => onTodoClick(todo.id)}
-      />
-    )}
+    {todos.map(todo => (
+      <Todo key={todo.id} {...todo} onClick={() => toggleTodo(todo.id)} />
+    ))}
   </ul>
 )
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    text: PropTypes.string.isRequired
-  }).isRequired).isRequired,
-  onTodoClick: PropTypes.func.isRequired
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired
+    }).isRequired
+  ).isRequired,
+  toggleTodo: PropTypes.func.isRequired
 }
 
 export default TodoList
@@ -188,24 +170,20 @@ export default TodoList
 
 #### `components/Link.js`
 ```js
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const Link = ({ active, children, onClick }) => {
-  if (active) {
-    return <span>{children}</span>
-  }
-
-  return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
-    >
-      {children}
-    </a>
-  )
-}
+const Link = ({ active, children, onClick }) => (
+  <button
+    onClick={onClick}
+    disabled={active}
+    style={{
+      marginLeft: '4px'
+    }}
+  >
+    {children}
+  </button>
+)
 
 Link.propTypes = {
   active: PropTypes.bool.isRequired,
@@ -221,23 +199,15 @@ export default Link
 ```js
 import React from 'react'
 import FilterLink from '../containers/FilterLink'
+import { VisibilityFilters } from '../actions'
 
 const Footer = () => (
-  <p>
-    Show:
-    {" "}
-    <FilterLink filter="SHOW_ALL">
-      All
-    </FilterLink>
-    {", "}
-    <FilterLink filter="SHOW_ACTIVE">
-      Active
-    </FilterLink>
-    {", "}
-    <FilterLink filter="SHOW_COMPLETED">
-      Completed
-    </FilterLink>
-  </p>
+  <div>
+    <span>Show: </span>
+    <FilterLink filter={VisibilityFilters.SHOW_ALL}>All</FilterLink>
+    <FilterLink filter={VisibilityFilters.SHOW_ACTIVE}>Active</FilterLink>
+    <FilterLink filter={VisibilityFilters.SHOW_COMPLETED}>Completed</FilterLink>
+  </div>
 )
 
 export default Footer
@@ -270,38 +240,33 @@ export default App
 import { connect } from 'react-redux'
 import { toggleTodo } from '../actions'
 import TodoList from '../components/TodoList'
+import { VisibilityFilters } from '../actions'
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
-    case 'SHOW_ALL':
+    case VisibilityFilters.SHOW_ALL:
       return todos
-    case 'SHOW_COMPLETED':
+    case VisibilityFilters.SHOW_COMPLETED:
       return todos.filter(t => t.completed)
-    case 'SHOW_ACTIVE':
+    case VisibilityFilters.SHOW_ACTIVE:
       return todos.filter(t => !t.completed)
+    default:
+      throw new Error('Unknown filter: ' + filter)
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter)
-  }
-}
+const mapStateToProps = state => ({
+  todos: getVisibleTodos(state.todos, state.visibilityFilter)
+})
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onTodoClick: (id) => {
-      dispatch(toggleTodo(id))
-    }
-  }
-}
+const mapDispatchToProps = dispatch => ({
+  toggleTodo: id => dispatch(toggleTodo(id))
+})
 
-const VisibleTodoList = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(TodoList)
-
-export default VisibleTodoList
 ```
 
 #### `containers/FilterLink.js`
@@ -311,26 +276,18 @@ import { connect } from 'react-redux'
 import { setVisibilityFilter } from '../actions'
 import Link from '../components/Link'
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    active: ownProps.filter === state.visibilityFilter
-  }
-}
+const mapStateToProps = (state, ownProps) => ({
+  active: ownProps.filter === state.visibilityFilter
+})
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onClick: () => {
-      dispatch(setVisibilityFilter(ownProps.filter))
-    }
-  }
-}
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  onClick: () => dispatch(setVisibilityFilter(ownProps.filter))
+})
 
-const FilterLink = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Link)
-
-export default FilterLink
 ```
 
 ### Остальные компоненты (Other Components)
@@ -342,30 +299,28 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
-let AddTodo = ({ dispatch }) => {
+const AddTodo = ({ dispatch }) => {
   let input
 
   return (
     <div>
-      <form onSubmit={e => {
-        e.preventDefault()
-        if (!input.value.trim()) {
-          return
-        }
-        dispatch(addTodo(input.value))
-        input.value = ''
-      }}>
-        <input ref={node => {
-          input = node
-        }} />
-        <button type="submit">
-          Add Todo
-        </button>
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+          if (!input.value.trim()) {
+            return
+          }
+          dispatch(addTodo(input.value))
+          input.value = ''
+        }}
+      >
+        <input ref={node => (input = node)} />
+        <button type="submit">Add Todo</button>
       </form>
     </div>
   )
 }
-AddTodo = connect()(AddTodo)
 
-export default AddTodo
+export default connect()(AddTodo)
 ```
+
