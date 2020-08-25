@@ -375,14 +375,16 @@ export function fetchPosts(subreddit) {
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(
         response => response.json(),
-        // Не используйте catch, потому что это также 				// перехватит любые ошибки в диспетчеризации и 				 // в результате рендеринга, что приведет к 						// циклу ошибок «Unexpected batch number».
+        // Не используйте catch, потому что это также
+        // перехватит любые ошибки в диспетчеризации и
+        // в результате рендеринга, что приведет к
+        // циклу ошибок «Unexpected batch number».
         // https://github.com/facebook/react/issues/6895
         error => console.log('An error occurred.', error)
       )
       .then(json =>
         // Мы можем вызывать dispatch много раз!
         // Здесь мы обновляем состояние приложения с результатами вызова API.
-
         dispatch(receivePosts(subreddit, json))
       )
   }
