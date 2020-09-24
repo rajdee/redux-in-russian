@@ -375,14 +375,16 @@ export function fetchPosts(subreddit) {
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(
         response => response.json(),
-        // Не используйте catch, потому что это также 				// перехватит любые ошибки в диспетчеризации и 				 // в результате рендеринга, что приведет к 						// циклу ошибок «Unexpected batch number».
+        // Не используйте catch, потому что это также
+        // перехватит любые ошибки в диспетчеризации и
+        // в результате рендеринга, что приведет к
+        // циклу ошибок «Unexpected batch number».
         // https://github.com/facebook/react/issues/6895
         error => console.log('An error occurred.', error)
       )
       .then(json =>
         // Мы можем вызывать dispatch много раз!
         // Здесь мы обновляем состояние приложения с результатами вызова API.
-
         dispatch(receivePosts(subreddit, json))
       )
   }
@@ -401,11 +403,11 @@ export function fetchPosts(subreddit) {
 >Внутри она использует [полифил `whatwg-fetch`](https://github.com/github/fetch) на клиенте и [`node-fetch`](https://github.com/bitinn/node-fetch) на сервере, поэтому вам не понадобится менять вызовы API, если вы захотите сделать ваше приложение [универсальным](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
 
 >Помните, что любой полифил `fetch` предполагает, что полифил [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) уже присутствует. Самый простой способ убедиться, что вы подключили Promise-полифил — это подключить ES6-полифил Babel во входной точке, прежде чем любой другой код запустится:
->
->```js
->// Добавьте это в самом начале вашего приложения
->import 'babel-core/polyfill'
->```
+
+```js
+// Добавьте это в самом начале вашего приложения
+import 'babel-core/polyfill'
+```
 
 Как мы добавляем мидлвар Redux Thunk в механизм диспетчера? Для этого мы используем метод [`applyMiddleware()`](../api/applyMiddleware.md) из Redux, как показано ниже:
 
