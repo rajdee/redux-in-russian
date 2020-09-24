@@ -525,8 +525,8 @@ store
 
 - Вы можете использовать [redux-promise](https://github.com/acdlite/redux-promise) или [redux-promise-middleware](https://github.com/pburtchaell/redux-promise-middleware) для отправки Promises вместо функций.
 - Вы можете использовать [redux-observable](https://github.com/redux-observable/redux-observable) для отправки Observables
-- Вы можете использовать мидлварь [redux-saga](https://github.com/yelouafi/redux-saga/) для создания более комплексных асинхронных экшенов
-- Вы можете использовать мидлварь [redux-pack](https://github.com/lelandrichardson/redux-pack) для отправки асинхронных экшенов, базирующихся на промисах
+- Вы можете использовать мидлвар [redux-saga](https://github.com/yelouafi/redux-saga/) для создания более комплексных асинхронных экшенов
+- Вы можете использовать мидлвар [redux-pack](https://github.com/lelandrichardson/redux-pack) для отправки асинхронных экшенов, базирующихся на промисах
 - Вы даже можете писать собственные мидлвары, для описания вызовов вашего API, как например в [real world example](../introduction/Examples.html#real-world).
 
 Решать вам, попробовать несколько вариантов, выбрать конвенции, которые вам нравятся и следовать им, будь то с использованием мидлвара или без него.
