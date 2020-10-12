@@ -3,6 +3,7 @@
 * [Памятка](../README.md)
 * [Введение](introduction/README.md)
   * [Мотивация](introduction/Motivation.md)
+  * [Начало работы с Redux](Introduction/GettingStarted.md)
   * [Основные понятия ](introduction/CoreConcepts.md)
   * [Три принципа](introduction/ThreePrinciples.md)
   * [Предшественники](introduction/PriorArt.md)
