@@ -47,6 +47,7 @@
     * [Паттерны иммутабельного обновления](recipes/reducers/ImmutableUpdatePatterns.md)
     * [Инициализирование состояния](recipes/reducers/InitializingState.md)
   * [Использование Immutable.JS с Redux](recipes/UsingImmutableJS.md)
+* [Учебные пособия](tutorials/tutorials-index.md)
 * [FAQ](FAQ.md)
   * [Главное](faq/General.md)
   * [Редюсеры](faq/Reducers.md)
