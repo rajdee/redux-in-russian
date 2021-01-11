@@ -115,7 +115,7 @@ function todoApp(state = initialState, action) {
 
 >##### Обратите внимание на `Object.assign`
 
->[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) это часть ES6, но этот метод не поддерживается старыми браузерами. Вам нужно будет использовать использовать полифилл, [плагин для Babel](https://www.npmjs.com/package/babel-plugin-transform-object-assign), либо хелпер из другой библиотеки, к примеру [`_.assign()` из lodash](https://lodash.com/docs#assign).
+>[`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) это часть ES6, но этот метод не поддерживается старыми браузерами. Вам нужно будет использовать полифилл, [плагин для Babel](https://www.npmjs.com/package/babel-plugin-transform-object-assign), либо хелпер из другой библиотеки, к примеру [`_.assign()` из lodash](https://lodash.com/docs#assign).
 
 >##### Обратите внимание на `switch` и шаблон (boilerplate)
 
