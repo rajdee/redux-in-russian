@@ -1,110 +1,30 @@
 ---
-id: part-1-overview-concepts
-title: 'Redux Essentials, Part 1: Redux Overview and Concepts'
-sidebar_label: 'Redux Overview and Concepts'
+id: part-2-concepts-data-flow
+title: 'Redux Fundamentals, Part 2: Concepts and Data Flow'
+sidebar_label: 'Redux Concepts and Data Flow'
 hide_title: true
-description: 'The official Essentials tutorial for Redux: learn how to use Redux, the right way'
+description: 'The official Redux Fundamentals tutorial: learn key Redux terms and how data flows in a Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Essentials, Part 1: Redux Overview and Concepts
+# Redux Fundamentals, Part 2: Concepts and Data Flow
 
 :::tip What You'll Learn
 
-- What Redux is and why you might want to use it
-- Key Redux terms and concepts
+- Key terms and concepts for using Redux
 - How data flows through a Redux app
 
 :::
 
 ## Introduction
 
-Welcome to the Redux Essentials tutorial! **This tutorial will introduce you to Redux and teach you how to use it the right way, using our latest recommended tools and best practices**. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
+In [Part 1: Redux Overview](./part-1-overview.md), we talked about what Redux is, why you might want to use it, and listed the other Redux libraries that are typically used with the Redux core. We also saw a small example of what a working Redux app looks like and the pieces that make up the app. Finally, we briefly mentioned some of the terms and concepts used with Redux.
 
-In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
+In this section, we'll look at those terms and concepts in more detail, and talk more about how data flows
+through a Redux application.
 
-Starting in [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
-
-### How to Read This Tutorial
-
-This page will focus on showing you _how_ to use Redux the right way, and explain just enough of the concepts so that you can understand how to build Redux apps correctly.
-
-We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already:
-
-:::important Prerequisites
-
-- Familiarity with [HTML & CSS](https://internetingishard.com/).
-- Familiarity with [ES6 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
-- Knowledge of React terminology: [JSX](https://reactjs.org/docs/introducing-jsx.html), [State](https://reactjs.org/docs/state-and-lifecycle.html), [Function Components, Props](https://reactjs.org/docs/components-and-props.html), and [Hooks](https://reactjs.org/docs/hooks-intro.html)
-- Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making AJAX requests](https://javascript.info/fetch)
-
-:::
-
-**If you're not already comfortable with those topics, we encourage you to take some time to become comfortable with them first, and then come back to learn about Redux**. We'll be here when you're ready!
-
-You should make sure that you have the React and Redux DevTools extensions installed in your browser:
-
-- React DevTools Extension:
-  - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
-  - [React DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
-- Redux DevTools Extension:
-  - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
-  - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
-
-## What is Redux?
-
-It helps to understand what this "Redux" thing is in the first place. What does it do? What problems does it help me solve? Why would I want to use it?
-
-**Redux is a pattern and library for managing and updating application state, using events called "actions".** It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
-
-### Why Should I Use Redux?
-
-Redux helps you manage "global" state - state that is needed across many parts of your application.
-
-**The patterns and tools provided by Redux make it easier to understand when, where, why, and how the state in your application is being updated, and how your application logic will behave when those changes occur**. Redux guides you towards writing code that is predictable and testable, which helps give you confidence that your application will work as expected.
-
-### When Should I Use Redux?
-
-Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There are more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
-
-Redux is more useful when:
-
-- You have large amounts of application state that are needed in many places in the app
-- The app state is updated frequently over time
-- The logic to update that state may be complex
-- The app has a medium or large-sized codebase, and might be worked on by many people
-
-**Not all apps need Redux. Take some time to think about the kind of app you're building, and decide what tools would be best to help solve the problems you're working on.**
-
-:::info Want to Know More?
-
-If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
-
-- **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
-- **[Redux FAQ: When should I use Redux?](../../faq/General.md#when-should-i-use-redux)**
-- **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
-
-:::
-
-### Redux Libraries and Tools
-
-Redux is a small standalone JS library. However, it is commonly used with several other packages:
-
-#### React-Redux
-
-Redux can integrate with any UI framework, and is most frequently used with React. [**React-Redux**](https://react-redux.js.org/) is our official package that lets your React components interact with a Redux store by reading pieces of state and dispatching actions to update the store.
-
-#### Redux Toolkit
-
-[**Redux Toolkit**](https://redux-toolkit.js.org) is our recommended approach for writing Redux logic. It contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
-
-#### Redux DevTools Extension
-
-The [**Redux DevTools Extension**](https://github.com/zalmoxisus/redux-devtools-extension) shows a history of the changes to the state in your Redux store over time. This allows you to debug your applications effectively, including using powerful techniques like "time-travel debugging".
-
-## Redux Terms and Concepts
+## Background Concepts
 
 Before we dive into some actual code, let's talk about some of the terms and concepts you'll need to know to use Redux.
 
@@ -219,11 +139,11 @@ For more info on how immutability works in JavaScript, see:
 
 :::
 
-### Terminology
+## Redux Terminology
 
-There are some important Redux terms that you'll need to be familiar with before we continue:
+There's some important Redux terms that you'll need to be familiar with before we continue:
 
-#### Actions
+### Actions
 
 An **action** is a plain JavaScript object that has a `type` field. **You can think of an action as an event that describes something that happened in the application**.
 
@@ -240,20 +160,7 @@ const addTodoAction = {
 }
 ```
 
-#### Action Creators
-
-An **action creator** is a function that creates and returns an action object. We typically use these so we don't have to write the action object by hand every time:
-
-```js
-const addTodo = text => {
-  return {
-    type: 'todos/todoAdded',
-    payload: text
-  }
-}
-```
-
-#### Reducers
+### Reducers
 
 A **reducer** is a function that receives the current `state` and an `action` object, decides how to update the state if necessary, and returns the new state: `(state, action) => newState`. **You can think of a reducer as an event listener which handles events based on the received action (event) type.**
 
@@ -284,7 +191,7 @@ const initialState = { value: 0 }
 
 function counterReducer(state = initialState, action) {
   // Check to see if the reducer cares about this action
-  if (action.type === 'counter/increment') {
+  if (action.type === 'counter/incremented') {
     // If so, make a copy of `state`
     return {
       ...state,
@@ -339,9 +246,9 @@ If we were to create an array of Redux actions, call `reduce()`, and pass in a r
 
 ```js
 const actions = [
-  { type: 'counter/increment' },
-  { type: 'counter/increment' },
-  { type: 'counter/increment' }
+  { type: 'counter/incremented' },
+  { type: 'counter/incremented' },
+  { type: 'counter/incremented' }
 ]
 
 const initialState = { value: 0 }
@@ -355,7 +262,7 @@ We can say that **Redux reducers reduce a set of actions (over time) into a sing
 
 </DetailedExplanation>
 
-#### Store
+### Store
 
 The current Redux application state lives in an object called the **store** .
 
@@ -370,12 +277,12 @@ console.log(store.getState())
 // {value: 0}
 ```
 
-#### Dispatch
+### Dispatch
 
 The Redux store has a method called `dispatch`. **The only way to update the state is to call `store.dispatch()` and pass in an action object**. The store will run its reducer function and save the new state value inside, and we can call `getState()` to retrieve the updated value:
 
 ```js
-store.dispatch({ type: 'counter/increment' })
+store.dispatch({ type: 'counter/incremented' })
 
 console.log(store.getState())
 // {value: 1}
@@ -383,22 +290,7 @@ console.log(store.getState())
 
 **You can think of dispatching actions as "triggering an event"** in the application. Something happened, and we want the store to know about it. Reducers act like event listeners, and when they hear an action they are interested in, they update the state in response.
 
-We typically call action creators to dispatch the right action:
-
-```js
-const increment = () => {
-  return {
-    type: 'counter/increment'
-  }
-}
-
-store.dispatch(increment())
-
-console.log(store.getState())
-// {value: 2}
-```
-
-#### Selectors
+### Selectors
 
 **Selectors** are functions that know how to extract specific pieces of information from a store state value. As an application grows bigger, this can help avoid repeating logic as different parts of the app need to read the same data:
 
@@ -410,7 +302,33 @@ console.log(currentValue)
 // 2
 ```
 
-### Redux Application Data Flow
+## Core Concepts and Principles
+
+Overall, we can summarize the intent behind Redux's design in three core concepts:
+
+### Single Source of Truth
+
+The **global state** of your application is stored as an object inside a single **store**. Any given piece of data should only exist in one location, rather than being duplicated in many places.
+
+This makes it easier to debug and inspect your app's state as things change, as well as centralizing logic that needs to interact with the entire application.
+
+:::tip
+
+This does _not_ mean that _every_ piece of state in your app must go into the Redux store! You should decide whether a piece of state belongs in Redux or your UI components, based on where it's needed.
+
+:::
+
+### State is Read-Only
+
+The only way to change the state is to dispatch an **action**, an object that describes what happened.
+
+This way, the UI won't accidentally overwrite data, and it's easier to trace why a state update happened. Since actions are plain JS objects, they can be logged, serialized, stored, and later replayed for debugging or testing purposes.
+
+### Changes are Made with Pure Reducer Functions
+
+To specify how the state tree is updated based on actions, you write **reducer** functions. Reducers are pure functions that take the previous state and an action, and return the next state. Like any other functions, you can split reducers into smaller functions to help do the work, or write reusable reducers for common tasks.
+
+## Redux Application Data Flow
 
 Earlier, we talked about "one-way data flow", which describes this sequence of steps to update the app:
 
@@ -427,7 +345,7 @@ For Redux specifically, we can break these steps into more detail:
   - When the UI is first rendered, UI components access the current state of the Redux store, and use that data to decide what to render. They also subscribe to any future store updates so they can know if the state has changed.
 - Updates:
   - Something happens in the app, such as a user clicking a button
-  - The app code dispatches an action to the Redux store, like `dispatch({type: 'counter/increment'})`
+  - The app code dispatches an action to the Redux store, like `dispatch({type: 'counter/incremented'})`
   - The store runs the reducer function again with the previous `state` and the current `action`, and saves the return value as the new `state`
   - The store notifies all parts of the UI that are subscribed that the store has been updated
   - Each UI component that needs data from the store checks to see if the parts of the state they need have changed.
@@ -439,13 +357,12 @@ Here's what that data flow looks like visually:
 
 ## What You've Learned
 
-Redux does have a number of new terms and concepts to remember. As a reminder, here's what we just covered:
-
 :::tip Summary
 
-- **Redux is a library for managing global application state**
-  - Redux is typically used with the React-Redux library for integrating Redux and React together
-  - Redux Toolkit is the recommended way to write Redux logic
+- **Redux's intent can be summarized in three principles**
+  - Global app state is kept in a single store
+  - The store state is read-only to the rest of the app
+  - Reducer functions are used to update the state in response to actions
 - **Redux uses a "one-way data flow" app structure**
   - State describes the condition of the app at a point in time, and UI renders based on that state
   - When something happens in the app:
@@ -453,13 +370,11 @@ Redux does have a number of new terms and concepts to remember. As a reminder, h
     - The store runs the reducers, and the state is updated based on what occurred
     - The store notifies the UI that the state has changed
   - The UI re-renders based on the new state
-- **Redux uses several types of code**
-  - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
-  - _Reducers_ are functions that calculate a new state value based on previous state + an action
-  - A Redux _store_ runs the root reducer whenever an action is _dispatched_
 
 :::
 
 ## What's Next?
 
-We've seen each of the individual pieces of a Redux app. Next, continue on to [Part 2: Redux App Structure](./part-2-app-structure.md), where we'll look at a full working example to see how the pieces fit together.
+You should now be familiar with the key concepts and terms that describe the different parts of a Redux app.
+
+Now, let's see how those pieces work together as we start building a new Redux application in [Part 3: State, Actions, and Reducers](./part-3-state-actions-reducers).

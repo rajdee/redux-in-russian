@@ -15,7 +15,7 @@ function todoApp(state = initialState, action) {
 }
 ```
 
-Несмотря на эффективность, `Object.assign()` может довольно быстро сделать простые редюсеры трудно читаемыми.
+Несмотря на эффективность, `Object.assign()` может довольно быстро сделать простые редьюсеры трудно читаемыми.
 
 Альтернативный вариант — использовать [object spread syntax](https://github.com/sebmarkbage/ecmascript-rest-spread), предложенный для следующих версий JavaScript, который позволяет вам использовать spread-оператор (`...`) для копирования перечисляемых свойств одного объекта в другой в более сжатой форме записи. Оператор расширения концептуально похож на [array spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) ES6. Мы можем упростить пример `todoApp`, используя object spread syntax:
 

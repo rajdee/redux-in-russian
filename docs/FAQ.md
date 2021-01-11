@@ -7,8 +7,8 @@
   - [Когда я должен использовать Redux?](/docs/faq/General.md#general-when-to-use)
   - [Должен ли Redux быть использован только с React?](/docs/faq/General.md#general-only-react)
   - [Нужны ли мне дополнительные инструменты для использования Redux?](/docs/faq/General.md#general-build-tools)
-- **Редюсеры**
-  - [Как мне передавать состояние между двумя редюсерами? Должен ли я использовать combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
+- **Редьюсеры**
+  - [Как мне передавать состояние между двумя редьюсерами? Должен ли я использовать combineReducers?](/docs/faq/Reducers.md#reducers-share-state)
   - [Должен ли я использовать оператор switch для обработки экшенов(actions)?](/docs/faq/Reducers.md#reducers-use-switch)
 - **Организация состояния(State)**
   - [Могу ли я хранить всё мое состояние в Redux? Должен ли я всегда использовать setState() из React?](/docs/faq/OrganizingState.md#organizing-state-only-redux-state)
@@ -21,7 +21,7 @@
   - [Как мне подписаться на получение только части стора? Могу ли я получить запущенный экшен, как часть подписки?](/docs/faq/StoreSetup.md#store-setup-subscriptions)
 - **Экшены**
   - [Почему тип экшена должен быть строкой или по крайней мере сериализуемым? Почему мои типы экшенов должны быть константами?](/docs/faq/Actions.md#actions-string-constants)
-  - [Всегда ли редюсеры и экшены преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
+  - [Всегда ли редьюсеры и экшены преобразуются "один к одному"?](/docs/faq/Actions.md#actions-reducer-mappings)
   - [Как я могу выполнять "сайдэффекты", такие как AJAX вызовы? Зачем нам нужны вещи типа “генераторов экшенов, “thunks” или “мидлвар” для осуществления асинхронного поведения?](/docs/faq/Actions.md#actions-side-effects)
   - [Какой асинхронный мидлвар должен я использовать? Как вы выбираете между thunks, sagas, observables или что-то еще?](faq/Actions.md#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
   - [Должен ли я отправлять несколько экшенов подряд от одного генератора экшена?](/docs/faq/Actions.md#actions-multiple-actions)
@@ -39,23 +39,23 @@
   - [Каковы некоторые устоявшиеся рекомендации по использованию Immutable.JS с Redux?](/docs/recipes/UsingImmutableJS.md#what-are-some-opinionated-best-practices-for-using-immutable-js-with-redux)
 
 - **Структура кода**
-  - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы экшенов и редюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
-  - [Как я должен разделять мою логику между редюсерами и генераторами экшенов? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
+  - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы экшенов и редьюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [Как я должен разделять мою логику между редьюсерами и генераторами экшенов? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
   - [Для чего я должен использовать генераторы экшенов?](/docs/faq/CodeStructure.md#why-should-i-use-action-creators)
   - [Где должны находиться веб-сокеты и другие постоянные соединения?](/docs/faq/CodeStructure.md#where-should-websockets-and-other-persistent-connections-live)
 - **Производительность**
   - [Насколько хорошо “масштабируется” Redux с точки зрения производительности и архитектуры?](/docs/faq/Performance.md#performance-scaling)
-  - [Не будет ли вызов “всех моих редюсеров” для каждого экшена медленным?](/docs/faq/Performance.md#performance-all-reducers)
-  - [Должен ли я иметь полноценный клон моего стейта в редюсере? Не будет ли копирование моего стейта медленным?](/docs/faq/Performance.md#performance-clone-state)
+  - [Не будет ли вызов “всех моих редьюсеров” для каждого экшена медленным?](/docs/faq/Performance.md#performance-all-reducers)
+  - [Должен ли я иметь полноценный клон моего стейта в редьюсере? Не будет ли копирование моего стейта медленным?](/docs/faq/Performance.md#performance-clone-state)
   - [Как мне уменьшить количество событий обновления стора?](/docs/faq/Performance.md#performance-update-events)
   - [Будут ли проблемы с памятью из-за использования “одного дерева состояния”? Будет ли вызов большого количества экшенов занимать память?](/docs/faq/Performance.md#performance-state-memory)
   - [Будет ли кеширование удаленных данных вызывать проблемы с памятью?](/docs/faq/Performance.md#will-caching-remote-data-cause-memory-problems)
 - **Проектные решения**
   - [Почему Redux не передает стейт и экшены подписчикам?](/docs/faq/DesignDecisions.md#why-doesnt-redux-pass-the-state-and-action-to-subscribers)
-  - [Почему Redux не поддерживает использование классов для экшенов и редюсеров](/docs/faq/DesignDecisions.md#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
+  - [Почему Redux не поддерживает использование классов для экшенов и редьюсеров](/docs/faq/DesignDecisions.md#why-doesnt-redux-support-using-classes-for-actions-and-reducers)
   - [Почему сигнатура мидлварей использует каррирование?](/docs/faq/DesignDecisions.md#why-does-the-middleware-signature-use-currying)
   - [Почему applyMiddleware использует замыкание для диспатчинга?](/docs/faq/DesignDecisions.md#why-does-applymiddleware-use-a-closure-for-dispatch)
-  - [Почему `combineReducers`  не включает третий аргумент со всем стейтом, когда он вызывает каждый редюсер?](/docs/faq/DesignDecisions.md#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
+  - [Почему `combineReducers`  не включает третий аргумент со всем стейтом, когда он вызывает каждый редьюсер?](/docs/faq/DesignDecisions.md#why-doesnt-combinereducers-include-a-third-argument-with-the-entire-state-when-it-calls-each-reducer)
   - [Почему mapDispatchToProps не позволяет использовать возвращаемые значения из `getState ()` или `mapStateToProps ()`?](/docs/faq/DesignDecisions.md#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
 - **React Redux**
   - [Почему я должен использовать React-Redux?](faq/ReactRedux.md#why-should-i-use-react-redux)

@@ -8,7 +8,7 @@
 **Мы рекомендуем начать с [руководства Redux Essentials](../tutorials/essentials/part-1-overview-concepts)**, поскольку оно охватывает ключевые моменты, которые вам нужно знать о том, как начать использовать Redux для написания реальных приложений.
 
 * [Экшены (Actions)](Actions.md)
-* [Редюсеры (Reducers)](Reducers.md)
+* [Редьюсеры (Reducers)](Reducers.md)
 * [Стор (Store)](Store.md)
 * [Поток данных (Data Flow)](DataFlow.md)
 * [Использвание с React](UsageWithReact.md)

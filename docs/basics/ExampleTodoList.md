@@ -53,7 +53,7 @@ export const VisibilityFilters = {
 }
 ```
 
-## Редюсеры (Reducers)
+## Редьюсеры (Reducers)
 
 #### `reducers/todos.js`
 
