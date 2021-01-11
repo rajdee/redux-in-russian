@@ -87,7 +87,7 @@ export function fetchPostsIfNeeded(subreddit) {
 }
 ```
 
-## Редюсеры (Reducers)
+## Редьюсеры (Reducers)
 
 #### `reducers.js`
 
