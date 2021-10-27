@@ -2,7 +2,6 @@
 id: part-5-ui-react
 title: 'Redux Fundamentals, Part 5: UI and React'
 sidebar_label: 'UI and React'
-hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn how to use Redux with React'
 ---
 
@@ -102,7 +101,7 @@ See **the official React-Redux docs at https://react-redux.js.org** for a comple
 
 ### Designing the Component Tree
 
-Much like we [designed the state structure](./part-3-state-actions-reducers.md#designing-the-state-structure) based on requirements, we can also design the overall set of UI components and how they related to each other in the application.
+Much like we [designed the state structure](./part-3-state-actions-reducers.md#designing-the-state-structure) based on requirements, we can also design the overall set of UI components and how they relate to each other in the application.
 
 Based on [the list of business requirements for the app](./part-3-state-actions-reducers.md#defining-requirements), at a minimum we're going to need this set of components:
 
@@ -120,7 +119,7 @@ Here's the initial React UI of this app looks like before we start adding any Re
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-3-initialUI/?fontsize=14&hidenavigation=1&theme=dark&view=preview"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-3-initialUI/?fontsize=14&hidenavigation=1&theme=dark&view=preview&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -246,7 +245,7 @@ const Header = () => {
   const handleKeyDown = e => {
     const trimmedText = e.target.value.trim()
     // If the user pressed the Enter key:
-    if (e.which === 13 && trimmedText) {
+    if (e.key === 'Enter' && trimmedText) {
       // highlight-start
       // Dispatch the "todo added" action with this text
       dispatch({ type: 'todos/todoAdded', payload: trimmedText })
@@ -312,7 +311,7 @@ We should now be able to actually interact with the app! Here's the working UI s
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-4-initialHooks/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-4-initialHooks/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -497,7 +496,7 @@ const TodoListItem = ({ id }) => {
 export default TodoListItem
 ```
 
-There's a problem with this, though. We said earlier that **returning new array references in selectors causes components to re-render every time**, and right now we're returning a new IDs array in `<TodoListItem>`. In this case, the _contents_ of the IDs array should be the same if we're toggling a todo, because we're still showing the same todo items - we haven't added or deleted any. But, the array _containing_ those IDs is a new reference, so `<TodoList>` will re-render when it really doesn't need to.
+There's a problem with this, though. We said earlier that **returning new array references in selectors causes components to re-render every time**, and right now we're returning a new IDs array in `<TodoList>`. In this case, the _contents_ of the IDs array should be the same if we're toggling a todo, because we're still showing the same todo items - we haven't added or deleted any. But, the array _containing_ those IDs is a new reference, so `<TodoList>` will re-render when it really doesn't need to.
 
 One possible solution to this is to change how `useSelector` compares its values to see if they've changed. `useSelector` can take a comparison function as its second argument. A comparison function is called with the old and new values, and returns `true` if they're considered the same. If they're the same, `useSelector` won't make the component re-render.
 
@@ -547,7 +546,7 @@ Let's see how the app looks now, including the components and sections we skippe
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

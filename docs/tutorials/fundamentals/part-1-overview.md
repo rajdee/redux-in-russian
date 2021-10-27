@@ -2,7 +2,6 @@
 id: part-1-overview
 title: 'Redux Fundamentals, Part 1: Redux Overview'
 sidebar_label: 'Redux Overview'
-hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the fundamentals of using Redux'
 ---
 
@@ -77,7 +76,7 @@ Redux helps you manage "global" state - state that is needed across many parts o
 
 ### When Should I Use Redux?
 
-Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There's more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
+Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There are more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
 
 Redux is more useful when:
 
@@ -93,7 +92,7 @@ Redux is more useful when:
 If you're not sure whether Redux is a good choice for your app, these resources give some more guidance:
 
 - **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
-- **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
+- **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
 - **[Redux FAQ: When should I use Redux?](../../faq/General.md#when-should-i-use-redux)**
 - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
 
@@ -142,7 +141,7 @@ Let's look at a minimal working example of a Redux app - a small counter applica
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/dank-architecture-lr7k1?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/dank-architecture-lr7k1?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-core-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

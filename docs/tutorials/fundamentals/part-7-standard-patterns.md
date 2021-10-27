@@ -2,7 +2,6 @@
 id: part-7-standard-patterns
 title: 'Redux Fundamentals, Part 7: Standard Redux Patterns'
 sidebar_label: 'Standard Redux Patterns'
-hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the standard patterns used in real-world Redux apps'
 ---
 
@@ -309,14 +308,14 @@ import React from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 
 // highlight-next-line
-import { selectTodoIds }
+import { selectTodoIds } from './todosSlice'
 import TodoListItem from './TodoListItem'
 
 const TodoList = () => {
   // highlight-next-line
   const todoIds = useSelector(selectTodoIds)
 
-  const renderedListItems = todoIds.map((todoId) => {
+  const renderedListItems = todoIds.map(todoId => {
     return <TodoListItem key={todoId} id={todoId} />
   })
 
@@ -439,10 +438,9 @@ export const selectTodoById = (state, todoId) => {
 
 :::info
 
-To learn more about how to use Reselect and memoized selectors, see:
+For more details on why we use selector functions and how to write memoized selectors with Reselect, see:
 
-- The [Reselect docs](https://github.com/reduxjs/reselect)
-- [Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance](https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/)
+- [Using Redux: Deriving Data with Selectors](../../usage/deriving-data-selectors.md)
 
 :::
 
@@ -640,7 +638,7 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -865,7 +863,7 @@ For now, the important things to understand are:
 
 For more details on why normalization is useful with Redux, see:
 
-- [Structuring Reducers: Normalizing State Shape](../../recipes/structuring-reducers/NormalizingStateShape.md)
+- [Structuring Reducers: Normalizing State Shape](../../usage/structuring-reducers/NormalizingStateShape.md)
 
 :::
 
@@ -895,7 +893,7 @@ This means that **we can write thunk functions that return a promise, and wait o
 
 We already have our `<Header>` component dispatching a thunk to save new todo entries to the server. Let's add some loading state inside the `<Header>` component, then disable the text input and show another loading spinner while we're waiting for the server:
 
-```js title="src/features/header.Header.js"
+```js title="src/features/header/Header.js"
 const Header = () => {
   const [text, setText] = useState('')
   // highlight-next-line
@@ -966,7 +964,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
