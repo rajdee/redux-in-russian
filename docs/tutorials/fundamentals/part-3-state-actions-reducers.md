@@ -2,7 +2,6 @@
 id: part-3-state-actions-reducers
 title: 'Redux Fundamentals, Part 3: State, Actions, and Reducers'
 sidebar_label: 'State, Actions, and Reducers'
-hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn how reducers update state in response to actions'
 ---
 
@@ -44,7 +43,7 @@ To get started, you can open and fork this CodeSandbox:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -93,7 +92,7 @@ Let's take a quick look at what the initial project contains:
   - `/api`
     - `client.js`: a small AJAX request client that allows us to make GET and POST requests
     - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
-- - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
+  - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
 
 If you load the app now, you should see a welcome message, but the rest of the app is otherwise empty.
 
@@ -117,7 +116,7 @@ Let's start by figuring out the initial business requirements for this applicati
   category tag for a predefined list of colors, and delete todo items.
 - The counter should pluralize the number of active todos: "0 items", "1 item", "3 items", etc
 - There should be buttons to mark all todos as completed, and to clear all completed todos by removing them
-- There should be to ways to filter the displayed todos in the list:
+- There should be two ways to filter the displayed todos in the list:
   - Filtering based on showing "All", "Active", and "Completed" todos
   - Filtering based on selecting one or more colors, and showing any todos whose tag that match those colors
 
@@ -365,7 +364,7 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
 ```js
-// ❌ Illegal - don't do this in a normal reducer!
+// ❌ Illegal - by default, this will mutate the state!
 state.value = 123
 ```
 
@@ -641,7 +640,7 @@ Since reducers are normal JS functions, we can import the slice reducers back in
 import todosReducer from './features/todos/todosSlice'
 import filtersReducer from './features/filters/filtersSlice'
 
-export default function rootReducer(state, action) {
+export default function rootReducer(state = {}, action) {
   // always return a new object for the root state
   return {
     // the value of `state.todos` is whatever the todos reducer returns
@@ -698,9 +697,9 @@ values are the slice reducer functions that know how to update those slices of t
 
 Here's the contents of our app so far:
 
-<iframe 
+<iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
   sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"

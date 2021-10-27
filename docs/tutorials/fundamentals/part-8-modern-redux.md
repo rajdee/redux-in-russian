@@ -2,7 +2,6 @@
 id: part-8-modern-redux
 title: 'Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit'
 sidebar_label: 'Modern Redux with Redux Toolkit'
-hide_title: true
 description: 'The official Fundamentals tutorial for Redux: learn the modern way to write Redux logic'
 ---
 
@@ -275,7 +274,7 @@ Earlier, we talked about "mutation" (modifying existing object/array values) and
 In Redux, **our reducers are _never_ allowed to mutate the original / current state values!**
 
 ```js
-// Illegal - don't do this in a normal reducer!
+// ❌ Illegal - by default, this will mutate the state!
 state.value = 123
 ```
 
@@ -301,7 +300,7 @@ As you've seen throughout this tutorial, we can write immutable updates by hand 
 
 **That's why Redux Toolkit's `createSlice` function lets you write immutable updates an easier way!**
 
-`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/docs/introduction) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
+`createSlice` uses a library called [Immer](https://immerjs.github.io/immer/) inside. Immer uses a special JS tool called a `Proxy` to wrap the data you provide, and lets you write code that "mutates" that wrapped data. But, **Immer tracks all the changes you've tried to make, and then uses that list of changes to return a safely immutably updated value**, as if you'd written all the immutable update logic by hand.
 
 So, instead of this:
 
@@ -354,9 +353,7 @@ Let's start converting our todos slice file to use `createSlice` instead. We'll 
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
-import { createSlice, createSelector } from '@reduxjs/toolkit'
-import { client } from '../../api/client'
-import { StatusFilters } from '../filters/filtersSlice'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   status: 'idle',
@@ -380,7 +377,7 @@ const todosSlice = createSlice({
   }
 })
 
-export const { todoAdded, todoDeleted } = todosSlice.actions
+export const { todoAdded, todoToggled } = todosSlice.actions
 
 export default todosSlice.reducer
 // highlight-end
@@ -423,12 +420,8 @@ const todosSlice = createSlice({
   }
 })
 
-export const {
-  todoAdded,
-  todoToggled,
-  todoColorSelected,
-  todoDeleted
-} = todosSlice.actions
+export const { todoAdded, todoToggled, todoColorSelected, todoDeleted } =
+  todosSlice.actions
 
 export default todosSlice.reducer
 ```
@@ -447,7 +440,7 @@ Here's how our code looks with all the slices converted:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-9-createSlice/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-9-createSlice/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -458,6 +451,14 @@ Here's how our code looks with all the slices converted:
 We've seen how we can [write thunks that dispatch "loading", "request succeeded", and "request failed" actions](./part-7-standard-patterns.md#loading-state-enum-values). We had to write action creators, action types, _and_ reducers to handle those cases.
 
 Because this pattern is so common, **Redux Toolkit has a `createAsyncThunk` API that will generate these thunks for us**. It also generates the action types and action creators for those different request status actions, and dispatches those actions automatically based on the resulting `Promise`.
+
+:::tip
+
+Redux Toolkit has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We encourage you to try it out and see if it can help simplify the data fetching code in your own apps!
+
+We'll be updating the Redux tutorials soon to include sections on using RTK Query. Until then, see [the RTK Query section in the Redux Toolkit docs](https://redux-toolkit.js.org/rtk-query/overview).
+
+:::
 
 ### Using `createAsyncThunk`
 
@@ -753,10 +754,8 @@ export const {
 export default todosSlice.reducer
 
 // highlight-start
-export const {
-  selectAll: selectTodos,
-  selectById: selectTodoById
-} = todosAdapter.getSelectors(state => state.todos)
+export const { selectAll: selectTodos, selectById: selectTodoById } =
+  todosAdapter.getSelectors(state => state.todos)
 // highlight-end
 
 export const selectTodoIds = createSelector(
@@ -830,7 +829,7 @@ Let's take one final look at the completed todo application, including all the c
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -869,7 +868,7 @@ However, our [**"Redux Essentials" tutorial**](../essentials/part-1-overview-con
 
 At the same time, the concepts we've covered in this tutorial should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
 
-The [Recipes](../../recipes/README.md) section has information on a number of important concepts, like [how to structure your reducers](../../recipes/structuring-reducers/StructuringReducers.md), and [**our Style Guide page**](../../style-guide/style-guide) has important information on our recommended patterns and best practices.
+The [Using Redux](../../usage/index.md) section has information on a number of important concepts, like [how to structure your reducers](../../usage/structuring-reducers/StructuringReducers.md), and [**our Style Guide page**](../../style-guide/style-guide) has important information on our recommended patterns and best practices.
 
 If you'd like to know more about _why_ Redux exists, what problems it tries to solve, and how it's meant to be used, see Redux maintainer Mark Erikson's posts on [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) and [The Tao of Redux, Part 2: Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/).
 

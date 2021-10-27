@@ -1,7 +1,7 @@
 # Redux-in-russian
 Оригинальная документация по [Redux](http://redux.js.org) с переводом на русский
 
-# <a href='http://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60' alt='Redux Logo' aria-label='Redux.js.org' /></a>
+# <a href='https://redux.js.org'><img src='https://camo.githubusercontent.com/f28b5bc7822f1b7bb28a96d8d09e7d79169248fc/687474703a2f2f692e696d6775722e636f6d2f4a65567164514d2e706e67' height='60' alt='Redux Logo' aria-label='redux.js.org' /></a>
 
 Redux - это предсказуемое хранилище состояния для JavaScript приложений.
 (Не путайте с WordPress фреймворком – [Redux Framework](https://reduxframework.com/).)
@@ -11,7 +11,7 @@ Redux - это предсказуемое хранилище состояния 
 Вы можете использовать Redux вместе с [React](https://facebook.github.io/react/) или с любой другой view-библиотекой. 
 Это крошечная библиотека (2kB, включая зависимости).
 
-[![build status](https://img.shields.io/travis/reduxjs/redux/master.svg?style=flat-square)](https://travis-ci.org/reduxjs/redux)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/reduxjs/redux/Tests/master?style=flat-square)
 [![npm version](https://img.shields.io/npm/v/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![npm downloads](https://img.shields.io/npm/dm/redux.svg?style=flat-square)](https://www.npmjs.com/package/redux)
 [![redux channel on discord](https://img.shields.io/badge/discord-%23redux%20%40%20reactiflux-61dafb.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZ6au5t)
@@ -19,24 +19,29 @@ Redux - это предсказуемое хранилище состояния 
 
 ## Установка
 
+[**Redux Toolkit**](https://redux-toolkit.js.org) - это наш официальный рекомендуемый подход для написания логики Redux. Он использует ядро Redux и содержит пакеты и функции, которые, по нашему мнению, необходимы для создания приложения Redux. Redux Toolkit создается в соответствии с нашими рекомендуемыми передовыми практиками, упрощает большинство задач Redux, предотвращает распространенные ошибки и упрощает написание приложений Redux.
+
 ```
 npm install @reduxjs/toolkit react-redux
+```
+
+Для самой библиотеки Redux:
+
+```
+npm install redux
 ```
 
 Для более подробной информации, смотри [страницу установки](https://redux.js.org/introduction/installation).
 
 ## Документация
 
-Документация по Redux находится по адресу **https://redux.js.org**:
+Документация по Redux доступна по адресу **https://redux.js.org**:
 
-- [Введение](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/GettingStarted.html)
-- [Рецепты](https://rajdee.gitbooks.io/redux-in-russian/content/docs/recipes/index.html)
-- [FAQ](https://rajdee.gitbooks.io/redux-in-russian/content/docs/FAQ.html)
-- [Справочник по API](https://rajdee.gitbooks.io/redux-in-russian/content/docs/api/index.html)
-
-Для экпорта в PDF, ePub MOBI для чтения в оффлайн и инструкциям, как это можно осуществить, обратите внимание на:  [paulkogel/redux-offline-docs](https://github.com/paulkogel/redux-offline-docs).
-
-Для документации в Offline, пожалуйста посмотрите: [devdocs](http://devdocs.io/redux/)
+- [Введение](https://github.com/rajdee/redux-in-russian/blob/master/docs/introduction/GettingStarted.md)
+- [Учебники](https://github.com/rajdee/redux-in-russian/blob/master/docs/tutorials/tutorials-index.md)
+- [Руководства по использованию](https://github.com/rajdee/redux-in-russian/blob/master/docs/usage/index.md)
+- [FAQ](https://github.com/rajdee/redux-in-russian/blob/master/docs/FAQ.md)
+- [Справочник по API](https://github.com/rajdee/redux-in-russian/blob/master/docs/api/README.md)
 
 ## Изучите Redux
 
@@ -44,13 +49,23 @@ npm install @reduxjs/toolkit react-redux
 
 [**Redux Essentials tutorial**](https://redux.js.org/tutorials/essentials/part-1-overview-concepts) - это пособие по основам, которое учит вас, как использовать Redux правильно, используя наши последние рекомендуемые API и лучшие практики. Мы рекомендуем начать с этого.
 
+### Базовое руководство по Redux
+
+[**Redux Fundamentals tutorial**](https://redux.js.org/tutorials/fundamentals/part-1-overview) - это учебник «снизу вверх», который учит, «как работает Redux» начиная с первых принципов и без каких-либо абстракций и почему существуют стандартные шаблоны использования Redux.
+
 ### Дополнительные учебные пособия
 
-- Документация Redux [**Базовое пособие**](https://rajdee.gitbooks.io/redux-in-russian/content/docs/basics/) и [**Продвинутое пособие**](https://rajdee.gitbooks.io/redux-in-russian/content/docs/advanced/) - это руководства, которые объясняют, как работает Redux, начиная с простых принципов.
 - Репозиторий Redux, содержит несколько примеров проектов, демонстрирующих  различные аспекты использования Redux. Почти во всех примерах есть соответствующая песочница CodeSandbox. Это интерактивная версия кода, которую можно попробовать онлайн. Смотрите полный список на **[странице Примеров](https://rajdee.gitbooks.io/redux-in-russian/content/docs/introduction/Examples.html)**.
 - видеокурсы на Egghead.io, от создателя Redux Dan Abramov **бесплатный  ["Getting Started with Redux"](https://egghead.io/series/getting-started-with-redux)** и **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** 
 - от разработчика Redux Mark Erikson - доклад с конференции **["Redux Fundamentals"](http://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** и слайды воркшопа [**"Redux Fundamentals"**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
 - Пост Dave Ceddia [**A Complete React Redux Tutorial for Beginners**](https://daveceddia.com/redux-tutorial/)
+
+### Другие ресурсы
+
+- **[Redux FAQ](https://github.com/rajdee/redux-in-russian/blob/master/docs/FAQ.md)** отвечает на многие распространенные вопросы о том, как использовать Redux и **[Использование Redux](https://github.com/rajdee/redux-in-russian/blob/master/docs/usage/index.md)** содержит информацию об обработке полученных данных, тестировании, структурировании логики редьюсеров и сокращении шаблонов.
+- Серия учебных пособий от разработчика Redux Mark Erikson **[Practical Redux](https://blog.isquaredsoftware.com/series/practical-redux/)** демонстрирует реальные промежуточные и продвинутые методы работы с React и Redux (также доступны в качества **[интерактивного курса на Educative.io](https://www.educative.io/collection/5687753853370368/5707702298738688)**).
+- [React/Redux links list](https://github.com/markerikson/react-redux-links)** содержит категоризированные статьи о работе с [редьюсрами и селекторами](https://github.com/markerikson/react-redux-links/blob/master/redux-reducers-selectors.md), [управлению сайд-эффектами](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md), [архитектуре Redux architecture и лучшим практиками](https://github.com/markerikson/react-redux-links/blob/master/redux-architecture.md) и т.д.
+- Наше сообщество создало тысячи связанных с Redux библиотек, надстроек и инструментов. **[Экосистема](https://redux.js.org/introduction/ecosystem)** перечисляет наши рекомендации, а также есть полный список, доступный в **[Redux addons catalog](https://github.com/markerikson/redux-ecosystem-links)**.
 
 ### Помощь и обсуждения
 
@@ -70,9 +85,10 @@ Redux - это ценный инструмент для управления в�
 
 >**Дополнительные сведения о том, как использовать Redux, см:**
 >
-> - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**
-> - **[The Tao of Redux, Part 1 - Implementation and Intent](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**
-> - **[The Tao of Redux, Part 2 - Practice and Philosophy](http://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
+> - **[When (and when not) to reach for Redux](https://changelog.com/posts/when-and-when-not-to-reach-for-redux)**
+> - **[You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367)**<br>
+> - **[The Tao of Redux, Part 1 - Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/)**<br>
+> - **[The Tao of Redux, Part 2 - Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/)**
 > - **[Redux FAQ](https://redux.js.org/faq)**
 
 ## Опыт разработки

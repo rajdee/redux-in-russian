@@ -2,7 +2,6 @@
 id: part-4-store
 title: 'Redux Fundamentals, Part 4: Store'
 sidebar_label: 'Store'
-hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn how to create and use a Redux store'
 ---
 
@@ -124,7 +123,7 @@ store.dispatch({ type: 'filters/statusFilterChanged', payload: 'Active' })
 
 store.dispatch({
   type: 'filters/colorFilterChanged',
-  payload: { color: 'red', changeType: 'selected' }
+  payload: { color: 'red', changeType: 'added' }
 })
 
 // Stop listening to state updates
@@ -151,7 +150,7 @@ Redux state changes as each action was dispatched:
 
 ![Logged Redux state after dispatching actions](/img/tutorials/fundamentals/initial-state-updates.png)
 
-Notice that our app did _not_ log anything from the last action. That's because we removed the listener callback when we called `unsubscribe()`, so nothing else ran when after the action was dispatched.
+Notice that our app did _not_ log anything from the last action. That's because we removed the listener callback when we called `unsubscribe()`, so nothing else ran after the action was dispatched.
 
 We specified the behavior of our app before we even started writing the UI. That
 helps give us confidence that the app will work as intended.
@@ -164,7 +163,7 @@ take the result, and check to see if it matches what you expect:
 ```js title="todosSlice.spec.js"
 import todosReducer from './todosSlice'
 
-test(('Toggles a todo based on id') => {
+test('Toggles a todo based on id', () => {
   const initialState = [{ id: 0, text: 'Test text', completed: false }]
 
   const action = { type: 'todos/todoToggled', payload: 0 }
@@ -284,7 +283,7 @@ Now look at the console. You should see `'Hi!'` logged there, in between the oth
 
 ![sayHi store enhancer logging](/img/tutorials/fundamentals/sayhi-enhancer-logging.png)
 
-The `sayHiOnDispatch` enhancer wrapped the original `store.dispatch` function with its own specialized version of `dispatch`. When we called `store.dispatch()`, we were actually calling the the wrapper function from `sayHiOnDispatch`, which called the original and then printed 'Hi'.
+The `sayHiOnDispatch` enhancer wrapped the original `store.dispatch` function with its own specialized version of `dispatch`. When we called `store.dispatch()`, we were actually calling the wrapper function from `sayHiOnDispatch`, which called the original and then printed 'Hi'.
 
 Now, let's try adding a second enhancer. We can import `includeMeaningOfLife` from that same file... but we have a problem. **`createStore` only accepts one enhancer as its third argument!** How can we pass _two_ enhancers at the same time?
 
@@ -543,7 +542,7 @@ Finally, there's one more very important thing to cover with configuring the sto
 
 **Redux was specifically designed to make it easier to understand when, where, why, and how your state has changed over time**. As part of that, Redux was built to enable the use of the **Redux DevTools** - an addon that shows you a history of what actions were dispatched, what those actions contained, and how the state changed after each dispatched action.
 
-The Redux DevTools UI is available as a browser extension for [Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) and [Firefox](ttps://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/). If you haven't already added that to your browser, go ahead and do that now.
+The Redux DevTools UI is available as a browser extension for [Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/). If you haven't already added that to your browser, go ahead and do that now.
 
 Once that's installed, open up the browser's DevTools window. You should now see a new "Redux" tab there. It doesn't do anything, yet - we've got to set it up to talk to a Redux store first.
 
@@ -598,7 +597,7 @@ Let's see how our example app looks now:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-2-storeSetup/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Fstore.js"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-2-storeSetup/?fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Fstore.js&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

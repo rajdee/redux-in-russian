@@ -2,7 +2,6 @@
 id: part-6-async-logic
 title: 'Redux Fundamentals, Part 6: Async Logic and Data Fetching'
 sidebar_label: 'Async Logic and Data Fetching'
-hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn how to use async logic with Redux'
 ---
 
@@ -86,7 +85,7 @@ const fetchTodosMiddleware = storeAPI => next => action => {
     // Make an API call to fetch todos from the server
     client.get('todos').then(todos => {
       // Dispatch an action with the todos we received
-      dispatch({ type: 'todos/todosLoaded', payload: todos })
+      storeAPI.dispatch({ type: 'todos/todosLoaded', payload: todos })
     })
   }
 
@@ -169,7 +168,11 @@ As it turns out, Redux already has an official version of that "async function m
 
 :::info
 
-The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). For more details, see these posts:
+The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). For more details on how to use thunks, see the thunk usage guide page:
+
+- [Using Redux: Writing Logic with Thunks](../../usage/writing-logic-thunks.mdx)
+
+as well as these posts:
 
 - [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/)
 - [Thunks in Redux: the basics](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
@@ -439,7 +442,7 @@ Here's what the current app looks like:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-6-asyncThunks/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-6-asyncThunks/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-fundamentals-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"

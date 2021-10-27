@@ -2,7 +2,6 @@
 id: part-2-concepts-data-flow
 title: 'Redux Fundamentals, Part 2: Concepts and Data Flow'
 sidebar_label: 'Redux Concepts and Data Flow'
-hide_title: true
 description: 'The official Redux Fundamentals tutorial: learn key Redux terms and how data flows in a Redux app'
 ---
 
@@ -238,7 +237,7 @@ console.log(total)
 // 15
 ```
 
-Notice that this `addNumber` "reduce callback" function doesn't need to keep track of anything itself. It takes the `previousResult` and `currentItem` arguments, does something with them, and returns a new result value.
+Notice that this `addNumbers` "reduce callback" function doesn't need to keep track of anything itself. It takes the `previousResult` and `currentItem` arguments, does something with them, and returns a new result value.
 
 **A Redux reducer function is exactly the same idea as this "reduce callback" function!** It takes a "previous result" (the `state`), and the "current item" (the `action` object), decides a new state value based on those arguments, and returns that new state.
 

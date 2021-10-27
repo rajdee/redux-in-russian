@@ -2,13 +2,10 @@
 id: part-3-data-flow
 title: 'Redux Essentials, Part 3: Basic Redux Data Flow'
 sidebar_label: 'Basic Redux Data Flow'
-hide_title: true
 description: 'The official Redux Essentials tutorial: learn how data flows in a React + Redux app'
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
-
-# Redux Essentials, Part 3: Basic Redux Data Flow
 
 :::tip What You'll Learn
 
@@ -44,7 +41,7 @@ To get started, you can open and fork this CodeSandbox:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-quick-start-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
@@ -86,6 +83,7 @@ ReactDOM.render(
 
 Let's take a quick look at what the initial project contains:
 
+- `/public`: the HTML host page template and other static files like icons
 - `/src`
   - `index.js`: the entry point file for the application. It renders the React-Redux `<Provider>` component and the main `<App>` component.
   - `App.js`: the main application component. Renders the top navbar and handles client-side routing for the other content.
@@ -449,7 +447,7 @@ Here's what the app looks like so far:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-1-postAdded/?fontsize=14&hidenavigation=1&theme=dark"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-1-postAdded/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-quick-start-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
