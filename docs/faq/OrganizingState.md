@@ -24,7 +24,7 @@
 - Важна ли Вам возможность восстанавливать это состояние в какой-то момент времени, т.е. отладка по времени (time travel debugging)?
 - Требуется ли кэшировать данные, т.е. использовать то, что уже хранится в состоянии вместо повторного запроса?
 
-Существует несколько пакетов, реализующих различные подходы к хранению данных в Redux-сторе вместо состояния компонента, таких как: [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local) и другие. Они также позволяют применять принципы Redux и концепцию редьюсера к задачам обновления локального состояни компонента, поддерживая идею `this.setState( (previousState) => reducer(previousState, someAction))`.
+Существует несколько пакетов, реализующих различные подходы к хранению данных в Redux-сторе вместо состояния компонента, таких как: [redux-ui](https://github.com/tonyhb/redux-ui), [redux-component](https://github.com/tomchentw/redux-component), [redux-react-local](https://github.com/threepointone/redux-react-local) и другие. Они также позволяют применять принципы Redux и концепцию редьюсера к задачам обновления локального состояния компонента, поддерживая идею `this.setState( (previousState) => reducer(previousState, someAction))`.
 
 #### Дополнительная информация
 
@@ -83,7 +83,7 @@
 **Документация**
 - [Продвинутое использование: Асинхронные экшены](/docs/advanced/AsyncActions.md)
 - [Примеры: Real World](/docs/introduction/Examples.html#real-world)
-- [Рецепты: Структурирование редьюсеров — Предварительные концепциии](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
+- [Рецепты: Структурирование редьюсеров — Предварительные концепции](/docs/recipes/reducers/PrerequisiteConcepts.md#normalizing-data)
 - [Рецепты: Структурирование редьюсеров — Нормализация состояния](/docs/recipes/reducers/NormalizingStateShape.md)
 - [Примеры: Tree View](https://github.com/reactjs/redux/tree/master/examples/tree-view)
 

@@ -11,5 +11,5 @@
 * [Редьюсеры (Reducers)](Reducers.md)
 * [Стор (Store)](Store.md)
 * [Поток данных (Data Flow)](DataFlow.md)
-* [Использвание с React](UsageWithReact.md)
+* [Использование с React](UsageWithReact.md)
 * [Пример: Todo List](ExampleTodoList.md)

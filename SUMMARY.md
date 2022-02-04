@@ -33,7 +33,7 @@
   * [Реализация истории отмен](/docs/recipes/ImplementingUndoHistory.md)
   * [Изолирование саб-приложений](/docs/recipes/IsolatingSubapps.md)
   * [Структурирование редьюсеров](/docs/recipes/StructuringReducers.md)
-    * [Предварительные концепциии](/docs/recipes/reducers/PrerequisiteConcepts.md)
+    * [Предварительные концепции](/docs/recipes/reducers/PrerequisiteConcepts.md)
     * [Базовая структура редьюсера](/docs/recipes/reducers/BasicReducerStructure.md)
     * [Разделение логики редьюсера](/docs/recipes/reducers/SplittingReducerLogic.md)
     * [Рефакторинг примера редьюсеров](/docs/recipes/reducers/RefactoringReducersExample.md)

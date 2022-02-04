@@ -11,11 +11,11 @@
 
 #### Возвращает
 
-(*Функция*): конечная функция полученая путем композиции переданных функций справа налево.
+(*Функция*): конечная функция полученная путем композиции переданных функций справа налево.
 
 #### Пример
 
-В этом примере показано, как использовать `compose` для расширения [стора](Store.md) с [`applyMiddleware`](applyMiddleware.md) и несколькоми инструментами для разработки из пакета [redux devtools](https://github.com/gaearon/redux-devtools).
+В этом примере показано, как использовать `compose` для расширения [стора](Store.md) с [`applyMiddleware`](applyMiddleware.md) и несколькими инструментами для разработки из пакета [redux devtools](https://github.com/gaearon/redux-devtools).
 
 ```js
 import { createStore, applyMiddleware, compose } from 'redux'
