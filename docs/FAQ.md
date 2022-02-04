@@ -39,7 +39,7 @@
   - [Каковы некоторые устоявшиеся рекомендации по использованию Immutable.JS с Redux?](/docs/recipes/UsingImmutableJS.md#what-are-some-opinionated-best-practices-for-using-immutable-js-with-redux)
 
 - **Структура кода**
-  - [Как должна выглядить моя файловая структура? Как я должен группировать мои генераторы экшенов и редьюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
+  - [Как должна выглядеть моя файловая структура? Как я должен группировать мои генераторы экшенов и редьюсеры в проекте? Где должны быть селекторы?](/docs/faq/CodeStructure.md#structure-file-structure)
   - [Как я должен разделять мою логику между редьюсерами и генераторами экшенов? Где должна быть "бизнес-логика"?](/docs/faq/CodeStructure.md#structure-business-logic)
   - [Для чего я должен использовать генераторы экшенов?](/docs/faq/CodeStructure.md#why-should-i-use-action-creators)
   - [Где должны находиться веб-сокеты и другие постоянные соединения?](/docs/faq/CodeStructure.md#where-should-websockets-and-other-persistent-connections-live)

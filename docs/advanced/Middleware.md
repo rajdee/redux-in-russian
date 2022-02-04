@@ -212,7 +212,7 @@ function logger(store) {
 }
 ```
 
-Это тот момент, когда [“we need to go deeper”](http://knowyourmeme.com/memes/we-need-to-go-deeper), так что имеет смысл потратить некоторе время на это. Каскад функций выглядит пугающим. Стрелочные функции из ES6 делают это [каррирование](https://en.wikipedia.org/wiki/Currying) чуть более простым для глаз:
+Это тот момент, когда [“we need to go deeper”](http://knowyourmeme.com/memes/we-need-to-go-deeper), так что имеет смысл потратить некоторое время на это. Каскад функций выглядит пугающим. Стрелочные функции из ES6 делают это [каррирование](https://en.wikipedia.org/wiki/Currying) чуть более простым для глаз:
 
 ```js
 const logger = store => next => action => {
